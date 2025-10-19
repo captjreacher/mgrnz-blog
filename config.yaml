@@ -1,0 +1,43 @@
+baseURL: "http://localhost/"
+title: "Maximised AI — Blog"
+languageCode: en-nz
+enableRobotsTXT: true
+theme: "congo"
+
+# Pagination (replaces deprecated 'paginate')
+pagination:
+  pagerSize: 10
+
+# Theme parameters
+params:
+  defaultTheme: light      # force light mode (no dark by default)
+
+  homepage:
+    layout: profile
+    title: "Maximised AI"
+    subtitle: "Build logs • Automations • Experiments"
+
+# Menus
+menus:
+  main:
+    - name: Home
+      pageRef: /
+      weight: 1
+    - name: Posts
+      pageRef: /posts/
+      weight: 2
+
+# Markup settings
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+  highlight:
+    noClasses: false
+    guessSyntax: true
+    codeFences: true
+
+# Outputs
+outputs:
+  home: ["HTML", "RSS", "JSON"]
+  section: ["HTML", "RSS"]

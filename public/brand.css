@@ -1,0 +1,32 @@
+﻿:root {
+  /* Primary (burnt orange) */
+  --color-primary-400: 255,119,64;
+  --color-primary-500: 255,79,0;
+  --color-primary-600: 214,66,0;
+
+  /* Secondary (blue) */
+  --color-secondary-400: 168,204,255;
+  --color-secondary-500: 137,187,254;
+  --color-secondary-600: 92,148,220;
+
+  /* Neutrals */
+  --color-neutral-50: 248,248,248;
+  --color-neutral-100: 241,241,241;
+  --color-neutral-200: 230,230,230;
+  --color-neutral-300: 212,212,212;
+  --color-neutral-400: 163,163,163;
+  --color-neutral-500: 115,115,115;
+  --color-neutral-600: 82,82,82;
+  --color-neutral-700: 64,64,64;
+  --color-neutral-800: 34,34,34;
+  --color-neutral-900: 17,17,17;
+}
+
+/* Links + buttons */
+:root { --tw-prose-links: rgba(var(--color-primary-500), 1); }
+a, .btn, .button { color: rgba(var(--color-primary-500), 1) !important; }
+.btn, .button { border-color: rgba(var(--color-primary-500), 1) !important; }
+.btn:hover, .button:hover {
+  background: rgba(var(--color-primary-500), 1) !important;
+  color: #000 !important;
+}
