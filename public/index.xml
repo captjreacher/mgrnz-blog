@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
+<<<<<<< HEAD
     <title>Maximised AI — Blog</title>
     <link>http://localhost:1313/</link>
     <description>Recent content on Maximised AI — Blog</description>
@@ -8,5 +9,63 @@
     <language>en-nz</language>
     <lastBuildDate></lastBuildDate>
     <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+=======
+    <title>Maximised AI on Maximised AI — Blog</title>
+    <link>http://localhost:1313/</link>
+    <description>Recent content in Maximised AI on Maximised AI — Blog</description>
+    <generator>Hugo</generator>
+    <language>en-nz</language>
+    <lastBuildDate>Wed, 01 Oct 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Hello, Maximised AI</title>
+      <link>http://localhost:1313/posts/hello-maxai/</link>
+      <pubDate>Wed, 01 Oct 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/hello-maxai/</guid>
+      <description>Fresh Hugo blog scaffold.</description>
+    </item>
+    <item>
+      <title>How I structure AI build weeks</title>
+      <link>http://localhost:1313/posts/how-i-structure/</link>
+      <pubDate>Mon, 01 Sep 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/how-i-structure/</guid>
+      <description>A lightweight cadence for experiments, shipping, and feedback.</description>
+    </item>
+    <item>
+      <title>Assistant patterns that actually stick</title>
+      <link>http://localhost:1313/posts/assistant-patterns/</link>
+      <pubDate>Tue, 12 Aug 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/assistant-patterns/</guid>
+      <description>A few assistant UX tricks that survive real usage.</description>
+    </item>
+    <item>
+      <title>Brand OS: notebooks, tasks, and truth</title>
+      <link>http://localhost:1313/posts/brand-os/</link>
+      <pubDate>Tue, 22 Jul 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/brand-os/</guid>
+      <description>Keeping ideas, tasks, and docs in flow.</description>
+    </item>
+    <item>
+      <title>CV / Experience</title>
+      <link>http://localhost:1313/pages/cv/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/pages/cv/</guid>
+      <description>&lt;h2 id=&#34;snapshot&#34;&gt;Snapshot&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Entrepreneur &amp;amp; builder focused on AI + automation.&lt;/li&gt;&#xA;&lt;li&gt;Ship fast, iterate faster. Fair, honest, chilled—but urgent.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;highlights&#34;&gt;Highlights&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Founded/ran multiple brands.&lt;/li&gt;&#xA;&lt;li&gt;Built assistants, data pipelines, and workflow tools.&lt;/li&gt;&#xA;&lt;li&gt;Comfortable across product, GTM, ops, and the messy middle.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;Replace this with your real CV content or link to a PDF.&lt;/p&gt;&lt;/blockquote&gt;</description>
+    </item>
+    <item>
+      <title>My Brands</title>
+      <link>http://localhost:1313/pages/brands/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/pages/brands/</guid>
+      <description>&lt;p&gt;Here are the brands I run/work on:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;strong&gt;Maximised AI&lt;/strong&gt; — automations, assistants, experiments.&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;(Add brand)&lt;/strong&gt; — one-liner.&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;(Add brand)&lt;/strong&gt; — one-liner.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;Swap this list for logos + links when you’re ready.&lt;/p&gt;&lt;/blockquote&gt;</description>
+    </item>
+    <item>
+      <title>Subscribe</title>
+      <link>http://localhost:1313/subscribe/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/subscribe/</guid>
+      <description>&lt;p&gt;Want new posts by email? Pop your address below.&lt;/p&gt;&#xA;&lt;!-- raw HTML omitted --&gt;&#xA;&lt;!-- raw HTML omitted --&gt;</description>
+    </item>
+>>>>>>> 1de5a9e (Re-init local repo with existing working tree)
   </channel>
 </rss>

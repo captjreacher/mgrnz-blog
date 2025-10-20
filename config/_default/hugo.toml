@@ -1,0 +1,6 @@
+baseURL = "http://localhost/"
+languageCode = "en-nz"
+title = "Maximised AI — Blog"
+
+[pagination]
+  pagerSize = 10

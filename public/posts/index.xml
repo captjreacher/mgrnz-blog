@@ -6,7 +6,40 @@
     <description>Recent content in Posts on Maximised AI — Blog</description>
     <generator>Hugo</generator>
     <language>en-nz</language>
+<<<<<<< HEAD
     <lastBuildDate></lastBuildDate>
     <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+=======
+    <lastBuildDate>Wed, 01 Oct 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Hello, Maximised AI</title>
+      <link>http://localhost:1313/posts/hello-maxai/</link>
+      <pubDate>Wed, 01 Oct 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/hello-maxai/</guid>
+      <description>Fresh Hugo blog scaffold.</description>
+    </item>
+    <item>
+      <title>How I structure AI build weeks</title>
+      <link>http://localhost:1313/posts/how-i-structure/</link>
+      <pubDate>Mon, 01 Sep 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/how-i-structure/</guid>
+      <description>A lightweight cadence for experiments, shipping, and feedback.</description>
+    </item>
+    <item>
+      <title>Assistant patterns that actually stick</title>
+      <link>http://localhost:1313/posts/assistant-patterns/</link>
+      <pubDate>Tue, 12 Aug 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/assistant-patterns/</guid>
+      <description>A few assistant UX tricks that survive real usage.</description>
+    </item>
+    <item>
+      <title>Brand OS: notebooks, tasks, and truth</title>
+      <link>http://localhost:1313/posts/brand-os/</link>
+      <pubDate>Tue, 22 Jul 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/brand-os/</guid>
+      <description>Keeping ideas, tasks, and docs in flow.</description>
+    </item>
+>>>>>>> 1de5a9e (Re-init local repo with existing working tree)
   </channel>
 </rss>

@@ -1,0 +1,31 @@
+{{ define "title" }}Posts — {{ .Site.Title }}{{ end }}
+{{ define "main" }}
+  <h1>Posts</h1>
+  {{ $all := where .Pages "Type" "in" (slice "posts") }}
+  {{ $sorted := $all.ByDate.Reverse }}
+  {{ $recent := first 3 $sorted }}
+  {{ $older  := after 3 $sorted }}
+
+  <h2>Recent</h2>
+  <ul class="post-list">
+    {{ range $recent }}
+      <li class="post-item">
+        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+        <span class="date">{{ .Date.Format "02 Jan 2006" }}</span>
+        {{ with .Summary }}<p class="summary">{{ . }}</p>{{ end }}
+      </li>
+    {{ end }}
+  </ul>
+
+  {{ if gt (len $older) 0 }}
+  <h2 style="margin-top:1.2rem;">Older</h2>
+  <ul class="post-list">
+    {{ range $older }}
+      <li class="post-item">
+        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+        <span class="date">{{ .Date.Format "02 Jan 2006" }}</span>
+      </li>
+    {{ end }}
+  </ul>
+  {{ end }}
+{{ end }}
