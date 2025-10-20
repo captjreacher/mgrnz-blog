@@ -1,0 +1,12 @@
+{
+  "name": "mgrnz-blog",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "hugo server --gc --bind 0.0.0.0 --port 1313 -D",
+    "build": "hugo --gc --minify"
+  },
+  "devDependencies": {
+    "hugo-bin": "^0.148.2"
+  }
+}
