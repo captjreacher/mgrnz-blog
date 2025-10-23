@@ -76,7 +76,7 @@
 
     
     <aside class="sidebar">
-      <img src="/images/logo.png" alt="MGR Logo" class="logo">
+      <img src="/images/logo.png" alt="Mike G Robinson Signature" class="logo">
       <img src="/images/head-shot.png" alt="Mike G Robinson" class="headshot">
 
       <nav class="side-nav" aria-label="Main">
@@ -106,30 +106,35 @@
                padding:0 .75rem 0 1rem;background:#0b0b0b;border-bottom:1px solid #222;">
   
   <div style="margin-left:auto;">
-    <div class="relative inline-block text-left" id="admin-wrapper">
+    <div id="admin-wrapper" style="position:relative;z-index:1000;">
   <button id="admin-btn"
-    style="background:none;border:none;color:#ffcf00;font-size:1.3rem;cursor:pointer;">
+    style="background:none;border:none;color:#ffcf00;font-size:1.6rem;cursor:pointer;
+           padding:.3rem .6rem;line-height:1;">
     &#9881;
   </button>
 
   <div id="admin-menu"
-    style="display:none;position:absolute;right:0;margin-top:0.5rem;background:#222;
-           border:1px solid #333;border-radius:8px;padding:0.5rem 0;z-index:1000;min-width:160px;">
+    style="display:none;position:absolute;right:0;margin-top:.5rem;
+           background:#111;border:1px solid #333;border-radius:8px;
+           box-shadow:0 3px 8px rgba(0,0,0,.5);min-width:180px;padding:.4rem 0;">
     
       
         <a href="/admin/"
-           style="display:block;padding:0.45rem 1rem;color:#fff;text-decoration:none;">
-           Dashboard
+           style="display:block;padding:.5rem 1rem;color:#eee;
+                  text-decoration:none;font-size:.95rem;">
+          Dashboard
         </a>
       
         <a href="/admin/create/"
-           style="display:block;padding:0.45rem 1rem;color:#fff;text-decoration:none;">
-           Create Post
+           style="display:block;padding:.5rem 1rem;color:#eee;
+                  text-decoration:none;font-size:.95rem;">
+          Create Post
         </a>
       
         <a href="/admin/settings/"
-           style="display:block;padding:0.45rem 1rem;color:#fff;text-decoration:none;">
-           Settings
+           style="display:block;padding:.5rem 1rem;color:#eee;
+                  text-decoration:none;font-size:.95rem;">
+          Settings
         </a>
       
     
@@ -137,27 +142,15 @@
 </div>
 
 <script>
-document.addEventListener('click', e => {
-  const btn = document.getElementById('admin-btn');
-  const menu = document.getElementById('admin-menu');
+document.addEventListener("click", function(e) {
+  const btn = document.getElementById("admin-btn");
+  const menu = document.getElementById("admin-menu");
   if (!btn || !menu) return;
-  if (btn.contains(e.target)) {
-    menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+  const clickedInside = btn.contains(e.target) || menu.contains(e.target);
+  if (clickedInside) {
+    menu.style.display = (menu.style.display === "block") ? "none" : "block";
   } else {
-    menu.style.display = 'none';
-  }
-});
-</script>
-
-<script>
-document.addEventListener('click', e => {
-  const btn = document.getElementById('admin-btn');
-  const menu = document.getElementById('admin-menu');
-  if (!btn || !menu) return;
-  if (btn.contains(e.target)) {
-    menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
-  } else {
-    menu.style.display = 'none';
+    menu.style.display = "none";
   }
 });
 </script>
