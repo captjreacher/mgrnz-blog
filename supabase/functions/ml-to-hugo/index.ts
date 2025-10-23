@@ -4,61 +4,61 @@ serve(async (req: Request) => {
   const headers = { "Content-Type": "application/json" };
 
   try {
+    // Parse JSON body (if any)
     const payload = await req.json().catch(() => ({}));
 
-    // 🔐 Check shared secret token (optional)
-    const expected = Deno.env.get("WEBHOOK_TOKEN");
-    if (!expected || payload.token !== expected) {
-      return new Response(
-        JSON.stringify({ ok: false, error: "unauthorized" }),
-        { headers, status: 401 },
-      );
+    // 🔐 Auth: token from query OR JSON body OR headers
+    const url = new URL(req.url);
+    const bodyToken = (payload?.token as string) ?? "";
+    const queryToken = url.searchParams.get("token") ?? "";
+    const headerToken =
+      req.headers.get("x-ml-token") ??
+      req.headers.get("authorization")?.replace(/^Bearer\s+/i, "") ??
+      "";
+    const got = bodyToken || queryToken || headerToken;
+
+    const expected = Deno.env.get("WEBHOOK_TOKEN") ?? "";
+    if (!expected || got !== expected) {
+      return new Response(JSON.stringify({ ok: false, error: "unauthorized" }), {
+        status: 401,
+        headers,
+      });
     }
 
-    // 🔗 Cloudflare deploy hook URL
+    // 🔗 Trigger Cloudflare Pages deploy hook
     const hook = Deno.env.get("HUGO_WEBHOOK_URL");
     if (!hook) {
       return new Response(
         JSON.stringify({ ok: false, error: "Missing HUGO_WEBHOOK_URL secret" }),
-        { headers, status: 500 },
+        { status: 500, headers },
       );
     }
 
-    // 🚀 Trigger Cloudflare Pages build
     const res = await fetch(hook, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         triggered_by: "supabase-ml-to-hugo",
-        payload,
         timestamp: new Date().toISOString(),
       }),
     });
 
-    const text = await res.text();
-
+    const upstream = await res.text();
     return new Response(
       JSON.stringify({
         ok: res.ok,
         status: res.status,
-        hook,
         message: res.ok
-          ? "Cloudflare Pages build triggered successfully 🎉"
-          : "Failed to trigger build ❌",
-        upstream: text.slice(0, 300),
+          ? "Cloudflare Pages build triggered successfully"
+          : "Failed to trigger build",
+        upstream: upstream.slice(0, 300),
       }),
-      { headers, status: res.ok ? 200 : 502 },
+      { status: res.ok ? 200 : 502, headers },
     );
   } catch (err) {
     return new Response(
-      JSON.stringify({
-        ok: false,
-        error: err.message || String(err),
-      }),
-      { headers, status: 500 },
+      JSON.stringify({ ok: false, error: err?.message ?? String(err) }),
+      { status: 500, headers },
     );
   }
 });
-
