@@ -1,5 +1,28 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
 
+/* Hero */
+.hero-image {
+  display:block;
+  margin:24px auto;
+  width:100%;
+  max-width:1120px; /* your x2 size */
+  height:auto;
+}
+article img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+article.prose {
+  line-height: 1.7;
+}
+
+/* Brand colors */
+:root { --orange:#ff4f00; --yellow:#ffcf00; --blue:#89bbfe; }
+h1,h2,h3 { color:var(--orange); }
+.nav a { color:#ccc; }
+.nav a:hover { color:var(--yellow); }
+
 :root {
   --font-body: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   --font-heading: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;

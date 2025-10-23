@@ -1,0 +1,47 @@
+backend:
+  name: git-gateway
+  branch: main            # or 'master' if your repo uses that
+
+media_folder: "static/uploads"        # where uploaded images go
+public_folder: "/uploads"             # public URL path
+publish_mode: editorial_workflow      # allows draft workflow
+
+site_url: "https://mgrnz.com"
+logo_url: "/images/logo.png"
+
+collections:
+  - name: "posts"
+    label: "Blog Posts"
+    folder: "content/posts"
+    create: true
+    slug: "{{slug}}"
+    path: "{{slug}}/index"
+    format: "frontmatter"
+    extension: "md"
+    editor:
+      preview: true
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Publish Date", name: "date", widget: "datetime"}
+      - {label: "Draft", name: "draft", widget: "boolean", default: false}
+      - {label: "Comments", name: "comments", widget: "boolean", default: true}
+      - {label: "Hero Image", name: "image", widget: "image", required: false}
+      - {label: "Summary", name: "summary", widget: "text", required: false}
+      - {label: "Tags", name: "tags", widget: "list", default: ["personal"]}
+      - {label: "Body", name: "body", widget: "markdown"}
+
+  - name: "pages"
+    label: "Static Pages"
+    folder: "content/pages"
+    create: true
+    slug: "{{slug}}"
+    path: "{{slug}}/index"
+    format: "frontmatter"
+    extension: "md"
+    editor:
+      preview: true
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Publish Date", name: "date", widget: "datetime"}
+      - {label: "Body", name: "body", widget: "markdown"}
+

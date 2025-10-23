@@ -1,43 +1,73 @@
 baseURL: "http://localhost/"
-title: "Maximised AI — Blog"
+title: "Mike G Robinson — Blog"
 languageCode: en-nz
 enableRobotsTXT: true
 theme: "congo"
 
-# Pagination (replaces deprecated 'paginate')
+# Site-wide taxonomies
+taxonomies:
+  tag: tags
+  category: categories
+
+# Pagination (Hugo v0.150+ replacement for deprecated 'paginate')
 pagination:
-  pagerSize: 10
-
-# Theme parameters
-params:
-  defaultTheme: light      # force light mode (no dark by default)
-
-  homepage:
-    layout: profile
-    title: "Maximised AI"
-    subtitle: "Build logs • Automations • Experiments"
+  paginate: 10
 
 # Menus
-menus:
+menu:
   main:
-    - name: Home
-      pageRef: /
+    - name: "Home"
+      url: "/"
       weight: 1
-    - name: Posts
-      pageRef: /posts/
+    - name: "Posts"
+      url: "/posts/"
       weight: 2
+    - name: "CV"
+      url: "/pages/cv/"
+      weight: 3
+    - name: "Brands"
+      url: "/pages/brands/"
+      weight: 4
+    - name: "Subscribe"
+      url: "/subscribe/"
+      weight: 5
 
-# Markup settings
+  # Top-right personal menu (you include this via {{ partial "admin-menu.html" . }})
+  admin:
+    - name: "Dashboard"
+      url: "/admin/"
+      weight: 1
+    - name: "Create Post"
+      url: "/admin/create/"
+      weight: 2
+    - name: "Settings"
+      url: "/admin/settings/"
+      weight: 3
+
+# Theme + site params (merged into a single 'params' block)
+params:
+  # Congo theme options (pick the variant you like)
+  defaultTheme: light        # or "dark" / "auto"
+  # Your custom CSS (ensures assets/css/custom.css is applied)
+  customCSS:
+    - css/custom.css
+
+  # Defaults for posts; individual posts can override
+  comments: false            # wizard can set comments: true per post
+  showReadingTime: true
+  showToc: false
+
+# Markup / rendering
 markup:
   goldmark:
     renderer:
-      unsafe: true
+      unsafe: true           # allow raw HTML in markdown (needed for any html partials)
   highlight:
     noClasses: false
     guessSyntax: true
     codeFences: true
 
-# Outputs
+# Output formats
 outputs:
   home: ["HTML", "RSS", "JSON"]
   section: ["HTML", "RSS"]

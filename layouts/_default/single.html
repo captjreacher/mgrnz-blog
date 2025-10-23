@@ -1,8 +1,19 @@
-{{ define "title" }}{{ .Title }} — {{ .Site.Title }}{{ end }}
 {{ define "main" }}
-  <article class="post">
-    <h1>{{ .Title }}</h1>
-    <p class="meta">{{ .Date.Format "02 Jan 2006" }}</p>
-    <div class="content">{{ .Content }}</div>
-  </article>
+  <main class="mx-auto max-w-3xl p-6 text-white">
+    <h1 class="text-4xl font-bold mb-3">{{ .Title }}</h1>
+    <p class="text-sm opacity-80 mb-6">
+      {{ with .Params.author }}{{ . }} — {{ end }}{{ .Date.Format "02 Jan 2006" }}
+    </p>
+
+    {{ with .Resources.GetMatch .Params.image }}
+      <figure class="mb-6">
+        <img src="{{ .RelPermalink }}" alt="{{ $.Title }}" class="rounded-lg shadow mx-auto">
+      </figure>
+    {{ end }}
+
+    <article class="prose prose-invert max-w-none">
+      {{ .Content }}
+    </article>
+  </main>
 {{ end }}
+

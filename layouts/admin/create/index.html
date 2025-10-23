@@ -1,0 +1,194 @@
+---
+title: "Create Post"
+type: "admin"
+---
+
+<section class="max-w-3xl mx-auto my-12" style="color:#eee;">
+  <h1 style="font-size:2rem;font-weight:700;margin-bottom:1rem;">🪄 Create a New Post</h1>
+
+  <p style="opacity:.8;margin-bottom:1rem;">Fill the fields, add text/image blocks in any order, then click “Generate Zip”. Unzip into <code>content/posts/&lt;slug&gt;/</code> in your repo.</p>
+
+  <form id="postWizard" class="flex flex-col gap-4" style="background:#181818;border:1px solid #282828;border-radius:12px;padding:16px;">
+    <div class="grid" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div>
+        <label>Short Name (slug)</label>
+        <input name="slug" required placeholder="e.g. ai-trends" style="width:100%;padding:.6rem;border-radius:8px;background:#111;border:1px solid #333;color:#eee;">
+      </div>
+      <div>
+        <label>Publish Date</label>
+        <input name="date" type="date" value="" style="width:100%;padding:.6rem;border-radius:8px;background:#111;border:1px solid #333;color:#eee;">
+      </div>
+    </div>
+
+    <div>
+      <label>Title</label>
+      <input name="title" required placeholder="Full Title" style="width:100%;padding:.6rem;border-radius:8px;background:#111;border:1px solid #333;color:#eee;">
+    </div>
+
+    <div class="grid" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div>
+        <label>Tags (comma separated, e.g. <code>cat:AI, automation</code>)</label>
+        <input name="tags" placeholder="cat:AI, automation" style="width:100%;padding:.6rem;border-radius:8px;background:#111;border:1px solid #333;color:#eee;">
+      </div>
+      <div>
+        <label>Comments</label>
+        <select name="comments" style="width:100%;padding:.6rem;border-radius:8px;background:#111;border:1px solid #333;color:#eee;">
+          <option value="true">On</option>
+          <option value="false" selected>Off</option>
+        </select>
+      </div>
+    </div>
+
+    <div>
+      <label>Excerpt (optional)</label>
+      <textarea name="excerpt" rows="2" placeholder="Short summary shown on /posts/…" style="width:100%;padding:.6rem;border-radius:8px;background:#111;border:1px solid #333;color:#eee;"></textarea>
+    </div>
+
+    <div class="grid" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div>
+        <label>Hero Image (optional, goes in front matter <code>image:</code>)</label>
+        <input name="hero" type="file" accept="image/*" style="width:100%;padding:.6rem;border-radius:8px;background:#111;border:1px solid #333;color:#eee;">
+      </div>
+      <div>
+        <label>Image Files (for content blocks; you can add more later)</label>
+        <input id="library" name="library" multiple type="file" accept="image/*" style="width:100%;padding:.6rem;border-radius:8px;background:#111;border:1px solid #333;color:#eee;">
+      </div>
+    </div>
+
+    <hr style="border:none;border-top:1px solid #333;margin:8px 0 4px;">
+
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+      <button type="button" id="addText" style="padding:.5rem .8rem;background:#2563eb;border:none;border-radius:8px;color:#fff;cursor:pointer;">+ Text Block</button>
+      <button type="button" id="addImage" style="padding:.5rem .8rem;background:#eab308;border:none;border-radius:8px;color:#000;cursor:pointer;">+ Image Block</button>
+    </div>
+
+    <div id="blocks" class="flex flex-col gap-3"></div>
+
+    <div style="margin-top:8px;">
+      <button type="submit" style="padding:.7rem 1rem;background:#ff4f00;border:none;border-radius:10px;color:#fff;font-weight:700;cursor:pointer;">Generate Zip</button>
+    </div>
+  </form>
+
+  <div id="result" style="margin-top:16px;white-space:pre-wrap;background:#111;border:1px solid #333;border-radius:12px;padding:12px;display:none;"></div>
+</section>
+
+<!-- JSZip for on-the-fly ZIP creation -->
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+
+<script>
+const blocksEl = document.getElementById('blocks');
+const addTextBtn = document.getElementById('addText');
+const addImageBtn = document.getElementById('addImage');
+const form = document.getElementById('postWizard');
+const result = document.getElementById('result');
+
+function blockContainer(innerHTML) {
+  const wrap = document.createElement('div');
+  wrap.style.background = '#111';
+  wrap.style.border = '1px solid #333';
+  wrap.style.borderRadius = '10px';
+  wrap.style.padding = '10px';
+  wrap.innerHTML = innerHTML + `<div style="text-align:right;margin-top:6px;"><button type="button" class="remove" style="background:#333;color:#eee;border:none;border-radius:6px;padding:.3rem .6rem;cursor:pointer;">Remove</button></div>`;
+  wrap.querySelector('.remove').onclick = () => wrap.remove();
+  return wrap;
+}
+
+addTextBtn.onclick = () => {
+  blocksEl.appendChild(blockContainer(`
+    <label>Text</label>
+    <textarea class="txt" rows="4" placeholder="Write markdown here…" style="width:100%;padding:.6rem;border-radius:8px;background:#0c0c0c;border:1px solid #2a2a2a;color:#eee;"></textarea>
+  `));
+};
+
+addImageBtn.onclick = () => {
+  blocksEl.appendChild(blockContainer(`
+    <label>Image (choose from library or type a filename you’ll add later)</label>
+    <input class="imgName" placeholder="e.g. chart.png" style="width:100%;padding:.6rem;border-radius:8px;background:#0c0c0c;border:1px solid #2a2a2a;color:#eee;margin-bottom:6px;">
+    <small style="opacity:.8">Tip: if you selected files in “Image Files” above, put one of those filenames here.</small>
+  `));
+};
+
+// default date = today
+document.querySelector('input[name="date"]').value = new Date().toISOString().slice(0,10);
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const fd = new FormData(form);
+  const slug = (fd.get('slug') || '').trim().toLowerCase();
+  if (!slug) { alert('Please enter a slug.'); return; }
+
+  const title = (fd.get('title') || '').trim();
+  const date = (fd.get('date') || new Date().toISOString().slice(0,10));
+  const comments = fd.get('comments') === 'true';
+  const excerpt = (fd.get('excerpt') || '').trim();
+
+  // tags + categories (support cat:AI syntax)
+  const tagsRaw = (fd.get('tags') || '').split(',').map(s => s.trim()).filter(Boolean);
+  const tags = [];
+  const categories = [];
+  for (const t of tagsRaw) {
+    const m = /^cat:(.+)$/i.exec(t);
+    if (m) categories.push(m[1].trim());
+    else tags.push(t);
+  }
+
+  // hero image (optional)
+  const heroFile = fd.get('hero');
+  const heroName = heroFile && heroFile.name ? heroFile.name : '';
+
+  // gather blocks (text + image filename references)
+  const blocks = [];
+  blocksEl.querySelectorAll('.txt').forEach(t => { const v = t.value.trim(); if (v) blocks.push({type:'text', value:v}); });
+  blocksEl.querySelectorAll('.imgName').forEach(i => { const v = i.value.trim(); if (v) blocks.push({type:'image', value:v}); });
+
+  // build front matter
+  const fm = [];
+  fm.push('---');
+  fm.push(`title: "${title.replace(/"/g,'\\"')}"`);
+  fm.push(`date: ${date}`);
+  fm.push(`draft: false`);
+  fm.push(`comments: ${comments ? 'true' : 'false'}`);
+  if (categories.length) fm.push(`categories: [${categories.map(c=>`"${c.replace(/"/g,'\\"')}"`).join(', ')}]`);
+  if (tags.length)       fm.push(`tags: [${tags.map(t=>`"${t.replace(/"/g,'\\"')}"`).join(', ')}]`);
+  if (excerpt)           fm.push(`summary: "${excerpt.replace(/"/g,'\\"')}"`);
+  if (heroName)          fm.push(`image: "${heroName}"`);
+  fm.push('---');
+  fm.push('');
+
+  // build body from blocks
+  const body = [];
+  for (const b of blocks) {
+    if (b.type === 'text') body.push(b.value);
+    if (b.type === 'image') body.push(`![Image](${b.value})`);
+  }
+  const md = fm.join('\n') + body.join('\n\n') + '\n';
+
+  // Prepare zip: content/posts/<slug>/index.md (+ images)
+  const zip = new JSZip();
+  const dir = `content/posts/${slug}/`;
+  zip.file(dir + 'index.md', md);
+
+  // include hero if provided
+  if (heroFile && heroFile.name) {
+    const buf = await heroFile.arrayBuffer();
+    zip.file(dir + heroFile.name, buf);
+  }
+
+  // include library images (optional)
+  const libraryFiles = document.getElementById('library').files || [];
+  for (const f of libraryFiles) {
+    const buf = await f.arrayBuffer();
+    zip.file(dir + f.name, buf);
+  }
+
+  const blob = await zip.generateAsync({type:'blob'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `${slug}.zip`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+
+  result.style.display = 'block';
+  result.textContent = `✅ Generated ${slug}.zip\nUnzip into your repo, then:\n- Check front matter\n- Run "hugo server" to preview\n- git add/commit/push when ready`;
+});
+</script>

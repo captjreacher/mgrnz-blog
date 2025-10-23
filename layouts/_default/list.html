@@ -1,14 +1,17 @@
-{{ define "title" }}{{ .Site.Title }} — Posts{{ end }}
-{{ define "main" }}
-  <h1>Posts</h1>
-  <ul class="post-list">
-    {{ range .Paginator.Pages }}
-      <li class="post-item">
-        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-        <span class="date">{{ .Date.Format "02 Jan 2006" }}</span>
-        {{ with .Summary }}<p class="summary">{{ . }}</p>{{ end }}
-      </li>
+﻿{{ define "main" }}
+  <main class="mx-auto max-w-3xl p-6 text-white">
+    <h1 class="text-3xl font-bold mb-8">Posts</h1>
+
+    {{ range .Pages.ByDate.Reverse }}
+      <article class="mb-8 border-b border-neutral-700/60 pb-6">
+        <h2 class="text-2xl font-semibold">
+          <a class="text-orange-500 hover:underline" href="{{ .RelPermalink }}">{{ .Title }}</a>
+        </h2>
+        <p class="text-sm opacity-80 mb-2">
+          {{ with .Params.author }}{{ . }} — {{ end }}{{ .Date.Format "02 Jan 2006" }}
+        </p>
+        <p class="opacity-75">{{ if .Summary }}{{ .Summary }}{{ else }}{{ .Plain | truncate 180 }}{{ end }}</p>
+      </article>
     {{ end }}
-  </ul>
-  {{ template "_internal/pagination.html" . }}
+  </main>
 {{ end }}

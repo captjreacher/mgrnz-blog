@@ -6,10 +6,6 @@
     <description>Recent content in Posts on Maximised AI — Blog</description>
     <generator>Hugo</generator>
     <language>en-nz</language>
-<<<<<<< HEAD
-    <lastBuildDate></lastBuildDate>
-    <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
-=======
     <lastBuildDate>Wed, 01 Oct 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
@@ -18,6 +14,13 @@
       <pubDate>Wed, 01 Oct 2025 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/posts/hello-maxai/</guid>
       <description>Fresh Hugo blog scaffold.</description>
+    </item>
+    <item>
+      <title>Hello, Maximised AI</title>
+      <link>http://localhost:1313/posts/hello-world/</link>
+      <pubDate>Wed, 01 Oct 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/hello-world/</guid>
+      <description>First post with Congo + brand colors.</description>
     </item>
     <item>
       <title>How I structure AI build weeks</title>
@@ -40,6 +43,5 @@
       <guid>http://localhost:1313/posts/brand-os/</guid>
       <description>Keeping ideas, tasks, and docs in flow.</description>
     </item>
->>>>>>> 1de5a9e (Re-init local repo with existing working tree)
   </channel>
 </rss>

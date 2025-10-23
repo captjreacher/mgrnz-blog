@@ -1,12 +1,9 @@
-<header class="header">
-  <div class="inner">
-    <a class="brand" href="/"><img src="/images/logo.png" alt="Maximised AI" height="36"></a>
-    <nav class="nav">
-      <a href="/">Home</a>
-      <a href="/posts/">Posts</a>
-      <a href="/pages/cv/">CV</a>
-      <a href="/pages/brands/">Brands</a>
-      <a href="/subscribe/">Subscribe</a>
-    </nav>
+<!-- layouts/partials/header.html -->
+<header style="height:56px;display:flex;align-items:center;justify-content:flex-end;
+               padding:0 .75rem 0 1rem;background:#0b0b0b;border-bottom:1px solid #222;">
+  <!-- right-aligned admin gear dropdown -->
+  <div style="margin-left:auto;">
+    {{ partial "admin-menu.html" . }}
   </div>
 </header>
+

@@ -1,18 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-<<<<<<< HEAD
-    <title>Maximised AI — Blog</title>
+    <title>Welcome to Maximised AI on Maximised AI — Blog</title>
     <link>http://localhost:1313/</link>
-    <description>Recent content on Maximised AI — Blog</description>
-    <generator>Hugo</generator>
-    <language>en-nz</language>
-    <lastBuildDate></lastBuildDate>
-    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
-=======
-    <title>Maximised AI on Maximised AI — Blog</title>
-    <link>http://localhost:1313/</link>
-    <description>Recent content in Maximised AI on Maximised AI — Blog</description>
+    <description>Recent content in Welcome to Maximised AI on Maximised AI — Blog</description>
     <generator>Hugo</generator>
     <language>en-nz</language>
     <lastBuildDate>Wed, 01 Oct 2025 00:00:00 +0000</lastBuildDate>
@@ -23,6 +14,13 @@
       <pubDate>Wed, 01 Oct 2025 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/posts/hello-maxai/</guid>
       <description>Fresh Hugo blog scaffold.</description>
+    </item>
+    <item>
+      <title>Hello, Maximised AI</title>
+      <link>http://localhost:1313/posts/hello-world/</link>
+      <pubDate>Wed, 01 Oct 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/hello-world/</guid>
+      <description>First post with Congo + brand colors.</description>
     </item>
     <item>
       <title>How I structure AI build weeks</title>
@@ -46,11 +44,18 @@
       <description>Keeping ideas, tasks, and docs in flow.</description>
     </item>
     <item>
+      <title>Create Post</title>
+      <link>http://localhost:1313/admin/create/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/admin/create/</guid>
+      <description>&lt;p&gt;If you see this, the page is wired correctly. The wizard UI will replace this content.&lt;/p&gt;</description>
+    </item>
+    <item>
       <title>CV / Experience</title>
       <link>http://localhost:1313/pages/cv/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/pages/cv/</guid>
-      <description>&lt;h2 id=&#34;snapshot&#34;&gt;Snapshot&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Entrepreneur &amp;amp; builder focused on AI + automation.&lt;/li&gt;&#xA;&lt;li&gt;Ship fast, iterate faster. Fair, honest, chilled—but urgent.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;highlights&#34;&gt;Highlights&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Founded/ran multiple brands.&lt;/li&gt;&#xA;&lt;li&gt;Built assistants, data pipelines, and workflow tools.&lt;/li&gt;&#xA;&lt;li&gt;Comfortable across product, GTM, ops, and the messy middle.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;Replace this with your real CV content or link to a PDF.&lt;/p&gt;&lt;/blockquote&gt;</description>
+      <description>&lt;h2 id=&#34;snapshot&#34; class=&#34;relative group&#34;&gt;Snapshot &lt;span class=&#34;absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100&#34;&gt;&lt;a class=&#34;group-hover:text-primary-300 dark:group-hover:text-neutral-700&#34; style=&#34;text-decoration-line: none !important;&#34; href=&#34;#snapshot&#34; aria-label=&#34;Anchor&#34;&gt;#&lt;/a&gt;&lt;/span&gt;&lt;/h2&gt;&lt;ul&gt;&#xA;&lt;li&gt;Entrepreneur &amp;amp; builder focused on AI + automation.&lt;/li&gt;&#xA;&lt;li&gt;Ship fast, iterate faster. Fair, honest, chilled—but urgent.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;highlights&#34; class=&#34;relative group&#34;&gt;Highlights &lt;span class=&#34;absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100&#34;&gt;&lt;a class=&#34;group-hover:text-primary-300 dark:group-hover:text-neutral-700&#34; style=&#34;text-decoration-line: none !important;&#34; href=&#34;#highlights&#34; aria-label=&#34;Anchor&#34;&gt;#&lt;/a&gt;&lt;/span&gt;&lt;/h2&gt;&lt;ul&gt;&#xA;&lt;li&gt;Founded/ran multiple brands.&lt;/li&gt;&#xA;&lt;li&gt;Built assistants, data pipelines, and workflow tools.&lt;/li&gt;&#xA;&lt;li&gt;Comfortable across product, GTM, ops, and the messy middle.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;Replace this with your real CV content or link to a PDF.&lt;/p&gt;</description>
     </item>
     <item>
       <title>My Brands</title>
@@ -64,8 +69,7 @@
       <link>http://localhost:1313/subscribe/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/subscribe/</guid>
-      <description>&lt;p&gt;Want new posts by email? Pop your address below.&lt;/p&gt;&#xA;&lt;!-- raw HTML omitted --&gt;&#xA;&lt;!-- raw HTML omitted --&gt;</description>
+      <description>&lt;p&gt;Want new posts by email? Pop your address below.&lt;/p&gt;&#xA;&lt;!-- Replace the action with your Mailchimp / Beehiiv / ConvertKit form URL --&gt;&#xD;&#xA;&lt;form method=&#34;post&#34; action=&#34;#&#34; style=&#34;display:flex;gap:8px;align-items:center;&#34;&gt;&#xD;&#xA;  &lt;input type=&#34;email&#34; name=&#34;email&#34; placeholder=&#34;you@example.com&#34; required&#xD;&#xA;         style=&#34;padding:10px;border-radius:8px;border:1px solid var(--border);background:#222;color:#eee;&#34;&gt;&#xD;&#xA;  &lt;button type=&#34;submit&#34; class=&#34;btn&#34; style=&#34;padding:10px 14px;border-radius:8px;border:1px solid var(--orange);background:transparent;color:#eee;&#34;&gt;&#xD;&#xA;    Subscribe&#xD;&#xA;  &lt;/button&gt;&#xD;&#xA;&lt;/form&gt;&#xD;&#xA;&lt;p style=&#34;opacity:.7;margin-top:.75rem;&#34;&gt;Tip: paste your provider’s embed code here later.&lt;/p&gt;</description>
     </item>
->>>>>>> 1de5a9e (Re-init local repo with existing working tree)
   </channel>
 </rss>
