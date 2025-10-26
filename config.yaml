@@ -1,61 +1,163 @@
-baseURL: "http://localhost/"
-title: "Mike G Robinson — Blog"
+baseURL: "https://mgrnz.com/"
+title: "Welcome to the Personal Blog of Mike G Robinson"
 languageCode: en-nz
 enableRobotsTXT: true
-theme: "congo"
+# theme: "congo"  # Disabled to use custom layouts
 
 # Site-wide taxonomies
 taxonomies:
   tag: tags
   category: categories
 
-# Pagination (Hugo v0.150+ replacement for deprecated 'paginate')
+# Pagination
 pagination:
-  paginate: 10
+  pagerSize: 10
 
 # Menus
 menu:
-  main:
+  # Header navigation
+  header:
     - name: "Home"
       url: "/"
       weight: 1
-    - name: "Posts"
+    - name: "Blog Posts"
       url: "/posts/"
       weight: 2
-    - name: "CV"
+    - name: "My CV"
       url: "/pages/cv/"
       weight: 3
-    - name: "Brands"
-      url: "/pages/brands/"
-      weight: 4
+  
+  # Sidebar navigation
+  sidebar:
     - name: "Subscribe"
       url: "/subscribe/"
-      weight: 5
-
-  # Top-right personal menu (you include this via {{ partial "admin-menu.html" . }})
-  admin:
-    - name: "Dashboard"
-      url: "/admin/"
       weight: 1
-    - name: "Create Post"
-      url: "/admin/create/"
-      weight: 2
-    - name: "Settings"
-      url: "/admin/settings/"
-      weight: 3
 
-# Theme + site params (merged into a single 'params' block)
+# Congo theme configuration
 params:
-  # Congo theme options (pick the variant you like)
-  defaultTheme: light        # or "dark" / "auto"
-  # Your custom CSS (ensures assets/css/custom.css is applied)
-  customCSS:
-    - css/custom.css
-
-  # Defaults for posts; individual posts can override
-  comments: false            # wizard can set comments: true per post
+  # Theme appearance
+  colorScheme: "congo"
+  defaultAppearance: "dark"
+  autoSwitchAppearance: false
+  
+  # Layout
+  layout: "page"
+  showBreadcrumbs: true
   showReadingTime: true
-  showToc: false
+  showTableOfContents: false
+  showTaxonomies: true
+  showWordCount: false
+  showSummary: true
+  sharingLinks: false
+  
+  # Header
+  header:
+    layout: "basic"
+    logo: "/images/BLOG-LOGO.png"
+    logoDark: "/images/BLOG-LOGO.png"
+    showTitle: true
+  
+  # Footer
+  footer:
+    showCopyright: true
+    showThemeAttribution: false
+    showAppearanceSwitcher: false
+    showScrollToTop: true
+  
+  # Homepage
+  homepage:
+    layout: "page"
+    homepageImage: "/images/home-banner.png"
+    showRecent: true
+    showRecentItems: 6
+    showMoreLink: true
+    showMoreLinkDest: "/posts"
+    cardView: false
+    cardViewScreenWidth: false
+    layoutBackgroundBlur: true
+  
+  # Article
+  article:
+    showDate: true
+    showViews: false
+    showLikes: false
+    showDateUpdated: false
+    showAuthor: true
+    showHero: true
+    heroStyle: "background"
+    layoutBackgroundBlur: true
+    showBreadcrumbs: false
+    showDraftLabel: true
+    showEdit: false
+    editURL: ""
+    editAppendPath: true
+    seriesOpened: false
+    showHeadingAnchors: true
+    showPagination: true
+    invertPagination: false
+    showReadingTime: true
+    showTableOfContents: false
+    showRelatedContent: false
+    relatedContentLimit: 3
+    showTaxonomies: true
+    showAuthorsBadges: false
+    showWordCount: false
+    showSummary: true
+    sharingLinks: false
+  
+  # List pages
+  list:
+    showHero: true
+    heroStyle: "background"
+    layoutBackgroundBlur: true
+    showBreadcrumbs: false
+    showSummary: false
+    showViews: false
+    showLikes: false
+    showTableOfContents: false
+    showCards: true
+    groupByYear: true
+    cardView: false
+    cardViewScreenWidth: false
+    constrainItemsWidth: false
+  
+  # Sitemap
+  sitemap:
+    excludedKinds: ["taxonomy", "term"]
+  
+  # Taxonomy
+  taxonomy:
+    showTermCount: true
+    showHero: true
+    heroStyle: "background"
+    showBreadcrumbs: false
+    showViews: false
+    showLikes: false
+    showTableOfContents: true
+    cardView: false
+  
+  # Term
+  term:
+    showHero: true
+    heroStyle: "background"
+    showBreadcrumbs: false
+    showViews: false
+    showLikes: false
+    showTableOfContents: true
+    groupByYear: false
+    cardView: false
+    cardViewScreenWidth: false
+  
+  # Author configuration
+  author:
+    name: "Mike G Robinson"
+    image: "/images/mgrnz-logo.webp"
+    headline: "Demystifying Technology to Build Better Businesses"
+    bio: "Mike is an unashamed evangelist of AI, ricidivous vibe-coder, and lifelong learner based in Auckland, New Zealand. Mike is a seasoned technology professional and entrepreneur. Mike has over 30 years of experience spanning IT security, SAP configuration, data migration, and business consulting. In early 2025, Mike founded Maximised AI after several months deep diving AI. Mike has since developed a string of successful AI-powered products and services aimed at helping businesses leverage the power of AI to drive productivity and growth."
+    links:
+      - email: "mailto:mike@mgrnz.com"
+      - link: "https://mgrnz.com"
+        text: "Website"
 
 # Markup / rendering
 markup:
@@ -69,5 +171,5 @@ markup:
 
 # Output formats
 outputs:
-  home: ["HTML", "RSS", "JSON"]
+  home: ["HTML", "RSS"]
   section: ["HTML", "RSS"]
