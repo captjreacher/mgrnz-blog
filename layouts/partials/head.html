@@ -41,6 +41,8 @@
 <!-- CSS -->
 {{ $customCSS := resources.Get "css/custom.css" | resources.Minify }}
 <link rel="stylesheet" href="{{ $customCSS.RelPermalink }}">
+<!-- Fallback CSS with cache busting -->
+<link rel="stylesheet" href="/css/custom.css?v={{ now.Unix }}">
 
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">

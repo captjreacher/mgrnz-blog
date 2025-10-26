@@ -13,7 +13,7 @@
       <div class="mb-8">
         <!-- Author Avatar/Logo -->
         <div style="padding-left: 2rem;">
-          <img src="/images/mgrnz-logo.webp?v=11" alt="Mike G Robinson" class="mb-4 h-60 w-60 rounded-full object-contain" style="display: block;">
+          <img src="/images/mgrnz-logo.webp?v={{ now.Unix }}" alt="Mike G Robinson" class="mb-4 h-60 w-60 rounded-full object-contain" style="display: block;">
         </div>
         
         <div class="text-center">
@@ -130,7 +130,7 @@
         <!-- Logo on right -->
         {{ with .Site.Params.header.logo }}
         <a href="{{ "/" | relURL }}" class="block">
-          <img src="{{ . }}" alt="{{ $.Site.Title }}" class="h-24 w-auto rounded-lg" style="height: 96px !important; max-height: 96px !important;">
+          <img src="{{ . }}?v={{ now.Unix }}" alt="{{ $.Site.Title }}" class="h-24 w-auto rounded-lg" style="height: 96px !important; max-height: 96px !important;">
         </a>
         {{ end }}
       </div>
@@ -158,7 +158,7 @@
     </button>
   </div>
 
-  <script src="/js/mobile-menu.js"></script>
+  <script src="/js/mobile-menu.js?v={{ now.Unix }}"></script>
   
   <script>
   // Simple prompt-based admin access
