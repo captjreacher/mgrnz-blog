@@ -1,26 +1,46 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Deployment Test</title>
+    <title>Deployment Test - Cache Buster</title>
     <style>
         body { 
             font-family: Arial, sans-serif; 
-            background: #1a1a1a; 
+            background: #0f172a; 
             color: #fff; 
             padding: 20px; 
             text-align: center;
         }
         .timestamp { 
             color: #ff4f00; 
-            font-size: 24px; 
+            font-size: 32px; 
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .status {
+            background: #22c55e;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            display: inline-block;
             margin: 20px 0;
         }
     </style>
 </head>
 <body>
-    <h1>🚀 Deployment Test</h1>
-    <div class="timestamp">{{ now.Format "2006-01-02 15:04:05" }}</div>
-    <p>If you can see this page with the current timestamp, the deployment is working!</p>
-    <p><a href="/" style="color: #89bbfe;">← Back to main site</a></p>
+    <h1>🚀 DEPLOYMENT SUCCESSFUL!</h1>
+    <div class="status">✅ Custom Layout Active</div>
+    <div class="timestamp">2025-10-26 22:17:40</div>
+    <p><strong>If you can see this page, the deployment is working!</strong></p>
+    <p>Check: <a href="/" style="color: #89bbfe;">https://342bf600.mgrnz-blog.pages.dev/</a></p>
+    <p>Look for: "CUSTOM LAYOUT ACTIVE" in the footer</p>
+    <hr style="margin: 30px 0; border-color: #374151;">
+    <h3>Expected Features:</h3>
+    <ul style="text-align: left; max-width: 500px; margin: 0 auto;">
+        <li>✅ Admin button in sidebar footer</li>
+        <li>✅ Logo in header (right side)</li>
+        <li>✅ Navigation menu (Home, Blog Posts, My CV)</li>
+        <li>✅ Orange/yellow/blue brand colors</li>
+        <li>✅ Dark theme background</li>
+    </ul>
 </body>
 </html>
