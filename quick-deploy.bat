@@ -32,6 +32,6 @@ git commit -m "Quick test %YYYY%-%MM%-%DD% %HH%:%Min%"
 git push
 
 echo.
-echo ✅ Deployed! Check: https://e35a2fac.mgrnz-blog.pages.dev/posts/
+echo ✅ Deployed! Check: https://mgrnz.com/posts/
 echo.
 pause

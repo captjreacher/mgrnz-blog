@@ -76,9 +76,9 @@ deploy-test-post.bat
 
 ## 🌐 **LIVE SITE URLS:**
 
-- **Main Site**: https://e35a2fac.mgrnz-blog.pages.dev/
-- **Blog Posts**: https://e35a2fac.mgrnz-blog.pages.dev/posts/
-- **Admin Interface**: https://e35a2fac.mgrnz-blog.pages.dev/admin/
+- **Main Site**: https://mgrnz.com/
+- **Blog Posts**: https://mgrnz.com/posts/
+- **Admin Interface**: https://mgrnz.com/admin/
 
 ## 📁 **KEY FILES:**
 

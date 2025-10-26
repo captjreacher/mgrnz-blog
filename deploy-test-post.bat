@@ -49,7 +49,7 @@ echo - Dark theme background
 echo.
 echo ---
 echo.
-echo **Site URL**: https://e35a2fac.mgrnz-blog.pages.dev/
+echo **Site URL**: https://mgrnz.com/
 echo.
 echo **Test completed at**: %timestamp%
 ) > "content/posts/deployment-test-%YYYY%-%MM%-%DD%-%HH%-%Min%.md"
@@ -103,10 +103,10 @@ echo ========================================
 echo.
 echo 🎯 Test URLs to check:
 echo.
-echo 1. Main site: https://e35a2fac.mgrnz-blog.pages.dev/
-echo 2. Blog posts: https://e35a2fac.mgrnz-blog.pages.dev/posts/
-echo 3. New test post: https://e35a2fac.mgrnz-blog.pages.dev/posts/deployment-test-%YYYY%-%MM%-%DD%-%HH%-%Min%/
-echo 4. Build info: https://e35a2fac.mgrnz-blog.pages.dev/build-info.txt
+echo 1. Main site: https://mgrnz.com/
+echo 2. Blog posts: https://mgrnz.com/posts/
+echo 3. New test post: https://mgrnz.com/posts/deployment-test-%YYYY%-%MM%-%DD%-%HH%-%Min%/
+echo 4. Build info: https://mgrnz.com/build-info.txt
 echo.
 echo ⏱️  Wait 2-3 minutes for Cloudflare Pages to build and deploy
 echo.

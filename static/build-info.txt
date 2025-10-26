@@ -1,8 +1,8 @@
 BUILD INFO TEST - CORRECT URL
 ==============================
-Timestamp: 2025-10-26 22:50:00
-Correct URL: https://e35a2fac.mgrnz-blog.pages.dev/
-Status: Testing with correct Cloudflare Pages URL
+Timestamp: 2025-10-26 23:00:00
+Correct URL: https://mgrnz.com/
+Status: Testing with correct domain (mgrnz.com -> mgrnz-blog.pages.dev)
 Expected: This file should appear at /build-info.txt
 Hugo Build: Should generate fresh HTML with FINAL TEST message
 ==============================
