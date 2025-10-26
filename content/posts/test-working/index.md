@@ -7,3 +7,5 @@ draft: false
 # Test Working
 
 This should work now with the folder structure.
+
+**Updated**: This post should be visible on the live site at https://mgrnz.com/posts/
