@@ -1,0 +1,298 @@
+{{ define "main" }}
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="flex items-center justify-between">
+    <div>
+      <h2 class="text-3xl font-bold text-white">Manage Posts</h2>
+      <p class="mt-2 text-neutral-400">Edit, delete, or organize your blog posts.</p>
+    </div>
+    <div class="flex gap-3">
+      <a href="/admin/create/" class="rounded-lg bg-orange-600 px-4 py-2 text-sm font-medium text-white hover:bg-orange-700">
+        + New Post
+      </a>
+      <a href="/admin/" class="rounded-lg bg-neutral-700 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-600">
+        ← Dashboard
+      </a>
+    </div>
+  </div>
+
+  <!-- Posts List -->
+  <div class="rounded-lg bg-white shadow-lg overflow-hidden">
+    <div class="px-6 py-4 border-b border-neutral-200 bg-neutral-50">
+      <h3 class="text-lg font-semibold text-neutral-900">All Posts</h3>
+    </div>
+    
+    <div class="divide-y divide-neutral-200">
+      {{ range (where .Site.RegularPages "Type" "posts") }}
+      <div class="px-6 py-4 hover:bg-neutral-50 transition-colors" data-post-slug="{{ .File.BaseFileName }}">
+        <!-- Hidden content storage -->
+        <script type="application/json" class="post-content" data-slug="{{ .File.BaseFileName }}">{{ .RawContent | jsonify }}</script>
+        
+        <div class="flex items-center justify-between">
+          <div class="flex-1">
+            <div class="flex items-center gap-3 mb-2">
+              <h4 class="text-lg font-semibold text-neutral-900">{{ .Title }}</h4>
+              {{ if .Draft }}
+              <span class="inline-flex items-center rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800">
+                Draft
+              </span>
+              {{ else }}
+              <span class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
+                Published
+              </span>
+              {{ end }}
+            </div>
+            
+            <div class="flex items-center gap-4 text-sm text-neutral-600 mb-2">
+              <span>{{ .Date.Format "Jan 2, 2006" }}</span>
+              {{ if .ReadingTime }}
+              <span>{{ .ReadingTime }} min read</span>
+              {{ end }}
+              {{ if .Params.tags }}
+              <span>Tags: {{ delimit .Params.tags ", " }}</span>
+              {{ end }}
+            </div>
+            
+            {{ if .Summary }}
+            <p class="text-sm text-neutral-700 line-clamp-2">{{ .Summary }}</p>
+            {{ end }}
+          </div>
+          
+          <div class="flex items-center gap-2 ml-4">
+            <a href="{{ .RelPermalink }}" target="_blank" 
+               class="inline-flex items-center rounded-lg bg-blue-100 px-3 py-2 text-sm font-medium text-blue-700 hover:bg-blue-200 transition-colors">
+              <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+              </svg>
+              View
+            </a>
+            
+            <a href="/admin/posts/edit/?post={{ .File.BaseFileName }}" 
+               class="inline-flex items-center rounded-lg bg-orange-100 px-3 py-2 text-sm font-medium text-orange-700 hover:bg-orange-200 transition-colors">
+              <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+              </svg>
+              Edit
+            </a>
+            
+            <button onclick="deletePost('{{ .File.BaseFileName }}', '{{ .Title }}')" 
+                    class="inline-flex items-center rounded-lg bg-red-100 px-3 py-2 text-sm font-medium text-red-700 hover:bg-red-200 transition-colors">
+              <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+              </svg>
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+      {{ end }}
+    </div>
+  </div>
+</div>
+
+<!-- Edit Post Modal -->
+<div id="editModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+  <div class="flex min-h-screen items-center justify-center px-4">
+    <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity"></div>
+    
+    <div class="relative w-full max-w-4xl rounded-lg bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto">
+      <div class="mb-4 flex items-center justify-between">
+        <h3 class="text-lg font-semibold text-neutral-900">Edit Post</h3>
+        <button onclick="closeEditModal()" class="text-neutral-400 hover:text-neutral-600">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      
+      <form id="editForm" class="space-y-4">
+        <input type="hidden" id="editSlug">
+        
+        <div>
+          <label class="block text-sm font-medium text-neutral-700 mb-2">Title</label>
+          <input id="editTitle" class="w-full rounded-lg border border-neutral-300 px-4 py-2 text-neutral-900 focus:border-orange-500 focus:ring-2 focus:ring-orange-200">
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium text-neutral-700 mb-2">Date</label>
+          <input id="editDate" type="date" class="w-full rounded-lg border border-neutral-300 px-4 py-2 text-neutral-900 focus:border-orange-500 focus:ring-2 focus:ring-orange-200">
+        </div>
+        
+        <div class="grid gap-4 md:grid-cols-2">
+          <div>
+            <label class="block text-sm font-medium text-neutral-700 mb-2">Tags</label>
+            <input id="editTags" placeholder="AI, automation, technology" class="w-full rounded-lg border border-neutral-300 px-4 py-2 text-neutral-900 focus:border-orange-500 focus:ring-2 focus:ring-orange-200">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-neutral-700 mb-2">Categories</label>
+            <input id="editCategories" placeholder="Technology, Business" class="w-full rounded-lg border border-neutral-300 px-4 py-2 text-neutral-900 focus:border-orange-500 focus:ring-2 focus:ring-orange-200">
+          </div>
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium text-neutral-700 mb-2">Summary</label>
+          <textarea id="editSummary" rows="3" class="w-full rounded-lg border border-neutral-300 px-4 py-2 text-neutral-900 focus:border-orange-500 focus:ring-2 focus:ring-orange-200"></textarea>
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium text-neutral-700 mb-2">Content</label>
+          <textarea id="editContent" rows="10" class="w-full rounded-lg border border-neutral-300 px-4 py-2 text-neutral-900 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 font-mono text-sm"></textarea>
+          <p class="mt-1 text-xs text-neutral-500">Edit the markdown content directly</p>
+        </div>
+        
+        <div>
+          <label class="flex items-center">
+            <input id="editDraft" type="checkbox" class="rounded border-neutral-300 text-orange-600 focus:ring-orange-500">
+            <span class="ml-2 text-sm text-neutral-700">Save as draft</span>
+          </label>
+        </div>
+        
+        <div class="flex justify-end gap-3 pt-4">
+          <button type="button" onclick="closeEditModal()" class="rounded-lg border border-neutral-300 px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50">
+            Cancel
+          </button>
+          <button type="submit" class="rounded-lg bg-orange-600 px-4 py-2 text-sm font-medium text-white hover:bg-orange-700">
+            Save Changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+function editPost(slug, title, date, tags, categories, summary, draft) {
+  document.getElementById('editSlug').value = slug;
+  document.getElementById('editTitle').value = title;
+  document.getElementById('editDate').value = date;
+  document.getElementById('editTags').value = (tags || []).join(', ');
+  document.getElementById('editCategories').value = (categories || []).join(', ');
+  document.getElementById('editSummary').value = summary || '';
+  document.getElementById('editContent').value = 'Loading content...';
+  document.getElementById('editDraft').checked = draft;
+  
+  // Load content separately to avoid JavaScript escaping issues
+  loadPostContent(slug);
+  
+  document.getElementById('editModal').classList.remove('hidden');
+}
+
+function loadPostContent(slug) {
+  try {
+    const contentScript = document.querySelector(`script.post-content[data-slug="${slug}"]`);
+    if (contentScript) {
+      const content = JSON.parse(contentScript.textContent);
+      document.getElementById('editContent').value = content;
+    } else {
+      document.getElementById('editContent').value = `# ${document.getElementById('editTitle').value}
+
+Add your content here. When you save, you'll get a downloadable file to replace the original.
+
+## Example Content
+
+Write your blog post content in Markdown format.
+
+- Use **bold** and *italic* text
+- Add [links](https://example.com)
+- Include code blocks:
+
+\`\`\`javascript
+console.log('Hello world');
+\`\`\`
+`;
+    }
+  } catch (error) {
+    console.error('Error loading post content:', error);
+    document.getElementById('editContent').value = 'Error loading content. Please try again.';
+  }
+}
+
+function closeEditModal() {
+  document.getElementById('editModal').classList.add('hidden');
+}
+
+function deletePost(slug, title) {
+  if (confirm(`Are you sure you want to delete "${title}"?\n\nThis will show you the folder to delete manually.`)) {
+    const postPath = `content/posts/${slug}/`;
+    alert(`To delete this post:\n\n1. Delete the folder: ${postPath}\n2. Hugo will automatically rebuild your site\n\nPost folder location: ${postPath}`);
+    
+    // Copy path to clipboard if possible
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(postPath).then(() => {
+        console.log('Post path copied to clipboard');
+      });
+    }
+  }
+}
+
+document.getElementById('editForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  
+  const formData = {
+    slug: document.getElementById('editSlug').value,
+    title: document.getElementById('editTitle').value,
+    date: document.getElementById('editDate').value,
+    tags: document.getElementById('editTags').value,
+    categories: document.getElementById('editCategories').value,
+    summary: document.getElementById('editSummary').value,
+    content: document.getElementById('editContent').value,
+    draft: document.getElementById('editDraft').checked
+  };
+  
+  // Generate the updated markdown content
+  const updatedContent = generateMarkdown(formData);
+  
+  if (confirm(`Download updated post "${formData.title}"?`)) {
+    // Create and download the updated file
+    const blob = new Blob([updatedContent], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${formData.slug}-updated.md`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    // Show instructions
+    alert(`Updated post downloaded as "${formData.slug}-updated.md"!\n\nTo apply changes:\n1. Replace content/posts/${formData.slug}/index.md with the downloaded file\n2. Rename it back to index.md\n3. Hugo will automatically rebuild your site`);
+    
+    closeEditModal();
+  }
+});
+
+function generateMarkdown(data) {
+  const tags = data.tags.split(',').map(t => t.trim()).filter(Boolean);
+  const categories = data.categories.split(',').map(c => c.trim()).filter(Boolean);
+  
+  let frontMatter = '---\n';
+  frontMatter += `title: "${data.title.replace(/"/g, '\\"')}"\n`;
+  frontMatter += `date: ${data.date}\n`;
+  frontMatter += `draft: ${data.draft}\n`;
+  
+  if (categories.length) {
+    frontMatter += `categories: [${categories.map(c => `"${c.replace(/"/g, '\\"')}"`).join(', ')}]\n`;
+  }
+  
+  if (tags.length) {
+    frontMatter += `tags: [${tags.map(t => `"${t.replace(/"/g, '\\"')}"`).join(', ')}]\n`;
+  }
+  
+  if (data.summary.trim()) {
+    frontMatter += `summary: "${data.summary.replace(/"/g, '\\"')}"\n`;
+  }
+  
+  frontMatter += '---\n\n';
+  
+  return frontMatter + data.content;
+}
+
+// Close modal when clicking outside
+document.getElementById('editModal').addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) {
+    closeEditModal();
+  }
+});
+</script>
+{{ end }}

@@ -1,4 +1,4 @@
-# Maximised AI — Hugo Blog (No Theme)
+# mgrnz.com — Hugo Blog (No Theme)
 
 Minimal Hugo blog scaffold with custom layouts (no external theme).
 - Dark UI with orange/blue accents

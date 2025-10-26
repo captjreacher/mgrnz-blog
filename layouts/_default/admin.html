@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.Language.Lang }}" class="dark">
+<head>
+  {{ partial "head.html" . }}
+  <title>{{ .Title }} - Admin | {{ .Site.Title }}</title>
+</head>
+<body class="min-h-screen bg-neutral-900 text-neutral-100">
+  
+  <!-- Admin Header -->
+  <header class="sticky top-0 z-20 border-b border-neutral-700 bg-neutral-800">
+    <div class="flex items-center justify-between px-6 py-4">
+      <div class="flex items-center gap-4">
+        <a href="{{ "/" | relURL }}" class="text-orange-500 hover:text-orange-400">
+          ← Back to Site
+        </a>
+        <h1 class="text-xl font-bold text-white">Admin Dashboard</h1>
+      </div>
+      
+      <nav class="flex items-center space-x-4">
+        <a href="/admin/" class="rounded-lg px-3 py-2 text-sm font-medium text-neutral-300 hover:bg-neutral-700 hover:text-white">
+          Dashboard
+        </a>
+        <a href="/admin/create/" class="rounded-lg px-3 py-2 text-sm font-medium text-neutral-300 hover:bg-neutral-700 hover:text-white">
+          Create Post
+        </a>
+        <a href="/admin/posts/" class="rounded-lg px-3 py-2 text-sm font-medium text-neutral-300 hover:bg-neutral-700 hover:text-white">
+          Manage Posts
+        </a>
+        <div class="border-l border-neutral-600 pl-4">
+          <button onclick="adminLogout()" class="rounded-lg px-3 py-2 text-sm font-medium text-red-400 hover:bg-red-900 hover:text-red-300">
+            Logout
+          </button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="mx-auto max-w-6xl px-6 py-8">
+    <div id="adminContent">
+      <!-- Admin content -->
+      {{ block "main" . }}
+        <div class="text-center py-16">
+          <h2 class="text-2xl font-bold text-white mb-4">Admin Content</h2>
+          <p class="text-neutral-400">Default admin template loaded.</p>
+        </div>
+      {{ end }}
+    </div>
+  </main>
+
+  <!-- Admin Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+  
+  <script>
+  // Check admin access
+  if (sessionStorage.getItem('adminAccess') !== 'true') {
+    alert('Access denied. Please log in first.');
+    window.location.href = '/';
+  }
+
+  // Add logout functionality
+  function adminLogout() {
+    sessionStorage.removeItem('adminAccess');
+    window.location.href = '/';
+  }
+  </script>
+
+  {{ partial "footer.html" . }}
+</body>
+</html>

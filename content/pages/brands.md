@@ -5,7 +5,7 @@ url: "/pages/brands/"
 
 Here are the brands I run/work on:
 
-- **Maximised AI** — automations, assistants, experiments.
+- **mgrnz.com** — automations, assistants, experiments.
 - **(Add brand)** — one-liner.
 - **(Add brand)** — one-liner.
 

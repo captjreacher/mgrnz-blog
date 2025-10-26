@@ -1,74 +1,289 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
 
-/* Hero */
-.hero-image {
-  display:block;
-  margin:24px auto;
-  width:100%;
-  max-width:1120px; /* your x2 size */
-  height:auto;
-}
-article img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
-}
-article.prose {
-  line-height: 1.7;
-}
-
-/* Brand colors */
-:root { --orange:#ff4f00; --yellow:#ffcf00; --blue:#89bbfe; }
-h1,h2,h3 { color:var(--orange); }
-.nav a { color:#ccc; }
-.nav a:hover { color:var(--yellow); }
-
+/* Congo Dark Theme Overrides with Custom Brand Colors */
 :root {
   --font-body: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   --font-heading: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-
-  /* Updated brand palette */
-  --color-primary-400: 96, 165, 250;  /* sky blue */
-  --color-primary-500: 59, 130, 246;
-  --color-primary-600: 37, 99, 235;
-
-  --color-secondary-400: 244, 174, 208; /* rose quartz */
-  --color-secondary-500: 236, 135, 192;
-  --color-secondary-600: 219, 109, 175;
-
-  --color-neutral: 248, 250, 252; /* page background */
-  --color-neutral-50: 248, 250, 252;
-  --color-neutral-100: 241, 245, 249;
-  --color-neutral-200: 226, 232, 240;
-  --color-neutral-300: 203, 213, 225;
-  --color-neutral-400: 148, 163, 184;
-  --color-neutral-500: 100, 116, 139;
-  --color-neutral-600: 71, 85, 105;
-  --color-neutral-700: 51, 65, 85;
-  --color-neutral-800: 30, 41, 59;
-  --color-neutral-900: 15, 23, 42; /* body text */
+  
+  /* Custom brand colors */
+  --orange: #ff4f00;
+  --yellow: #ffcf00;
+  --blue: #89bbfe;
+  
+  /* Dark theme colors */
+  --color-neutral-50: 15, 23, 42;
+  --color-neutral-100: 30, 41, 59;
+  --color-neutral-200: 51, 65, 85;
+  --color-neutral-300: 71, 85, 105;
+  --color-neutral-400: 100, 116, 139;
+  --color-neutral-500: 148, 163, 184;
+  --color-neutral-600: 203, 213, 225;
+  --color-neutral-700: 226, 232, 240;
+  --color-neutral-800: 241, 245, 249;
+  --color-neutral-900: 248, 250, 252;
+  
+  /* Primary colors (orange theme) */
+  --color-primary-400: 255, 79, 0;
+  --color-primary-500: 255, 79, 0;
+  --color-primary-600: 204, 63, 0;
+  
+  /* Secondary colors (blue accents) */
+  --color-secondary-400: 137, 187, 254;
+  --color-secondary-500: 137, 187, 254;
+  --color-secondary-600: 109, 149, 203;
 }
 
-html,
+/* Force dark theme */
+html {
+  color-scheme: dark;
+}
+
 body {
   font-family: var(--font-body);
+  background-color: rgb(var(--color-neutral-50));
+  color: rgb(var(--color-neutral-900));
 }
 
-body {
-  background-color: rgba(var(--color-neutral), 1);
-  color: rgba(var(--color-neutral-900), 1);
-}
-
-.prose,
-.prose :where(p, li, strong, span) {
-  color: inherit;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+/* Headings with brand colors */
+h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
+  color: var(--orange) !important;
+}
+
+/* Links */
+a {
+  color: var(--blue);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--yellow);
+}
+
+/* Navigation */
+.main-menu a {
+  color: rgb(var(--color-neutral-700));
+}
+
+.main-menu a:hover {
+  color: var(--yellow);
+}
+
+/* Article images */
+article img, .prose img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 1rem auto;
+  display: block;
+}
+
+/* Hero image */
+.hero-image {
+  display: block;
+  margin: 24px auto;
+  width: 100%;
+  max-width: 1120px;
+  height: auto;
+  border-radius: 12px;
+}
+
+/* Author avatar - updated for logo display */
+.author-avatar, 
+.profile-image,
+img.avatar {
+  width: 128px;
+  height: 128px;
+  border-radius: 50%;
+  object-fit: contain;
+  object-position: center;
+  margin: 0 auto;
+  display: block;
+  background: white;
+  padding: 4px;
+}
+
+/* Sidebar avatar container */
+.sidebar .author-avatar {
+  border: 3px solid var(--orange);
+}
+
+/* Cards */
+.card {
+  background-color: rgb(var(--color-neutral-100));
+  border: 1px solid rgb(var(--color-neutral-200));
+}
+
+.card:hover {
+  border-color: var(--orange);
+}
+
+/* Buttons */
+.btn, button {
+  background-color: var(--orange);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn:hover, button:hover {
+  background-color: var(--yellow);
+  color: rgb(var(--color-neutral-50));
+}
+
+/* Code blocks */
+pre, code {
+  background-color: rgb(var(--color-neutral-100)) !important;
+  color: rgb(var(--color-neutral-800)) !important;
+}
+
+/* Sidebar customization for Congo theme */
+.sidebar {
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Header logo - 50% smaller */
+img.site-logo.h-10 {
+  height: 20px !important;
+  max-height: 20px !important;
+  width: auto !important;
+}
+.site-logo img,
+img.site-logo,
+.site-logo.h-10,
+.h-10.site-logo {
+  height: 20px !important;
+  width: auto !important;
+}
+
+/* Override Tailwind h-10 class specifically for logo */
+.site-logo.h-10 {
+  height: 20px !important;
+}
+
+/* Prose content */
+.prose {
+  line-height: 1.7;
+  color: rgb(var(--color-neutral-800));
+}
+
+.prose strong {
+  color: var(--orange);
+}
+
+/* Table styling */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+}
+
+th, td {
+  border: 1px solid rgb(var(--color-neutral-300));
+  padding: 0.5rem;
+  text-align: left;
+}
+
+th {
+  background-color: rgb(var(--color-neutral-100));
+  color: var(--orange);
+  font-weight: 600;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .author-avatar, 
+  .profile-image,
+  img.avatar {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .hero-image {
+    max-width: 100%;
+    margin: 16px auto;
+  }
+}
+
+/* Responsive Sidebar Layout */
+@media (max-width: 1024px) {
+  .ml-64 {
+    margin-left: 0;
+  }
+  
+  aside.fixed {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+  
+  aside.fixed.open {
+    transform: translateX(0);
+  }
+  
+  .author-avatar {
+    width: 80px;
+    height: 80px;
+  }
+  
+  /* Adjust sidebar width on mobile */
+  aside.fixed {
+    width: 280px;
+  }
+}
+
+@media (max-width: 768px) {
+  .grid.md\\:grid-cols-2 {
+    grid-template-columns: 1fr;
+  }
+  
+  .grid.lg\\:grid-cols-3 {
+    grid-template-columns: 1fr;
+  }
+  
+  .text-4xl {
+    font-size: 2rem;
+  }
+  
+  .px-6 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* Ensure images don't break layout */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Fix Congo theme conflicts - ensure proper integration */
+.prose a {
+  color: var(--blue);
+}
+
+.prose a:hover {
+  color: var(--yellow);
+}
+
+/* Ensure proper dark mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+  }
+}
+
+/* Mobile menu toggle */
+#mobile-menu-toggle {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  #mobile-menu-toggle {
+    display: block;
+  }
 }

@@ -1,31 +1,157 @@
-{{ define "title" }}Posts — {{ .Site.Title }}{{ end }}
+{{ define "title" }}My Blog Posts — {{ .Site.Title }}{{ end }}
 {{ define "main" }}
-  <h1>Posts</h1>
+<div class="space-y-8">
+  <!-- Page Header -->
+  <header class="text-center">
+    <h1 class="mb-4 text-4xl font-bold text-white">My Blog Posts</h1>
+  </header>
+
   {{ $all := where .Pages "Type" "in" (slice "posts") }}
   {{ $sorted := $all.ByDate.Reverse }}
   {{ $recent := first 3 $sorted }}
   {{ $older  := after 3 $sorted }}
 
-  <h2>Recent</h2>
-  <ul class="post-list">
-    {{ range $recent }}
-      <li class="post-item">
-        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-        <span class="date">{{ .Date.Format "02 Jan 2006" }}</span>
-        {{ with .Summary }}<p class="summary">{{ . }}</p>{{ end }}
-      </li>
-    {{ end }}
-  </ul>
-
-  {{ if gt (len $older) 0 }}
-  <h2 style="margin-top:1.2rem;">Older</h2>
-  <ul class="post-list">
-    {{ range $older }}
-      <li class="post-item">
-        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-        <span class="date">{{ .Date.Format "02 Jan 2006" }}</span>
-      </li>
-    {{ end }}
-  </ul>
+  <!-- Recent Posts (First 3 as Cards) -->
+  {{ if $recent }}
+  <section class="space-y-6">
+    <h2 class="text-2xl font-bold text-orange-400">Recent</h2>
+    <!-- OPTION 3: Magazine Style Cards -->
+    <div class="space-y-6">
+      {{ range $index, $post := $recent }}
+      {{ if eq $index 0 }}
+      <!-- Featured Post (Large Card) -->
+      <article class="card overflow-hidden rounded-lg transition-all hover:shadow-xl bg-white border border-neutral-200 shadow-lg">
+        {{ if $post.Params.image }}
+        <div class="h-64 w-full">
+          <img src="{{ $post.Params.image }}" alt="{{ $post.Title }}" class="h-full w-full object-cover">
+        </div>
+        {{ end }}
+        <div class="p-8">
+          <div class="mb-2 flex items-center gap-2">
+            <span class="rounded-full bg-gradient-to-r from-orange-500 to-red-500 px-3 py-1 text-xs font-semibold text-white shadow-md">FEATURED</span>
+            <time class="text-sm text-neutral-600" datetime="{{ $post.Date.Format "2006-01-02" }}">
+              {{ $post.Date.Format "Jan 2, 2006" }}
+            </time>
+          </div>
+          
+          <header class="mb-4">
+            <h3 class="mb-3 text-3xl font-bold text-neutral-900">
+              <a href="{{ $post.RelPermalink }}" class="hover:text-orange-600 transition-colors">{{ $post.Title }}</a>
+            </h3>
+          </header>
+          
+          {{ if $post.Summary }}
+          <p class="mb-6 text-lg text-neutral-700 leading-relaxed">{{ $post.Summary }}</p>
+          {{ else if $post.Content }}
+          <p class="mb-6 text-lg text-neutral-700 leading-relaxed">{{ $post.Plain | truncate 200 }}</p>
+          {{ end }}
+          
+          <div class="flex items-center justify-between">
+            {{ if $post.Params.tags }}
+            <div class="flex flex-wrap gap-2">
+              {{ range first 4 $post.Params.tags }}
+              <span class="rounded-full bg-neutral-100 border border-neutral-300 px-3 py-1 text-xs text-neutral-700 hover:bg-neutral-200 transition-colors">
+                {{ . }}
+              </span>
+              {{ end }}
+            </div>
+            {{ end }}
+            
+            <a href="{{ $post.RelPermalink }}" class="inline-flex items-center rounded-lg bg-gradient-to-r from-orange-600 to-red-600 px-6 py-3 text-sm font-semibold text-white hover:from-orange-700 hover:to-red-700 transition-all shadow-md hover:shadow-lg">
+              Read More →
+            </a>
+          </div>
+        </div>
+      </article>
+      {{ else }}
+      <!-- Regular Posts (First time through, create grid container) -->
+      {{ if eq $index 1 }}
+      <div class="grid gap-6 md:grid-cols-2">
+      {{ end }}
+        <article class="card overflow-hidden rounded-lg transition-all hover:shadow-xl bg-white border border-neutral-200 shadow-md hover:shadow-lg">
+          {{ if $post.Params.image }}
+          <div class="h-40 w-full">
+            <img src="{{ $post.Params.image }}" alt="{{ $post.Title }}" class="h-full w-full object-cover">
+          </div>
+          {{ end }}
+          <div class="p-6">
+            <header class="mb-3">
+              <h3 class="mb-2 text-lg font-semibold text-neutral-900">
+                <a href="{{ $post.RelPermalink }}" class="hover:text-orange-600 transition-colors">{{ $post.Title }}</a>
+              </h3>
+              
+              <div class="flex flex-wrap items-center gap-3 text-sm text-neutral-600">
+                <time datetime="{{ $post.Date.Format "2006-01-02" }}">
+                  {{ $post.Date.Format "Jan 2, 2006" }}
+                </time>
+                {{ if $post.ReadingTime }}
+                <span>{{ $post.ReadingTime }} min read</span>
+                {{ end }}
+              </div>
+            </header>
+            
+            {{ if $post.Summary }}
+            <p class="mb-4 text-neutral-700 text-sm">{{ $post.Summary | truncate 100 }}</p>
+            {{ else if $post.Content }}
+            <p class="mb-4 text-neutral-700 text-sm">{{ $post.Plain | truncate 100 }}</p>
+            {{ end }}
+            
+            {{ if $post.Params.tags }}
+            <div class="flex flex-wrap gap-2">
+              {{ range first 2 $post.Params.tags }}
+              <span class="rounded-full bg-gradient-to-r from-orange-500 to-red-500 px-3 py-1 text-xs text-white shadow-sm">
+                {{ . }}
+              </span>
+              {{ end }}
+            </div>
+            {{ end }}
+          </div>
+        </article>
+      {{ if eq $index 2 }}
+      </div>
+      {{ end }}
+      {{ end }}
+      {{ end }}
+    </div>
+  </section>
   {{ end }}
+
+  <!-- Older Posts (List Format) -->
+  {{ if gt (len $older) 0 }}
+  <section class="space-y-6">
+    <h2 class="text-2xl font-bold text-orange-400">Older Posts</h2>
+    <div class="space-y-4">
+      {{ range $older }}
+      <article class="border-b border-neutral-700 pb-4">
+        <div class="flex items-start justify-between">
+          <div class="flex-1">
+            <h3 class="text-lg font-semibold text-white mb-1">
+              <a href="{{ .RelPermalink }}" class="hover:text-orange-400">{{ .Title }}</a>
+            </h3>
+            <div class="flex items-center gap-3 text-sm text-neutral-400 mb-2">
+              <time datetime="{{ .Date.Format "2006-01-02" }}">
+                {{ .Date.Format "Jan 2, 2006" }}
+              </time>
+              {{ if .ReadingTime }}
+              <span>{{ .ReadingTime }} min read</span>
+              {{ end }}
+            </div>
+            {{ if .Summary }}
+            <p class="text-neutral-300 text-sm">{{ .Summary | truncate 120 }}</p>
+            {{ else if .Content }}
+            <p class="text-neutral-300 text-sm">{{ .Plain | truncate 120 }}</p>
+            {{ end }}
+          </div>
+          {{ if .Params.image }}
+          <div class="ml-4 flex-shrink-0">
+            <img src="{{ .Params.image }}" alt="{{ .Title }}" class="h-16 w-16 rounded object-cover">
+          </div>
+          {{ end }}
+        </div>
+      </article>
+      {{ end }}
+    </div>
+  </section>
+  {{ end }}
+</div>
 {{ end }}

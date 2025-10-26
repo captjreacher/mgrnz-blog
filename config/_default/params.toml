@@ -1,0 +1,22 @@
+[params]
+autoswitchappearance = true
+colorscheme = "congo"
+customcss = ["css/custom.css"]
+defaultappearance = "light"
+showreadingtime = true
+
+# Sidebar profile
+[params.author]
+name = "Mike G Robinson"
+headline = "Demystifying Technology to Build Better Businesses"
+image = "/images/mgrnz-logo.webp"     # MUST exist at static/images/mgrnz-logo.webp
+
+# Header logo (top-right)
+[params.header]
+logo = "/images/BLUE-LOGO.png"        # static/images/BLOG-LOGO.png
+logodark = "/images/BLUE-LOGO.png"
+
+# Homepage banner
+[params.homepage]
+layout = "page"
+hero = "/images/home-banner.png"      # static/images/home-banner.png

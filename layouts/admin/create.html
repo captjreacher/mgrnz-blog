@@ -1,0 +1,236 @@
+{{ define "main" }}
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="flex items-center justify-between">
+    <div>
+      <h2 class="text-3xl font-bold text-white">Create New Post</h2>
+      <p class="mt-2 text-neutral-400">Use the wizard below to create a new blog post with all the necessary files.</p>
+    </div>
+    <a href="/admin/" class="rounded-lg bg-neutral-700 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-600">
+      ← Back to Dashboard
+    </a>
+  </div>
+
+  <!-- Post Creation Wizard -->
+  <div class="rounded-lg bg-white p-8 shadow-lg">
+    <form id="postWizard" class="space-y-6">
+      <!-- Basic Information -->
+      <div class="grid gap-6 md:grid-cols-2">
+        <div>
+          <label class="block text-sm font-medium text-neutral-700 mb-2">Post Slug</label>
+          <input name="slug" required placeholder="e.g. ai-trends-2025" 
+                 class="w-full rounded-lg border border-neutral-300 px-4 py-2 text-neutral-900 focus:border-orange-500 focus:ring-2 focus:ring-orange-200">
+          <p class="mt-1 text-xs text-neutral-500">URL-friendly name (lowercase, hyphens only)</p>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-neutral-700 mb-2">Publish Date</label>
+          <input name="date" type="date" 
+                 class="w-full rounded-lg border border-neutral-300 px-4 py-2 text-neutral-900 focus:border-orange-500 focus:ring-2 focus:ring-orange-200">
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-neutral-700 mb-2">Post Title</label>
+        <input name="title" required placeholder="Enter your post title" 
+               class="w-full rounded-lg border border-neutral-300 px-4 py-2 text-neutral-900 focus:border-orange-500 focus:ring-2 focus:ring-orange-200">
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-2">
+        <div>
+          <label class="block text-sm font-medium text-neutral-700 mb-2">Tags</label>
+          <input name="tags" placeholder="AI, automation, technology" 
+                 class="w-full rounded-lg border border-neutral-300 px-4 py-2 text-neutral-900 focus:border-orange-500 focus:ring-2 focus:ring-orange-200">
+          <p class="mt-1 text-xs text-neutral-500">Comma-separated tags</p>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-neutral-700 mb-2">Categories</label>
+          <input name="categories" placeholder="Technology, Business" 
+                 class="w-full rounded-lg border border-neutral-300 px-4 py-2 text-neutral-900 focus:border-orange-500 focus:ring-2 focus:ring-orange-200">
+          <p class="mt-1 text-xs text-neutral-500">Comma-separated categories</p>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-neutral-700 mb-2">Summary/Excerpt</label>
+        <textarea name="excerpt" rows="3" placeholder="Brief description of your post..." 
+                  class="w-full rounded-lg border border-neutral-300 px-4 py-2 text-neutral-900 focus:border-orange-500 focus:ring-2 focus:ring-orange-200"></textarea>
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-2">
+        <div>
+          <label class="block text-sm font-medium text-neutral-700 mb-2">Hero Image</label>
+          <input name="hero" type="file" accept="image/*" 
+                 class="w-full rounded-lg border border-neutral-300 px-4 py-2 text-neutral-900 focus:border-orange-500 focus:ring-2 focus:ring-orange-200">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-neutral-700 mb-2">Additional Images</label>
+          <input name="library" multiple type="file" accept="image/*" 
+                 class="w-full rounded-lg border border-neutral-300 px-4 py-2 text-neutral-900 focus:border-orange-500 focus:ring-2 focus:ring-orange-200">
+        </div>
+      </div>
+
+      <!-- Content Blocks -->
+      <div class="border-t border-neutral-200 pt-6">
+        <div class="mb-4 flex items-center justify-between">
+          <h3 class="text-lg font-semibold text-neutral-900">Content Blocks</h3>
+          <div class="flex gap-2">
+            <button type="button" id="addText" 
+                    class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
+              + Text Block
+            </button>
+            <button type="button" id="addImage" 
+                    class="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700">
+              + Image Block
+            </button>
+          </div>
+        </div>
+        <div id="blocks" class="space-y-4"></div>
+      </div>
+
+      <!-- Submit -->
+      <div class="border-t border-neutral-200 pt-6">
+        <button type="submit" 
+                class="w-full rounded-lg bg-gradient-to-r from-orange-600 to-red-600 px-6 py-3 text-lg font-semibold text-white hover:from-orange-700 hover:to-red-700 transition-all">
+          Generate Post Package
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Result Display -->
+  <div id="result" class="hidden rounded-lg bg-green-50 border border-green-200 p-6">
+    <div class="flex items-center">
+      <svg class="h-6 w-6 text-green-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+      </svg>
+      <div>
+        <h3 class="text-lg font-semibold text-green-800">Post Package Generated!</h3>
+        <p class="text-green-700" id="resultText"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const blocksEl = document.getElementById('blocks');
+const addTextBtn = document.getElementById('addText');
+const addImageBtn = document.getElementById('addImage');
+const form = document.getElementById('postWizard');
+const result = document.getElementById('result');
+const resultText = document.getElementById('resultText');
+
+function createBlock(type, content) {
+  const block = document.createElement('div');
+  block.className = 'rounded-lg border border-neutral-200 bg-neutral-50 p-4';
+  
+  if (type === 'text') {
+    block.innerHTML = `
+      <div class="flex items-center justify-between mb-3">
+        <label class="text-sm font-medium text-neutral-700">Text Block</label>
+        <button type="button" class="remove text-red-600 hover:text-red-800 text-sm">Remove</button>
+      </div>
+      <textarea class="txt w-full rounded-lg border border-neutral-300 px-4 py-2 text-neutral-900 focus:border-orange-500 focus:ring-2 focus:ring-orange-200" 
+                rows="4" placeholder="Write your content in Markdown...">${content || ''}</textarea>
+    `;
+  } else if (type === 'image') {
+    block.innerHTML = `
+      <div class="flex items-center justify-between mb-3">
+        <label class="text-sm font-medium text-neutral-700">Image Block</label>
+        <button type="button" class="remove text-red-600 hover:text-red-800 text-sm">Remove</button>
+      </div>
+      <input class="imgName w-full rounded-lg border border-neutral-300 px-4 py-2 text-neutral-900 focus:border-orange-500 focus:ring-2 focus:ring-orange-200" 
+             placeholder="image-filename.jpg" value="${content || ''}">
+      <p class="mt-1 text-xs text-neutral-500">Reference an image from your library above</p>
+    `;
+  }
+  
+  block.querySelector('.remove').onclick = () => block.remove();
+  return block;
+}
+
+addTextBtn.onclick = () => blocksEl.appendChild(createBlock('text'));
+addImageBtn.onclick = () => blocksEl.appendChild(createBlock('image'));
+
+// Set default date
+document.querySelector('input[name="date"]').value = new Date().toISOString().slice(0,10);
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const fd = new FormData(form);
+  
+  const slug = (fd.get('slug') || '').trim().toLowerCase().replace(/[^a-z0-9-]/g, '-');
+  if (!slug) { alert('Please enter a slug.'); return; }
+
+  const title = (fd.get('title') || '').trim();
+  const date = fd.get('date') || new Date().toISOString().slice(0,10);
+  const excerpt = (fd.get('excerpt') || '').trim();
+  
+  const tags = (fd.get('tags') || '').split(',').map(s => s.trim()).filter(Boolean);
+  const categories = (fd.get('categories') || '').split(',').map(s => s.trim()).filter(Boolean);
+
+  const heroFile = fd.get('hero');
+  const heroName = heroFile && heroFile.name ? heroFile.name : '';
+
+  // Gather content blocks
+  const blocks = [];
+  blocksEl.querySelectorAll('.txt').forEach(t => {
+    const v = t.value.trim();
+    if (v) blocks.push({type:'text', value:v});
+  });
+  blocksEl.querySelectorAll('.imgName').forEach(i => {
+    const v = i.value.trim();
+    if (v) blocks.push({type:'image', value:v});
+  });
+
+  // Build front matter
+  const fm = ['---'];
+  fm.push(`title: "${title.replace(/"/g,'\\"')}"`);
+  fm.push(`date: ${date}`);
+  fm.push(`draft: false`);
+  if (categories.length) fm.push(`categories: [${categories.map(c=>`"${c.replace(/"/g,'\\"')}"`).join(', ')}]`);
+  if (tags.length) fm.push(`tags: [${tags.map(t=>`"${t.replace(/"/g,'\\"')}"`).join(', ')}]`);
+  if (excerpt) fm.push(`summary: "${excerpt.replace(/"/g,'\\"')}"`);
+  if (heroName) fm.push(`image: "${heroName}"`);
+  fm.push('---');
+  fm.push('');
+
+  // Build content
+  const body = [];
+  for (const b of blocks) {
+    if (b.type === 'text') body.push(b.value);
+    if (b.type === 'image') body.push(`![Image](${b.value})`);
+  }
+  
+  const md = fm.join('\n') + body.join('\n\n') + '\n';
+
+  // Create ZIP
+  const zip = new JSZip();
+  const dir = `content/posts/${slug}/`;
+  zip.file(dir + 'index.md', md);
+
+  // Add hero image
+  if (heroFile && heroFile.name) {
+    const buf = await heroFile.arrayBuffer();
+    zip.file(dir + heroFile.name, buf);
+  }
+
+  // Add library images
+  const libraryFiles = document.querySelector('input[name="library"]').files || [];
+  for (const f of libraryFiles) {
+    const buf = await f.arrayBuffer();
+    zip.file(dir + f.name, buf);
+  }
+
+  // Create ZIP file for download
+  const blob = await zip.generateAsync({type:'blob'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `${slug}.zip`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+
+  result.classList.remove('hidden');
+  resultText.textContent = `Generated ${slug}.zip - Extract this to your content/posts/ directory. Hugo will automatically rebuild your site.`;
+});
+</script>
+{{ end }}

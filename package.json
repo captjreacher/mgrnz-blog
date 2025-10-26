@@ -1,13 +1,17 @@
 {
-  "name": "mgrnz-blog",
+  "name": "hugo-admin-api",
   "version": "1.0.0",
-  "private": true,
+  "description": "Admin API for Hugo blog management",
+  "main": "admin-api.js",
   "scripts": {
-    "dev": "hugo server --gc --bind 0.0.0.0 --port 1313 -D",
-    "build": "hugo --gc --minify"
+    "start": "node admin-api.js",
+    "dev": "nodemon admin-api.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
   },
   "devDependencies": {
-    "hugo-bin": "^0.148.2",
-    "supabase": "^2.53.6"
+    "nodemon": "^3.0.1"
   }
 }

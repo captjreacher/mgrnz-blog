@@ -1,19 +1,5 @@
-﻿---
-title: "Welcome to Maximised AI"
+---
+title: "Welcome to the Personal Blog of Mike G Robinson"
 ---
 
-<section style="text-align:center; padding:80px 20px; color:white;">
-<img src="/images/placeholder.png" alt="Maximised AI hero" class="hero-image">
- <h1 style="font-size:2.5rem; margin:0;">Building Better with AI</h1>
-  <p style="font-size:1.1rem; margin-top:1rem; max-width:620px; margin-left:auto; margin-right:auto;">
-    Iâ€™m Mike G Robinson â€” founder of <strong>Maximised AI</strong>.  
-    We build custom automations, smart business workflows, and AI-powered tools that save time, cut costs, and amplify impact.
-  </p>
-
-  <nav style="margin-top:40px;">
-    <a href="/posts/" style="color:#ff4f00; margin:0 15px; text-decoration:none;">Blog</a>
-    <a href="/pages/cv/" style="color:#ffcf00; margin:0 15px; text-decoration:none;">CV / Experience</a>
-    <a href="/pages/brands/" style="color:#89bbfe; margin:0 15px; text-decoration:none;">My Brands</a>
-    <a href="/subscribe/" style="color:white; margin:0 15px; text-decoration:none;">Subscribe</a>
-  </nav>
-</section>
+Welcome to my personal blog and business hub. I'm passionate about building better solutions with AI and automation.

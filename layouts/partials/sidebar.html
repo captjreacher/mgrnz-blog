@@ -1,0 +1,63 @@
+<!-- Left Sidebar with Author Info and Navigation -->
+<aside class="sidebar fixed left-0 top-0 z-30 h-full w-64 bg-neutral-900/95 backdrop-blur-md p-6 text-white shadow-xl">
+  <!-- Author Section -->
+  <div class="mb-8 text-center">
+    {{ with .Site.Params.author.image }}
+    <img src="{{ . }}" alt="{{ $.Site.Params.author.name }}" class="author-avatar mx-auto mb-4">
+    {{ end }}
+    
+    <h2 class="mb-2 text-lg font-bold">{{ .Site.Params.author.name }}</h2>
+    <p class="text-sm text-neutral-300">{{ .Site.Params.author.headline }}</p>
+  </div>
+  
+  <!-- Navigation Menu -->
+  <nav class="space-y-2">
+    {{ range .Site.Menus.sidebar }}
+    <a href="{{ .URL | relURL }}" 
+       class="block rounded-lg px-4 py-2 text-sm transition-colors hover:bg-white/10 {{ if $.IsMenuCurrent "sidebar" . }}bg-primary-600{{ end }}">
+      {{ .Name }}
+    </a>
+    {{ end }}
+  </nav>
+  
+  <!-- Brands Section -->
+  <div class="mt-8 space-y-2">
+    <h3 class="text-sm font-semibold text-neutral-400">Brands</h3>
+    <a href="https://maximisedai.com" target="_blank" rel="noopener" 
+       class="block text-sm text-neutral-300 hover:text-white">
+      Maximised AI
+    </a>
+    <a href="https://funkmybrand.com" target="_blank" rel="noopener" 
+       class="block text-sm text-neutral-300 hover:text-white">
+      Funk My Brand
+    </a>
+  </div>
+  
+  <!-- Author Links -->
+  {{ if .Site.Params.author.links }}
+  <div class="mt-8 space-y-2">
+    <h3 class="text-sm font-semibold text-neutral-400">Connect</h3>
+    {{ range .Site.Params.author.links }}
+    {{ if .email }}
+    <a href="{{ .email }}" class="block text-sm text-neutral-300 hover:text-white">
+      Email
+    </a>
+    {{ else if .link }}
+    <a href="{{ .link }}" target="_blank" rel="noopener" class="block text-sm text-neutral-300 hover:text-white">
+      {{ .text | default "Website" }}
+    </a>
+    {{ end }}
+    {{ end }}
+  </div>
+  {{ end }}
+  
+  <!-- Footer -->
+  <div class="mt-auto pt-8 text-center text-xs text-neutral-400">
+    © {{ now.Year }} {{ .Site.Title }}
+  </div>
+</aside>
+
+<!-- Main content wrapper with sidebar offset -->
+<div class="ml-64">
+  <!-- Content goes here -->
+</div>

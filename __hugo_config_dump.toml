@@ -1,0 +1,732 @@
+﻿archetypedir = 'archetypes'
+assetdir = 'assets'
+baseurl = 'http://mgrnz.com'
+cachedir = 'C:\Users\user\AppData\Local\hugo_cache'
+capitalizelisttitles = true
+contentdir = 'content'
+datadir = 'data'
+defaultcontentlanguage = 'en'
+defaultoutputformat = 'html'
+enablerobotstxt = true
+environment = 'production'
+i18ndir = 'i18n'
+languagecode = 'en-nz'
+layoutdir = 'layouts'
+pluralizelisttitles = true
+publishdir = 'public'
+resourcedir = 'resources'
+staticdir = ['static']
+summarylength = 70
+theme = ['congo']
+themesdir = 'themes'
+timeout = '60s'
+title = 'Welcome to the Personal Blog of Mike G Robinson'
+titlecasestyle = 'AP'
+workingdir = 'C:\dev_local\mgrnz-blog'
+
+[build]
+  useresourcecachewhen = 'fallback'
+
+  [build.buildstats]
+
+  [[build.cachebusters]]
+    source = '(postcss|tailwind)\.config\.js'
+    target = '(css|styles|scss|sass)'
+
+[caches]
+  [caches.assets]
+    dir = ':resourceDir/_gen'
+    maxage = -1
+
+  [caches.getcsv]
+    dir = ':cacheDir/:project'
+    maxage = -1
+
+  [caches.getjson]
+    dir = ':cacheDir/:project'
+    maxage = -1
+
+  [caches.getresource]
+    dir = ':cacheDir/:project'
+    maxage = -1
+
+  [caches.images]
+    dir = ':resourceDir/_gen'
+    maxage = -1
+
+  [caches.misc]
+    dir = ':cacheDir/:project'
+    maxage = -1
+
+  [caches.modules]
+    dir = ':cacheDir/modules'
+    maxage = -1
+
+[contenttypes]
+  [contenttypes.'text/asciidoc']
+
+  [contenttypes.'text/html']
+
+  [contenttypes.'text/markdown']
+
+  [contenttypes.'text/org']
+
+  [contenttypes.'text/pandoc']
+
+  [contenttypes.'text/rst']
+
+[deployment]
+  invalidatecdn = true
+  maxdeletes = 256
+  workers = 10
+
+[frontmatter]
+  date = ['date', 'publishdate', 'pubdate', 'published', 'lastmod', 'modified']
+  expirydate = ['expirydate', 'unpublishdate']
+  lastmod = [':git', 'lastmod', 'modified', 'date', 'publishdate', 'pubdate', 'published']
+  publishdate = ['publishdate', 'pubdate', 'published', 'date']
+
+[httpcache]
+  [httpcache.cache]
+    [httpcache.cache.for]
+      excludes = ['**']
+
+  [[httpcache.polls]]
+    disable = true
+    high = '0s'
+    low = '0s'
+
+    [httpcache.polls.for]
+      includes = ['**']
+
+[imaging]
+  bgcolor = '#ffffff'
+  hint = 'photo'
+  quality = 75
+  resamplefilter = 'box'
+
+[languages]
+  [languages.en]
+    title = 'Welcome to the Personal Blog of Mike G Robinson'
+
+[markup]
+  defaultmarkdownhandler = 'goldmark'
+
+  [markup.asciidocext]
+    backend = 'html5'
+    failurelevel = 'fatal'
+    noheaderorfooter = true
+    safemode = 'unsafe'
+
+    [markup.asciidocext.attributes]
+
+  [markup.goldmark]
+    [markup.goldmark.extensions]
+      definitionlist = true
+      footnote = true
+      linkify = true
+      linkifyprotocol = 'https'
+      strikethrough = true
+      table = true
+      tasklist = true
+
+      [markup.goldmark.extensions.cjk]
+        eastasianlinebreaksstyle = 'simple'
+
+      [markup.goldmark.extensions.extras]
+        [markup.goldmark.extensions.extras.delete]
+
+        [markup.goldmark.extensions.extras.insert]
+
+        [markup.goldmark.extensions.extras.mark]
+
+        [markup.goldmark.extensions.extras.subscript]
+
+        [markup.goldmark.extensions.extras.superscript]
+
+      [markup.goldmark.extensions.passthrough]
+        [markup.goldmark.extensions.passthrough.delimiters]
+
+      [markup.goldmark.extensions.typographer]
+        apostrophe = '&rsquo;'
+        ellipsis = '&hellip;'
+        emdash = '&mdash;'
+        endash = '&ndash;'
+        leftanglequote = '&laquo;'
+        leftdoublequote = '&ldquo;'
+        leftsinglequote = '&lsquo;'
+        rightanglequote = '&raquo;'
+        rightdoublequote = '&rdquo;'
+        rightsinglequote = '&rsquo;'
+
+    [markup.goldmark.parser]
+      autoheadingid = true
+      autoidtype = 'github'
+      wrapstandaloneimagewithinparagraph = true
+
+      [markup.goldmark.parser.attribute]
+        title = true
+
+    [markup.goldmark.renderer]
+      unsafe = true
+
+    [markup.goldmark.renderhooks]
+      [markup.goldmark.renderhooks.image]
+        useembedded = 'fallback'
+
+      [markup.goldmark.renderhooks.link]
+        useembedded = 'fallback'
+
+  [markup.highlight]
+    codefences = true
+    guesssyntax = true
+    linenostart = 1
+    linenumbersintable = true
+    style = 'monokai'
+    tabwidth = 4
+    wrapperclass = 'highlight'
+
+  [markup.tableofcontents]
+    endlevel = 3
+    startlevel = 2
+
+[mediatypes]
+  [mediatypes.'application/json']
+    delimiter = '.'
+    suffixes = ['json']
+
+  [mediatypes.'application/manifest+json']
+    delimiter = '.'
+    suffixes = ['webmanifest']
+
+  [mediatypes.'application/octet-stream']
+    delimiter = '.'
+
+  [mediatypes.'application/pdf']
+    delimiter = '.'
+    suffixes = ['pdf']
+
+  [mediatypes.'application/rss+xml']
+    delimiter = '.'
+    suffixes = ['xml', 'rss']
+
+  [mediatypes.'application/toml']
+    delimiter = '.'
+    suffixes = ['toml']
+
+  [mediatypes.'application/wasm']
+    delimiter = '.'
+    suffixes = ['wasm']
+
+  [mediatypes.'application/xml']
+    delimiter = '.'
+    suffixes = ['xml']
+
+  [mediatypes.'application/yaml']
+    delimiter = '.'
+    suffixes = ['yaml', 'yml']
+
+  [mediatypes.'font/otf']
+    delimiter = '.'
+    suffixes = ['otf']
+
+  [mediatypes.'font/ttf']
+    delimiter = '.'
+    suffixes = ['ttf']
+
+  [mediatypes.'image/bmp']
+    delimiter = '.'
+    suffixes = ['bmp']
+
+  [mediatypes.'image/gif']
+    delimiter = '.'
+    suffixes = ['gif']
+
+  [mediatypes.'image/jpeg']
+    delimiter = '.'
+    suffixes = ['jpg', 'jpeg', 'jpe', 'jif', 'jfif']
+
+  [mediatypes.'image/png']
+    delimiter = '.'
+    suffixes = ['png']
+
+  [mediatypes.'image/svg+xml']
+    delimiter = '.'
+    suffixes = ['svg']
+
+  [mediatypes.'image/tiff']
+    delimiter = '.'
+    suffixes = ['tif', 'tiff']
+
+  [mediatypes.'image/webp']
+    delimiter = '.'
+    suffixes = ['webp']
+
+  [mediatypes.'text/asciidoc']
+    delimiter = '.'
+    suffixes = ['adoc', 'asciidoc', 'ad']
+
+  [mediatypes.'text/calendar']
+    delimiter = '.'
+    suffixes = ['ics']
+
+  [mediatypes.'text/css']
+    delimiter = '.'
+    suffixes = ['css']
+
+  [mediatypes.'text/csv']
+    delimiter = '.'
+    suffixes = ['csv']
+
+  [mediatypes.'text/html']
+    delimiter = '.'
+    suffixes = ['html', 'htm']
+
+  [mediatypes.'text/javascript']
+    delimiter = '.'
+    suffixes = ['js', 'jsm', 'mjs']
+
+  [mediatypes.'text/jsx']
+    delimiter = '.'
+    suffixes = ['jsx']
+
+  [mediatypes.'text/markdown']
+    delimiter = '.'
+    suffixes = ['md', 'mdown', 'markdown']
+
+  [mediatypes.'text/org']
+    delimiter = '.'
+    suffixes = ['org']
+
+  [mediatypes.'text/pandoc']
+    delimiter = '.'
+    suffixes = ['pandoc', 'pdc']
+
+  [mediatypes.'text/plain']
+    delimiter = '.'
+    suffixes = ['txt']
+
+  [mediatypes.'text/rst']
+    delimiter = '.'
+    suffixes = ['rst']
+
+  [mediatypes.'text/tsx']
+    delimiter = '.'
+    suffixes = ['tsx']
+
+  [mediatypes.'text/typescript']
+    delimiter = '.'
+    suffixes = ['ts']
+
+  [mediatypes.'text/x-gotmpl']
+    delimiter = '.'
+    suffixes = ['gotmpl']
+
+  [mediatypes.'text/x-sass']
+    delimiter = '.'
+    suffixes = ['sass']
+
+  [mediatypes.'text/x-scss']
+    delimiter = '.'
+    suffixes = ['scss']
+
+  [mediatypes.'video/3gpp']
+    delimiter = '.'
+    suffixes = ['3gpp', '3gp']
+
+  [mediatypes.'video/mp4']
+    delimiter = '.'
+    suffixes = ['mp4']
+
+  [mediatypes.'video/mpeg']
+    delimiter = '.'
+    suffixes = ['mpg', 'mpeg']
+
+  [mediatypes.'video/ogg']
+    delimiter = '.'
+    suffixes = ['ogv']
+
+  [mediatypes.'video/webm']
+    delimiter = '.'
+    suffixes = ['webm']
+
+  [mediatypes.'video/x-msvideo']
+    delimiter = '.'
+    suffixes = ['avi']
+
+[menus]
+  [[menus.admin]]
+    name = 'Dashboard'
+    url = '/admin/'
+    weight = 1
+
+  [[menus.admin]]
+    name = 'Create Post'
+    url = '/admin/create/'
+    weight = 2
+
+  [[menus.admin]]
+    name = 'Settings'
+    url = '/admin/settings/'
+    weight = 3
+
+  [[menus.main]]
+    name = 'Home'
+    url = '/'
+    weight = 1
+
+  [[menus.main]]
+    name = 'Posts'
+    url = '/posts/'
+    weight = 2
+
+  [[menus.main]]
+    name = 'CV'
+    url = '/pages/cv/'
+    weight = 3
+
+  [[menus.main]]
+    name = 'Brands'
+    url = '/pages/brands/'
+    weight = 4
+
+  [[menus.main]]
+    name = 'Subscribe'
+    url = '/subscribe/'
+    weight = 5
+
+[minify]
+  [minify.tdewolff]
+    [minify.tdewolff.css]
+
+    [minify.tdewolff.html]
+      keepdefaultattrvals = true
+      keepdocumenttags = true
+      keependtags = true
+      keepspecialcomments = true
+      templatedelims = ['', '']
+
+    [minify.tdewolff.js]
+      version = 2022
+
+    [minify.tdewolff.json]
+
+    [minify.tdewolff.svg]
+
+    [minify.tdewolff.xml]
+
+[module]
+  noproxy = 'none'
+  private = '*.*'
+  proxy = 'direct'
+  workspace = 'off'
+
+  [module.hugoversion]
+
+  [[module.imports]]
+    path = 'congo'
+
+  [[module.mounts]]
+    source = 'package.json'
+    target = 'assets\_jsconfig\package.json'
+
+  [[module.mounts]]
+    source = 'content'
+    target = 'content'
+
+  [[module.mounts]]
+    source = 'data'
+    target = 'data'
+
+  [[module.mounts]]
+    source = 'layouts'
+    target = 'layouts'
+
+  [[module.mounts]]
+    source = 'i18n'
+    target = 'i18n'
+
+  [[module.mounts]]
+    source = 'archetypes'
+    target = 'archetypes'
+
+  [[module.mounts]]
+    source = 'assets'
+    target = 'assets'
+
+  [[module.mounts]]
+    source = 'static'
+    target = 'static'
+
+[outputformats]
+  [outputformats.404]
+    ishtml = true
+    mediatype = 'text/html'
+    notalternative = true
+    permalinkable = true
+    ugly = true
+
+  [outputformats.alias]
+    ishtml = true
+    mediatype = 'text/html'
+    ugly = true
+
+  [outputformats.amp]
+    basename = 'index'
+    ishtml = true
+    mediatype = 'text/html'
+    path = 'amp'
+    permalinkable = true
+    rel = 'amphtml'
+
+  [outputformats.calendar]
+    basename = 'index'
+    isplaintext = true
+    mediatype = 'text/calendar'
+    protocol = 'webcal://'
+    rel = 'alternate'
+
+  [outputformats.css]
+    basename = 'styles'
+    isplaintext = true
+    mediatype = 'text/css'
+    notalternative = true
+    rel = 'stylesheet'
+
+  [outputformats.csv]
+    basename = 'index'
+    isplaintext = true
+    mediatype = 'text/csv'
+    rel = 'alternate'
+
+  [outputformats.gotmpl]
+    isplaintext = true
+    mediatype = 'text/x-gotmpl'
+    notalternative = true
+
+  [outputformats.html]
+    basename = 'index'
+    ishtml = true
+    mediatype = 'text/html'
+    permalinkable = true
+    rel = 'canonical'
+    weight = 10
+
+  [outputformats.json]
+    basename = 'index'
+    isplaintext = true
+    mediatype = 'application/json'
+    rel = 'alternate'
+
+  [outputformats.markdown]
+    basename = 'index'
+    isplaintext = true
+    mediatype = 'text/markdown'
+    rel = 'alternate'
+
+  [outputformats.robots]
+    basename = 'robots'
+    isplaintext = true
+    mediatype = 'text/plain'
+    rel = 'alternate'
+    root = true
+
+  [outputformats.rss]
+    basename = 'index'
+    mediatype = 'application/rss+xml'
+    nougly = true
+    rel = 'alternate'
+
+  [outputformats.sitemap]
+    basename = 'sitemap'
+    mediatype = 'application/xml'
+    rel = 'sitemap'
+    ugly = true
+
+  [outputformats.sitemapindex]
+    basename = 'sitemap'
+    mediatype = 'application/xml'
+    rel = 'sitemap'
+    root = true
+    ugly = true
+
+  [outputformats.webappmanifest]
+    basename = 'manifest'
+    isplaintext = true
+    mediatype = 'application/manifest+json'
+    notalternative = true
+    rel = 'manifest'
+
+[outputs]
+  home = ['html', 'rss', 'json']
+  page = ['html']
+  rss = ['rss']
+  section = ['html', 'rss']
+  taxonomy = ['html', 'rss']
+  term = ['html', 'rss']
+
+[page]
+  nextprevinsectionsortorder = 'desc'
+  nextprevsortorder = 'desc'
+
+[pagination]
+  pagersize = 10
+  path = 'page'
+
+[params]
+  autoswitchappearance = true
+  colorscheme = 'congo'
+  customcss = ['css/custom.css']
+  dateformat = '2 January 2006'
+  defaultappearance = 'light'
+  defaulttheme = 'light'
+  defaultthemecolor = '#FFFFFF'
+  enableimagelazyloading = true
+  enableimagewebp = true
+  fingerprintalgorithm = 'sha256'
+  showreadingtime = true
+
+  [params.article]
+    editappendpath = true
+    showauthor = true
+    showdate = true
+    showdraftlabel = true
+    showheadinganchors = true
+    showpagination = true
+    showreadingtime = true
+
+  [params.author]
+    headline = 'Trust the Process'
+    image = 'images/mgrnz-logo.png'
+    name = 'Mike G Robinson'
+
+    [[params.author.links]]
+      github = 'https://github.com/captjreacher'
+
+    [[params.author.links]]
+      email = 'mailto:mike@mgrnz.com'
+
+    [[params.author.links]]
+      linkedin = 'https://www.linkedin.com/in/mgrnz'
+
+    [[params.author.links]]
+      facebook = 'https://www.facebook.com/mikegrobinson'
+
+  [params.fathomanalytics]
+
+  [params.footer]
+    showcopyright = true
+    showscrolltotop = true
+    showthemeattribution = true
+
+  [params.header]
+    layout = 'basic'
+    showtitle = true
+
+  [params.homepage]
+    layout = 'page'
+    recentlimit = 5
+
+  [params.list]
+    groupbyyear = true
+    paginationwidth = 1
+
+  [params.params]
+    [params.params.header]
+      layout = 'basic'
+      showtitle = true
+
+    [params.params.homepage]
+      layout = 'profile'
+
+  [params.plausibleanalytics]
+
+  [params.sitemap]
+    excludedkinds = ['taxonomy', 'term']
+
+  [params.taxonomy]
+    showtermcount = true
+
+  [params.verification]
+
+[permalinks]
+  [permalinks.page]
+
+  [permalinks.section]
+
+  [permalinks.taxonomy]
+
+  [permalinks.term]
+
+[privacy]
+  [privacy.disqus]
+
+  [privacy.googleanalytics]
+
+  [privacy.instagram]
+
+  [privacy.twitter]
+
+  [privacy.vimeo]
+
+  [privacy.x]
+
+  [privacy.youtube]
+
+[related]
+  threshold = 80
+
+  [[related.indices]]
+    name = 'keywords'
+    type = 'basic'
+    weight = 100
+
+  [[related.indices]]
+    name = 'date'
+    type = 'basic'
+    weight = 10
+
+  [[related.indices]]
+    name = 'tags'
+    type = 'basic'
+    weight = 80
+
+[security]
+  [security.exec]
+    allow = ['^(dart-)?sass(-embedded)?$', '^go$', '^git$', '^npx$', '^postcss$', '^tailwindcss$']
+    osenv = ['(?i)^((HTTPS?|NO)_PROXY|PATH(EXT)?|APPDATA|TE?MP|TERM|GO\w+|(XDG_CONFIG_)?HOME|USERPROFILE|SSH_AUTH_SOCK|DISPLAY|LANG|SYSTEMDRIVE|PROGRAMDATA)$']
+
+  [security.funcs]
+    getenv = ['^HUGO_', '^CI$']
+
+  [security.http]
+    methods = ['(?i)GET|POST']
+    urls = ['.*']
+
+[server]
+  [[server.redirects]]
+    from = '/**'
+    status = 404
+    to = '/404.html'
+
+[services]
+  [services.disqus]
+
+  [services.googleanalytics]
+
+  [services.instagram]
+
+  [services.rss]
+    limit = -1
+
+  [services.twitter]
+
+  [services.x]
+
+[sitemap]
+  filename = 'sitemap.xml'
+  priority = -1
+
+[taxonomies]
+  category = 'categories'
+  tag = 'tags'

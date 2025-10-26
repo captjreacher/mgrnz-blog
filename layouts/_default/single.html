@@ -1,19 +1,69 @@
 {{ define "main" }}
-  <main class="mx-auto max-w-3xl p-6 text-white">
-    <h1 class="text-4xl font-bold mb-3">{{ .Title }}</h1>
-    <p class="text-sm opacity-80 mb-6">
-      {{ with .Params.author }}{{ . }} — {{ end }}{{ .Date.Format "02 Jan 2006" }}
-    </p>
-
-    {{ with .Resources.GetMatch .Params.image }}
-      <figure class="mb-6">
-        <img src="{{ .RelPermalink }}" alt="{{ $.Title }}" class="rounded-lg shadow mx-auto">
-      </figure>
+<article class="max-w-none">
+  <!-- Article Header -->
+  <header class="mb-8">
+    {{ if .Params.image }}
+    <div class="mb-6">
+      <img src="{{ .Params.image }}" alt="{{ .Title }}" class="hero-image">
+    </div>
     {{ end }}
+    
+    <h1 class="mb-4 text-4xl font-bold">{{ .Title }}</h1>
+    
+    <div class="flex flex-wrap items-center gap-4 text-sm text-neutral-600">
+      {{ if .Params.author }}
+      <span>By {{ .Params.author }}</span>
+      {{ end }}
+      <time datetime="{{ .Date.Format "2006-01-02" }}">
+        {{ .Date.Format "January 2, 2006" }}
+      </time>
+      {{ if .ReadingTime }}
+      <span>{{ .ReadingTime }} min read</span>
+      {{ end }}
+    </div>
+    
+    {{ if .Params.tags }}
+    <div class="mt-4 flex flex-wrap gap-2">
+      {{ range .Params.tags }}
+      <a href="{{ "/tags/" | relURL }}{{ . | urlize }}" class="rounded-full bg-neutral-200 px-3 py-1 text-sm text-neutral-700 hover:bg-primary-100">
+        {{ . }}
+      </a>
+      {{ end }}
+    </div>
+    {{ end }}
+  </header>
 
-    <article class="prose prose-invert max-w-none">
-      {{ .Content }}
-    </article>
-  </main>
+  <!-- Article Content -->
+  <div class="prose prose-lg prose-neutral max-w-none dark:prose-invert">
+    {{ .Content }}
+  </div>
+
+  <!-- Article Footer -->
+  <footer class="mt-12 border-t border-neutral-200 pt-8">
+    {{ if .Params.categories }}
+    <div class="mb-4">
+      <span class="text-sm font-medium text-neutral-600">Categories:</span>
+      {{ range .Params.categories }}
+      <a href="{{ "/categories/" | relURL }}{{ . | urlize }}" class="ml-2 text-primary-600 hover:text-primary-500">
+        {{ . }}
+      </a>
+      {{ end }}
+    </div>
+    {{ end }}
+    
+    <!-- Navigation -->
+    <nav class="flex justify-between">
+      {{ with .PrevInSection }}
+      <a href="{{ .RelPermalink }}" class="text-primary-600 hover:text-primary-500">
+        ← {{ .Title }}
+      </a>
+      {{ end }}
+      {{ with .NextInSection }}
+      <a href="{{ .RelPermalink }}" class="text-primary-600 hover:text-primary-500">
+        {{ .Title }} →
+      </a>
+      {{ end }}
+    </nav>
+  </footer>
+</article>
 {{ end }}
-

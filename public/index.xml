@@ -1,74 +1,74 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Welcome to Maximised AI on Maximised AI — Blog</title>
-    <link>http://localhost:1313/</link>
-    <description>Recent content in Welcome to Maximised AI on Maximised AI — Blog</description>
+    <title>Welcome to the Personal Blog of Mike G Robinson</title>
+    <link>http://mgrnz.com/</link>
+    <description>Recent content on Welcome to the Personal Blog of Mike G Robinson</description>
     <generator>Hugo</generator>
-    <language>en-nz</language>
+    <language>en</language>
     <lastBuildDate>Wed, 01 Oct 2025 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://mgrnz.com/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Hello, Maximised AI</title>
-      <link>http://localhost:1313/posts/hello-maxai/</link>
+      <title>Hello, mgrnz.com</title>
+      <link>http://mgrnz.com/posts/hello-maxai/</link>
       <pubDate>Wed, 01 Oct 2025 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/hello-maxai/</guid>
+      <guid>http://mgrnz.com/posts/hello-maxai/</guid>
       <description>Fresh Hugo blog scaffold.</description>
     </item>
     <item>
-      <title>Hello, Maximised AI</title>
-      <link>http://localhost:1313/posts/hello-world/</link>
+      <title>Hello, mgrnz.com</title>
+      <link>http://mgrnz.com/posts/hello-world/</link>
       <pubDate>Wed, 01 Oct 2025 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/hello-world/</guid>
+      <guid>http://mgrnz.com/posts/hello-world/</guid>
       <description>First post with Congo + brand colors.</description>
     </item>
     <item>
       <title>How I structure AI build weeks</title>
-      <link>http://localhost:1313/posts/how-i-structure/</link>
+      <link>http://mgrnz.com/posts/how-i-structure/</link>
       <pubDate>Mon, 01 Sep 2025 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/how-i-structure/</guid>
+      <guid>http://mgrnz.com/posts/how-i-structure/</guid>
       <description>A lightweight cadence for experiments, shipping, and feedback.</description>
     </item>
     <item>
       <title>Assistant patterns that actually stick</title>
-      <link>http://localhost:1313/posts/assistant-patterns/</link>
+      <link>http://mgrnz.com/posts/assistant-patterns/</link>
       <pubDate>Tue, 12 Aug 2025 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/assistant-patterns/</guid>
+      <guid>http://mgrnz.com/posts/assistant-patterns/</guid>
       <description>A few assistant UX tricks that survive real usage.</description>
     </item>
     <item>
       <title>Brand OS: notebooks, tasks, and truth</title>
-      <link>http://localhost:1313/posts/brand-os/</link>
+      <link>http://mgrnz.com/posts/brand-os/</link>
       <pubDate>Tue, 22 Jul 2025 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/brand-os/</guid>
+      <guid>http://mgrnz.com/posts/brand-os/</guid>
       <description>Keeping ideas, tasks, and docs in flow.</description>
     </item>
     <item>
-      <title>Create Post</title>
-      <link>http://localhost:1313/admin/create/</link>
+      <title>CV / Experience</title>
+      <link>http://mgrnz.com/pages/cv/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/admin/create/</guid>
-      <description>&lt;p&gt;If you see this, the page is wired correctly. The wizard UI will replace this content.&lt;/p&gt;</description>
+      <guid>http://mgrnz.com/pages/cv/</guid>
+      <description>&lt;h2 id=&#34;snapshot&#34;&gt;Snapshot&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Entrepreneur &amp;amp; builder focused on AI + automation.&lt;/li&gt;&#xA;&lt;li&gt;Ship fast, iterate faster. Fair, honest, chilled—but urgent.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;highlights&#34;&gt;Highlights&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Founded/ran multiple brands.&lt;/li&gt;&#xA;&lt;li&gt;Built assistants, data pipelines, and workflow tools.&lt;/li&gt;&#xA;&lt;li&gt;Comfortable across product, GTM, ops, and the messy middle.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;Replace this with your real CV content or link to a PDF.&lt;/p&gt;&lt;/blockquote&gt;</description>
     </item>
     <item>
-      <title>CV / Experience</title>
-      <link>http://localhost:1313/pages/cv/</link>
+      <title>Edit Post</title>
+      <link>http://mgrnz.com/admin/posts/edit/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/pages/cv/</guid>
-      <description>&lt;h2 id=&#34;snapshot&#34; class=&#34;relative group&#34;&gt;Snapshot &lt;span class=&#34;absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100&#34;&gt;&lt;a class=&#34;group-hover:text-primary-300 dark:group-hover:text-neutral-700&#34; style=&#34;text-decoration-line: none !important;&#34; href=&#34;#snapshot&#34; aria-label=&#34;Anchor&#34;&gt;#&lt;/a&gt;&lt;/span&gt;&lt;/h2&gt;&lt;ul&gt;&#xA;&lt;li&gt;Entrepreneur &amp;amp; builder focused on AI + automation.&lt;/li&gt;&#xA;&lt;li&gt;Ship fast, iterate faster. Fair, honest, chilled—but urgent.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;highlights&#34; class=&#34;relative group&#34;&gt;Highlights &lt;span class=&#34;absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100&#34;&gt;&lt;a class=&#34;group-hover:text-primary-300 dark:group-hover:text-neutral-700&#34; style=&#34;text-decoration-line: none !important;&#34; href=&#34;#highlights&#34; aria-label=&#34;Anchor&#34;&gt;#&lt;/a&gt;&lt;/span&gt;&lt;/h2&gt;&lt;ul&gt;&#xA;&lt;li&gt;Founded/ran multiple brands.&lt;/li&gt;&#xA;&lt;li&gt;Built assistants, data pipelines, and workflow tools.&lt;/li&gt;&#xA;&lt;li&gt;Comfortable across product, GTM, ops, and the messy middle.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;Replace this with your real CV content or link to a PDF.&lt;/p&gt;</description>
+      <guid>http://mgrnz.com/admin/posts/edit/</guid>
+      <description></description>
     </item>
     <item>
       <title>My Brands</title>
-      <link>http://localhost:1313/pages/brands/</link>
+      <link>http://mgrnz.com/pages/brands/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/pages/brands/</guid>
-      <description>&lt;p&gt;Here are the brands I run/work on:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;strong&gt;Maximised AI&lt;/strong&gt; — automations, assistants, experiments.&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;(Add brand)&lt;/strong&gt; — one-liner.&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;(Add brand)&lt;/strong&gt; — one-liner.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;Swap this list for logos + links when you’re ready.&lt;/p&gt;&lt;/blockquote&gt;</description>
+      <guid>http://mgrnz.com/pages/brands/</guid>
+      <description>&lt;p&gt;Here are the brands I run/work on:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;strong&gt;mgrnz.com&lt;/strong&gt; — automations, assistants, experiments.&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;(Add brand)&lt;/strong&gt; — one-liner.&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;(Add brand)&lt;/strong&gt; — one-liner.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;Swap this list for logos + links when you’re ready.&lt;/p&gt;&lt;/blockquote&gt;</description>
     </item>
     <item>
       <title>Subscribe</title>
-      <link>http://localhost:1313/subscribe/</link>
+      <link>http://mgrnz.com/subscribe/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/subscribe/</guid>
+      <guid>http://mgrnz.com/subscribe/</guid>
       <description>&lt;p&gt;Want new posts by email? Pop your address below.&lt;/p&gt;&#xA;&lt;!-- Replace the action with your Mailchimp / Beehiiv / ConvertKit form URL --&gt;&#xD;&#xA;&lt;form method=&#34;post&#34; action=&#34;#&#34; style=&#34;display:flex;gap:8px;align-items:center;&#34;&gt;&#xD;&#xA;  &lt;input type=&#34;email&#34; name=&#34;email&#34; placeholder=&#34;you@example.com&#34; required&#xD;&#xA;         style=&#34;padding:10px;border-radius:8px;border:1px solid var(--border);background:#222;color:#eee;&#34;&gt;&#xD;&#xA;  &lt;button type=&#34;submit&#34; class=&#34;btn&#34; style=&#34;padding:10px 14px;border-radius:8px;border:1px solid var(--orange);background:transparent;color:#eee;&#34;&gt;&#xD;&#xA;    Subscribe&#xD;&#xA;  &lt;/button&gt;&#xD;&#xA;&lt;/form&gt;&#xD;&#xA;&lt;p style=&#34;opacity:.7;margin-top:.75rem;&#34;&gt;Tip: paste your provider’s embed code here later.&lt;/p&gt;</description>
     </item>
   </channel>

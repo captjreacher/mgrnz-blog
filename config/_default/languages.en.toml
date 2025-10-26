@@ -1,0 +1,15 @@
+title = "Welcome to the Personal Blog of Mike G Robinson"
+[params]
+[params.author]
+name = "Mike G Robinson"
+headline = "Demystifying Technology to Build Better Businesses"
+heroTitle = "Mike Who?"
+bio = "Mike is an unashamed evangelist of AI, ricidivous vibe-coder, and lifelong learner. A seasoned technology professional and entrepreneur based in Auckland, New Zealand, Mike has over 30 years of experience spanning IT security, SAP configuration, data migration, and business consulting. In early 2025, Mike founded Maximised AI after several months deep diving AI. Mike has since developed a string of successful AI-powered products and services aimed at helping businesses leverage the power of AI to drive productivity and growth."
+image = "/images/BLUE-LOGO.png"
+
+links = [
+  { github   = "https://github.com/captjreacher" },
+  { email    = "mailto:mike@mgrnz.com" },
+  { linkedin = "https://www.linkedin.com/in/mgrnz" },
+  { facebook = "https://www.facebook.com/mikegrobinson" }
+]

@@ -1,6 +1,6 @@
-baseURL = "http://localhost/"
+baseURL = "http://mgrnz.com"
 languageCode = "en-nz"
-title = "Maximised AI — Blog"
+title = "Welcome to the Personal Blog of Mike G Robinson"
 
 [pagination]
   pagerSize = 10

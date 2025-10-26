@@ -1,5 +1,5 @@
-﻿---
-title: "Hello, Maximised AI"
+---
+title: "Hello, mgrnz.com"
 date: 2025-10-01
 draft: false
 summary: "Fresh Hugo blog scaffold."

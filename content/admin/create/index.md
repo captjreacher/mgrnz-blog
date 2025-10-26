@@ -1,4 +1,4 @@
-﻿---
+---
 title: "Create Post"
 type: "admin"
 layout: "create"

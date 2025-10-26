@@ -1,17 +1,108 @@
-﻿{{ define "main" }}
-  <main class="mx-auto max-w-3xl p-6 text-white">
-    <h1 class="text-3xl font-bold mb-8">Posts</h1>
-
-    {{ range .Pages.ByDate.Reverse }}
-      <article class="mb-8 border-b border-neutral-700/60 pb-6">
-        <h2 class="text-2xl font-semibold">
-          <a class="text-orange-500 hover:underline" href="{{ .RelPermalink }}">{{ .Title }}</a>
-        </h2>
-        <p class="text-sm opacity-80 mb-2">
-          {{ with .Params.author }}{{ . }} — {{ end }}{{ .Date.Format "02 Jan 2006" }}
-        </p>
-        <p class="opacity-75">{{ if .Summary }}{{ .Summary }}{{ else }}{{ .Plain | truncate 180 }}{{ end }}</p>
-      </article>
+{{ define "main" }}
+<div class="space-y-8">
+  <!-- Page Header -->
+  <header class="text-center">
+    <h1 class="mb-4 text-4xl font-bold">My Blog Posts</h1>
+    {{ if .Content }}
+    <div class="prose prose-lg mx-auto dark:prose-invert">
+      {{ .Content }}
+    </div>
     {{ end }}
-  </main>
+  </header>
+
+  {{ if .Pages }}
+  <!-- Recent Posts (First 3 as Cards) -->
+  {{ $recentPosts := first 3 .Pages }}
+  {{ if $recentPosts }}
+  <section class="space-y-6">
+    <h2 class="text-2xl font-bold text-orange-400">Recent</h2>
+    <div class="grid gap-6 md:grid-cols-1 lg:grid-cols-3">
+      {{ range $recentPosts }}
+      <article class="card overflow-hidden rounded-lg p-6 transition-all hover:shadow-lg bg-neutral-800 border border-neutral-700">
+        {{ if .Params.image }}
+        <div class="mb-4">
+          <img src="{{ .Params.image }}" alt="{{ .Title }}" class="h-48 w-full rounded-lg object-cover">
+        </div>
+        {{ end }}
+        
+        <header class="mb-3">
+          <h3 class="mb-2 text-xl font-semibold text-white">
+            <a href="{{ .RelPermalink }}" class="hover:text-orange-400">{{ .Title }}</a>
+          </h3>
+          
+          <div class="flex flex-wrap items-center gap-3 text-sm text-neutral-400">
+            <time datetime="{{ .Date.Format "2006-01-02" }}">
+              {{ .Date.Format "Jan 2, 2006" }}
+            </time>
+            {{ if .ReadingTime }}
+            <span>{{ .ReadingTime }} min read</span>
+            {{ end }}
+          </div>
+        </header>
+        
+        {{ if .Summary }}
+        <p class="mb-4 text-neutral-300">{{ .Summary }}</p>
+        {{ else if .Content }}
+        <p class="mb-4 text-neutral-300">{{ .Plain | truncate 150 }}</p>
+        {{ end }}
+        
+        {{ if .Params.tags }}
+        <div class="flex flex-wrap gap-2">
+          {{ range first 3 .Params.tags }}
+          <span class="rounded-full bg-orange-600 px-2 py-1 text-xs text-white">
+            {{ . }}
+          </span>
+          {{ end }}
+        </div>
+        {{ end }}
+      </article>
+      {{ end }}
+    </div>
+  </section>
+  {{ end }}
+
+  <!-- Older Posts (List Format) -->
+  {{ $olderPosts := after 3 .Pages }}
+  {{ if $olderPosts }}
+  <section class="space-y-6">
+    <h2 class="text-2xl font-bold text-orange-400">Older Posts</h2>
+    <div class="space-y-4">
+      {{ range $olderPosts }}
+      <article class="border-b border-neutral-700 pb-4">
+        <div class="flex items-start justify-between">
+          <div class="flex-1">
+            <h3 class="text-lg font-semibold text-white mb-1">
+              <a href="{{ .RelPermalink }}" class="hover:text-orange-400">{{ .Title }}</a>
+            </h3>
+            <div class="flex items-center gap-3 text-sm text-neutral-400 mb-2">
+              <time datetime="{{ .Date.Format "2006-01-02" }}">
+                {{ .Date.Format "Jan 2, 2006" }}
+              </time>
+              {{ if .ReadingTime }}
+              <span>{{ .ReadingTime }} min read</span>
+              {{ end }}
+            </div>
+            {{ if .Summary }}
+            <p class="text-neutral-300 text-sm">{{ .Summary | truncate 120 }}</p>
+            {{ else if .Content }}
+            <p class="text-neutral-300 text-sm">{{ .Plain | truncate 120 }}</p>
+            {{ end }}
+          </div>
+          {{ if .Params.image }}
+          <div class="ml-4 flex-shrink-0">
+            <img src="{{ .Params.image }}" alt="{{ .Title }}" class="h-16 w-16 rounded object-cover">
+          </div>
+          {{ end }}
+        </div>
+      </article>
+      {{ end }}
+    </div>
+  </section>
+  {{ end }}
+  {{ else }}
+  <div class="text-center text-neutral-600">
+    <p>No posts found.</p>
+  </div>
+  {{ end }}
+</div>
 {{ end }}

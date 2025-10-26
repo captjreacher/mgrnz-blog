@@ -1,0 +1,68 @@
+{{ define "main" }}
+<div class="space-y-8">
+  <!-- Hero Banner -->
+  {{ with .Site.Params.homepage.homepageImage }}
+  <section class="relative overflow-hidden rounded-2xl shadow-2xl">
+    <img src="{{ . }}" alt="Home Banner" class="h-80 w-full object-contain">
+  </section>
+  {{ end }}
+
+  <!-- Hero Content -->
+  <section class="relative overflow-hidden rounded-2xl px-8 py-12 text-center text-white shadow-2xl" style="background-color: rgb(15, 23, 42) !important;">
+    <div class="relative z-10">
+      <!-- Smaller logo display -->
+      <div class="mx-auto mb-6 flex justify-center">
+        <img src="/images/mgrnz-logo.webp?v=3" alt="Mike G Robinson" class="h-8 w-auto rounded-xl shadow-lg" style="display: block !important; max-height: 2rem !important;">
+      </div>
+      
+      <h1 class="mb-6 text-5xl font-bold text-orange-400">{{ .Site.Params.author.heroTitle }}</h1>
+      <div class="mx-auto max-w-3xl text-xl opacity-90 space-y-4">
+        <p>Mike is an unashamed evangelist of AI, ricidivous vibe-coder, and lifelong learner.</p>
+        <p>A seasoned technology professional and entrepreneur based in Auckland, New Zealand, Mike has over 30 years of experience spanning IT security, SAP configuration, data migration, and business consulting.</p>
+        <p>In early 2025, Mike founded Maximised AI after several months deep diving AI. Mike has since developed a string of successful AI-powered products and services aimed at helping businesses leverage the power of AI to drive productivity and growth.</p>
+      </div>
+      
+      <div class="mt-10 flex flex-wrap justify-center gap-4">
+        <a href="/posts/" class="rounded-lg bg-orange-500 px-6 py-3 font-semibold text-white transition-colors hover:bg-orange-600">Read Blog</a>
+        <a href="/pages/cv/" class="rounded-lg bg-blue-500 px-6 py-3 font-semibold text-white transition-colors hover:bg-blue-600">View CV</a>
+        <a href="/subscribe/" class="rounded-lg bg-yellow-500 px-6 py-3 font-semibold text-white transition-colors hover:bg-yellow-600">Subscribe</a>
+      </div>
+    </div>
+    <!-- Background decoration -->
+    <div class="absolute inset-0 bg-gradient-to-r from-orange-500/5 to-blue-500/5"></div>
+  </section>
+
+  <!-- Recent Posts -->
+  {{ if .Site.Params.homepage.showRecent }}
+  <section class="space-y-6">
+    <div class="flex items-center justify-between">
+      <h2 class="text-2xl font-bold">Recent Posts</h2>
+      {{ if .Site.Params.homepage.showMoreLink }}
+      <a href="{{ .Site.Params.homepage.showMoreLinkDest | default "/posts" }}" class="text-primary-600 hover:text-primary-500">
+        View all posts →
+      </a>
+      {{ end }}
+    </div>
+    
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {{ range first (.Site.Params.homepage.showRecentItems | default 5) (where .Site.RegularPages "Type" "posts") }}
+      <article class="card overflow-hidden rounded-lg p-6 transition-all hover:shadow-lg">
+        {{ with .Params.image }}
+        <img src="{{ . }}" alt="{{ $.Title }}" class="mb-4 h-48 w-full rounded-lg object-cover">
+        {{ end }}
+        <h3 class="mb-2 text-xl font-semibold">
+          <a href="{{ .RelPermalink }}" class="hover:text-primary-600">{{ .Title }}</a>
+        </h3>
+        <p class="mb-3 text-sm text-neutral-600">
+          {{ .Date.Format "January 2, 2006" }}
+        </p>
+        <p class="text-neutral-700">
+          {{ if .Summary }}{{ .Summary }}{{ else }}{{ .Plain | truncate 120 }}{{ end }}
+        </p>
+      </article>
+      {{ end }}
+    </div>
+  </section>
+  {{ end }}
+</div>
+{{ end }}
