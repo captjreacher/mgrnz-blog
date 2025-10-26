@@ -2,7 +2,7 @@ baseURL: "https://342bf600.mgrnz-blog.pages.dev/"
 title: "Welcome to the Personal Blog of Mike G Robinson"
 languageCode: en-nz
 enableRobotsTXT: true
-# theme: "congo"  # DISABLED - Using custom layouts only
+theme: "congo"  # Re-enabled - public folder conflict resolved
 
 # Site-wide taxonomies
 taxonomies:
