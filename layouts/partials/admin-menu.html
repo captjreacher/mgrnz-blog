@@ -1,41 +1,34 @@
-{{- /* layouts/partials/admin-menu.html */ -}}
-<div id="admin-wrapper" style="position:relative;z-index:1000;">
-  <button id="admin-btn"
-    style="background:none;border:none;color:#ffcf00;font-size:1.6rem;cursor:pointer;
-           padding:.3rem .6rem;line-height:1;">
-    &#9881;
+<!-- Admin Menu Dropdown -->
+<div class="relative inline-block text-left">
+  <button onclick="toggleAdminMenu()" class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-neutral-700 text-neutral-300 hover:bg-neutral-600 hover:text-white transition-colors">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+    </svg>
   </button>
-
-  <div id="admin-menu"
-    style="display:none;position:absolute;right:0;margin-top:.5rem;
-           background:#111;border:1px solid #333;border-radius:8px;
-           box-shadow:0 3px 8px rgba(0,0,0,.5);min-width:180px;padding:.4rem 0;">
-    {{ with site.Menus.admin }}
-      {{ range . }}
-        <a href="{{ .URL }}"
-           style="display:block;padding:.5rem 1rem;color:#eee;
-                  text-decoration:none;font-size:.95rem;">
-          {{ .Name }}
-        </a>
-      {{ end }}
-    {{ else }}
-      <a href="/admin/" style="display:block;padding:.5rem 1rem;color:#eee;text-decoration:none;">Dashboard</a>
-      <a href="/admin/create/" style="display:block;padding:.5rem 1rem;color:#eee;text-decoration:none;">Create Post</a>
-      <a href="/admin/settings/" style="display:block;padding:.5rem 1rem;color:#eee;text-decoration:none;">Settings</a>
-    {{ end }}
+  
+  <div id="adminDropdown" class="hidden absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+    <div class="py-1">
+      <a href="/admin/" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dashboard</a>
+      <a href="/admin/posts/" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Manage Posts</a>
+      <a href="/admin/create/" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Create Post</a>
+    </div>
   </div>
 </div>
 
 <script>
-document.addEventListener("click", function(e) {
-  const btn = document.getElementById("admin-btn");
-  const menu = document.getElementById("admin-menu");
-  if (!btn || !menu) return;
-  const clickedInside = btn.contains(e.target) || menu.contains(e.target);
-  if (clickedInside) {
-    menu.style.display = (menu.style.display === "block") ? "none" : "block";
-  } else {
-    menu.style.display = "none";
+function toggleAdminMenu() {
+  const dropdown = document.getElementById('adminDropdown');
+  dropdown.classList.toggle('hidden');
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(event) {
+  const dropdown = document.getElementById('adminDropdown');
+  const button = event.target.closest('button[onclick="toggleAdminMenu()"]');
+  
+  if (!button && !dropdown.contains(event.target)) {
+    dropdown.classList.add('hidden');
   }
 });
 </script>
