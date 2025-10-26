@@ -39,7 +39,8 @@
 </script>
 
 <!-- CSS -->
-<link rel="stylesheet" href="{{ "/css/custom.css" | relURL }}?v=3">
+{{ $customCSS := resources.Get "css/custom.css" | resources.Minify }}
+<link rel="stylesheet" href="{{ $customCSS.RelPermalink }}">
 
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">

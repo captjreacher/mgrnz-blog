@@ -1,0 +1,15 @@
+# Netlify/Cloudflare Pages build configuration
+[build]
+  command = "hugo --gc --minify"
+  publish = "public"
+
+[build.environment]
+  HUGO_VERSION = "0.147.8"
+  HUGO_ENV = "production"
+  NODE_VERSION = "18"
+
+# Redirect rules for admin
+[[redirects]]
+  from = "/admin/*"
+  to = "/admin/index.html"
+  status = 200
