@@ -3,11 +3,11 @@ name = "mgrnz-blog"
 compatibility_date = "2024-10-26"
 
 [build]
-command = "hugo --gc --minify"
+command = "hugo --gc --minify --verbose"
 cwd = "."
 publish = "public"
 
 [build.environment]
-HUGO_VERSION = "0.147.8"
+HUGO_VERSION = "0.150.1"
 HUGO_ENV = "production"
 NODE_VERSION = "18"
