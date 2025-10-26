@@ -32,6 +32,13 @@
 start-admin-server.bat
 ```
 
+## 🤖 **AUTOMATED MAINTENANCE:**
+
+### Submodule Auto-Updates
+- **✅ Weekly automation** - GitHub Action runs every Sunday
+- **✅ Manual fix script** - `fix-submodules.bat` for immediate fixes
+- **✅ Prevents build failures** - Keeps theme submodules current
+
 ### Step 2: Test Local Development
 ```bash
 # In another terminal:
