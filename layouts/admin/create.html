@@ -18,34 +18,41 @@
       <div class="grid gap-6 md:grid-cols-2">
         <div>
           <label class="block text-sm font-medium text-neutral-700 mb-2">Post Slug</label>
-          <input name="slug" required placeholder="e.g. ai-trends-2025" 
-                 class="w-full rounded-lg border border-neutral-300 px-4 py-2 text-neutral-900 focus:border-orange-500 focus:ring-2 focus:ring-orange-200">
-          <p class="mt-1 text-xs text-neutral-500">URL-friendly name (lowercase, hyphens only)</p>
+          <div class="flex items-center space-x-2">
+            <span class="text-sm text-neutral-600" id="slugPrefix">/2025/10/</span>
+            <input name="slug" required placeholder="my-post-name" 
+                   class="flex-1 rounded-lg border-4 border-orange-500 px-4 py-2 text-neutral-900 focus:border-orange-600 focus:ring-4 focus:ring-orange-200"
+                   oninput="updateSlugPreview()">
+          </div>
+          <p class="mt-1 text-xs text-neutral-500">URL format: /year/month/your-slug</p>
+          <p class="mt-1 text-sm text-orange-600" id="fullSlugPreview">/2025/10/my-post-name</p>
         </div>
         <div>
           <label class="block text-sm font-medium text-neutral-700 mb-2">Publish Date</label>
           <input name="date" type="date" 
-                 class="w-full rounded-lg border border-neutral-300 px-4 py-2 text-neutral-900 focus:border-orange-500 focus:ring-2 focus:ring-orange-200">
+                 class="w-full rounded-lg border-4 border-orange-500 px-4 py-2 text-neutral-900 focus:border-orange-600 focus:ring-4 focus:ring-orange-200"
+                 onchange="updateSlugPrefix()">
         </div>
       </div>
 
       <div>
         <label class="block text-sm font-medium text-neutral-700 mb-2">Post Title</label>
         <input name="title" required placeholder="Enter your post title" 
-               class="w-full rounded-lg border border-neutral-300 px-4 py-2 text-neutral-900 focus:border-orange-500 focus:ring-2 focus:ring-orange-200">
+               class="w-full rounded-lg border-4 border-orange-500 px-4 py-2 text-neutral-900 focus:border-orange-600 focus:ring-4 focus:ring-orange-200"
+               oninput="generateSlugFromTitle()">
       </div>
 
       <div class="grid gap-6 md:grid-cols-2">
         <div>
           <label class="block text-sm font-medium text-neutral-700 mb-2">Tags</label>
           <input name="tags" placeholder="AI, automation, technology" 
-                 class="w-full rounded-lg border border-neutral-300 px-4 py-2 text-neutral-900 focus:border-orange-500 focus:ring-2 focus:ring-orange-200">
+                 class="w-full rounded-lg border-4 border-orange-500 px-4 py-2 text-neutral-900 focus:border-orange-600 focus:ring-4 focus:ring-orange-200">
           <p class="mt-1 text-xs text-neutral-500">Comma-separated tags</p>
         </div>
         <div>
           <label class="block text-sm font-medium text-neutral-700 mb-2">Categories</label>
           <input name="categories" placeholder="Technology, Business" 
-                 class="w-full rounded-lg border border-neutral-300 px-4 py-2 text-neutral-900 focus:border-orange-500 focus:ring-2 focus:ring-orange-200">
+                 class="w-full rounded-lg border-4 border-orange-500 px-4 py-2 text-neutral-900 focus:border-orange-600 focus:ring-4 focus:ring-orange-200">
           <p class="mt-1 text-xs text-neutral-500">Comma-separated categories</p>
         </div>
       </div>
@@ -53,7 +60,7 @@
       <div>
         <label class="block text-sm font-medium text-neutral-700 mb-2">Summary/Excerpt</label>
         <textarea name="excerpt" rows="3" placeholder="Brief description of your post..." 
-                  class="w-full rounded-lg border border-neutral-300 px-4 py-2 text-neutral-900 focus:border-orange-500 focus:ring-2 focus:ring-orange-200"></textarea>
+                  class="w-full rounded-lg border-4 border-orange-500 px-4 py-2 text-neutral-900 focus:border-orange-600 focus:ring-4 focus:ring-orange-200"></textarea>
       </div>
 
       <div class="grid gap-6 md:grid-cols-2">
@@ -151,18 +158,68 @@ function createBlock(type, content) {
 addTextBtn.onclick = () => blocksEl.appendChild(createBlock('text'));
 addImageBtn.onclick = () => blocksEl.appendChild(createBlock('image'));
 
-// Set default date
-document.querySelector('input[name="date"]').value = new Date().toISOString().slice(0,10);
+// Set default date and initialize slug
+const today = new Date();
+const dateInput = document.querySelector('input[name="date"]');
+dateInput.value = today.toISOString().slice(0,10);
+updateSlugPrefix();
+
+// Slug generation functions
+function updateSlugPrefix() {
+  const dateInput = document.querySelector('input[name="date"]');
+  const slugPrefix = document.getElementById('slugPrefix');
+  
+  if (dateInput.value) {
+    const date = new Date(dateInput.value + 'T00:00:00');
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    slugPrefix.textContent = `/${year}/${month}/`;
+    updateSlugPreview();
+  }
+}
+
+function updateSlugPreview() {
+  const slugPrefix = document.getElementById('slugPrefix').textContent;
+  const slugInput = document.querySelector('input[name="slug"]');
+  const preview = document.getElementById('fullSlugPreview');
+  
+  const slug = slugInput.value || 'my-post-name';
+  preview.textContent = slugPrefix + slug;
+}
+
+function generateSlugFromTitle() {
+  const titleInput = document.querySelector('input[name="title"]');
+  const slugInput = document.querySelector('input[name="slug"]');
+  
+  if (titleInput.value && !slugInput.value) {
+    const slug = titleInput.value
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .trim();
+    
+    slugInput.value = slug;
+    updateSlugPreview();
+  }
+}
 
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
   const fd = new FormData(form);
   
-  const slug = (fd.get('slug') || '').trim().toLowerCase().replace(/[^a-z0-9-]/g, '-');
-  if (!slug) { alert('Please enter a slug.'); return; }
+  const slugInput = (fd.get('slug') || '').trim().toLowerCase().replace(/[^a-z0-9-]/g, '-');
+  if (!slugInput) { alert('Please enter a slug.'); return; }
+  
+  // Get date for folder structure
+  const date = fd.get('date') || new Date().toISOString().slice(0,10);
+  const dateObj = new Date(date + 'T00:00:00');
+  const year = dateObj.getFullYear();
+  const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+  
+  const slug = `${year}-${month}-${slugInput}`;
 
   const title = (fd.get('title') || '').trim();
-  const date = fd.get('date') || new Date().toISOString().slice(0,10);
   const excerpt = (fd.get('excerpt') || '').trim();
   
   const tags = (fd.get('tags') || '').split(',').map(s => s.trim()).filter(Boolean);
