@@ -1,0 +1,8 @@
+BUILD INFO TEST
+================
+Timestamp: 2025-10-26 22:45:00
+Commit: bd3b68a
+Status: Testing if Cloudflare Pages is reading repository changes
+Expected: This file should appear at /build-info.txt if static files are updating
+Hugo Build: Should generate fresh HTML with NUCLEAR DEPLOY message
+================
