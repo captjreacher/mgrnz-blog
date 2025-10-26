@@ -13,11 +13,14 @@ set "timestamp=%YYYY%-%MM%-%DD% %HH%:%Min%:%Sec%"
 echo Creating test blog post...
 echo.
 
+:: Create the folder first
+mkdir "content/posts/deployment-test-%YYYY%-%MM%-%DD%-%HH%-%Min%" 2>nul
+
 :: Create the blog post content
 (
 echo ---
 echo title: "🚀 Deployment Test Post"
-echo date: %YYYY%-%MM%-%DD%T%HH%:%Min%:%Sec%+12:00
+echo date: 2025-10-26
 echo draft: false
 echo tags: ["test", "deployment"]
 echo categories: ["testing"]
@@ -52,7 +55,7 @@ echo.
 echo **Site URL**: https://mgrnz.com/
 echo.
 echo **Test completed at**: %timestamp%
-) > "content/posts/deployment-test-%YYYY%-%MM%-%DD%-%HH%-%Min%.md"
+) > "content/posts/deployment-test-%YYYY%-%MM%-%DD%-%HH%-%Min%/index.md"
 
 echo ✅ Test post created: deployment-test-%YYYY%-%MM%-%DD%-%HH%-%Min%.md
 echo.
