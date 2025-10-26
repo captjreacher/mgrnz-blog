@@ -1,4 +1,4 @@
-baseURL: "https://342bf600.mgrnz-blog.pages.dev/"
+baseURL: "/"  # Use relative URLs for Cloudflare Pages
 title: "Welcome to the Personal Blog of Mike G Robinson"
 languageCode: en-nz
 enableRobotsTXT: true
