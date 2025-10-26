@@ -1,2 +1,3 @@
-# Cloudflare Pages redirects
+# Cloudflare Pages redirects - Updated 2025-10-26 22:45
 /admin/* /admin/index.html 200
+/test-redirect /build-info.txt 302
