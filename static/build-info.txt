@@ -1,8 +1,8 @@
-BUILD INFO TEST - CORRECT URL
-==============================
-Timestamp: 2025-10-26 23:00:00
+BUILD INFO TEST - ADMIN UPDATE
+===============================
+Timestamp: 2025-10-27 09:30:00
 Correct URL: https://mgrnz.com/
-Status: Testing with correct domain (mgrnz.com -> mgrnz-blog.pages.dev)
-Expected: This file should appear at /build-info.txt
-Hugo Build: Should generate fresh HTML with FINAL TEST message
-==============================
+Status: Testing admin form updates with orange borders
+Expected: Admin form should have orange outlined fields
+Hugo Build: Should show enhanced admin interface
+===============================
