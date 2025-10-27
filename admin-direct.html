@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Blog Admin - Direct Publishing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-orange': '#ff4f00',
+                        'brand-yellow': '#ffcf00',
+                        'brand-blue': '#89bbfe'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #0f172a !important; }
+        .orange-border { border: 2px solid #ff4f00 !important; }
+        .orange-border:focus { border-color: #ff6600 !important; box-shadow: 0 0 0 3px rgba(255, 79, 0, 0.2) !important; }
+        .loading { opacity: 0.6; pointer-events: none; }
+    </style>
+</head>
+<body class="min-h-screen bg-neutral-900 text-white" x-data="adminApp()">
+    
+    <!-- Header -->
+    <header class="bg-neutral-800 border-b border-neutral-700 p-4 sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <h1 class="text-2xl font-bold text-orange-400">Direct Publishing Admin</h1>
+                <span class="px-3 py-1 bg-green-900 text-green-300 text-xs rounded-full">Auto-Deploy</span>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button @click="checkApiStatus()" 
+                        class="bg-neutral-700 hover:bg-neutral-600 px-4 py-2 rounded text-sm transition-colors">
+                    🔍 Check API
+                </button>
+                <a href="/admin-dashboard.html" class="bg-neutral-700 hover:bg-neutral-600 px-4 py-2 rounded text-sm transition-colors">
+                    ← Dashboard
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- API Status Alert -->
+    <div x-show="!apiAvailable" class="bg-red-900 border-b border-red-700 p-4">
+        <div class="max-w-4xl mx-auto">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h3 class="text-red-300 font-bold">⚠️ API Server Required</h3>
+                    <p class="text-red-200 text-sm">Start the admin API server to enable direct publishing</p>
+                </div>
+                <button @click="startApiServer()" 
+                        class="bg-red-700 hover:bg-red-600 px-4 py-2 rounded text-sm transition-colors">
+                    Start API Server
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto p-6">
+        
+        <!-- Status Messages -->
+        <div x-show="message.show" x-transition 
+             :class="message.type === 'success' ? 'bg-green-900 border-green-700 text-green-300' : 
+                     message.type === 'error' ? 'bg-red-900 border-red-700 text-red-300' :
+                     'bg-blue-900 border-blue-700 text-blue-300'"
+             class="mb-6 p-4 border rounded-lg">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h3 class="font-bold" x-text="message.title"></h3>
+                    <p class="text-sm" x-text="message.text"></p>
+                </div>
+                <button @click="message.show = false" class="text-xl">&times;</button>
+            </div>
+        </div>
+
+        <!-- Post Creation Form -->
+        <div class="bg-white rounded-lg p-8 shadow-xl border-2 border-orange-500">
+            
+            <form @submit.prevent="createPost()" class="space-y-6">
+                
+                <!-- Post Slug with Live Preview -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Post Slug</label>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-sm text-gray-600 bg-gray-100 px-3 py-2 rounded" x-text="slugPrefix"></span>
+                        <input x-model="form.slug" required placeholder="my-awesome-post" 
+                               @input="updateSlugPreview()"
+                               class="flex-1 orange-border rounded-lg px-4 py-2 text-gray-900">
+                    </div>
+                    <p class="mt-2 text-sm font-bold text-orange-600" x-text="'Full URL: https://mgrnz.com' + fullSlugPreview"></p>
+                </div>
+
+                <!-- Date and Title -->
+                <div class="grid gap-6 md:grid-cols-2">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Publish Date</label>
+                        <input x-model="form.date" type="date" @change="updateSlugPrefix()"
+                               class="w-full orange-border rounded-lg px-4 py-2 text-gray-900">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Post Title *</label>
+                        <input x-model="form.title" required placeholder="Enter your post title" 
+                               @input="generateSlugFromTitle()"
+                               class="w-full orange-border rounded-lg px-4 py-2 text-gray-900">
+                    </div>
+                </div>
+
+                <!-- Tags and Categories -->
+                <div class="grid gap-6 md:grid-cols-2">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Tags</label>
+                        <input x-model="form.tags" placeholder="AI, automation, technology" 
+                               class="w-full orange-border rounded-lg px-4 py-2 text-gray-900">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Categories</label>
+                        <select x-model="form.categories" 
+                                class="w-full orange-border rounded-lg px-4 py-2 text-gray-900">
+                            <option value="">Select category...</option>
+                            <option value="Technology">Technology</option>
+                            <option value="Business">Business</option>
+                            <option value="AI">AI</option>
+                            <option value="Tutorial">Tutorial</option>
+                            <option value="Opinion">Opinion</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Summary -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Summary/Excerpt 
+                        <span class="text-xs text-gray-500">(<span x-text="form.excerpt.length"></span>/160 chars)</span>
+                    </label>
+                    <textarea x-model="form.excerpt" rows="3" maxlength="160"
+                              placeholder="Brief description of your post..." 
+                              class="w-full orange-border rounded-lg px-4 py-2 text-gray-900"></textarea>
+                </div>
+
+                <!-- Content -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Post Content *</label>
+                    <textarea x-model="form.content" rows="12" required
+                              placeholder="Write your post content in Markdown..." 
+                              class="w-full orange-border rounded-lg px-4 py-2 text-gray-900 font-mono text-sm"></textarea>
+                </div>
+
+                <!-- Advanced Options -->
+                <div x-data="{ showAdvanced: false }">
+                    <button type="button" @click="showAdvanced = !showAdvanced"
+                            class="text-sm text-orange-600 hover:text-orange-700 mb-4">
+                        <span x-text="showAdvanced ? '▼ Hide Advanced Options' : '▶ Show Advanced Options'"></span>
+                    </button>
+                    
+                    <div x-show="showAdvanced" x-transition class="space-y-4 p-4 bg-gray-50 rounded-lg">
+                        <div class="grid gap-4 md:grid-cols-2">
+                            <div>
+                                <label class="flex items-center">
+                                    <input x-model="form.draft" type="checkbox" class="mr-2">
+                                    <span class="text-sm text-gray-700">Save as draft</span>
+                                </label>
+                            </div>
+                            <div>
+                                <label class="flex items-center">
+                                    <input x-model="form.featured" type="checkbox" class="mr-2">
+                                    <span class="text-sm text-gray-700">Featured post</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="pt-6">
+                    <button type="submit" :disabled="isLoading || !apiAvailable"
+                            :class="isLoading ? 'loading' : ''"
+                            class="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold py-4 px-6 rounded-lg text-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span x-show="!isLoading">🚀 Publish Post Directly</span>
+                        <span x-show="isLoading">⏳ Publishing & Deploying...</span>
+                    </button>
+                    <p class="text-center text-sm text-gray-600 mt-2">
+                        Post will be created and automatically deployed to live site
+                    </p>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        function adminApp() {
+            return {
+                apiAvailable: false,
+                isLoading: false,
+                
+                // Form data
+                form: {
+                    title: '',
+                    slug: '',
+                    date: new Date().toISOString().slice(0,10),
+                    tags: '',
+                    categories: '',
+                    excerpt: '',
+                    content: '',
+                    draft: false,
+                    featured: false
+                },
+                
+                // UI state
+                message: {
+                    show: false,
+                    type: 'success',
+                    title: '',
+                    text: ''
+                },
+                
+                slugPrefix: '/2025/10/',
+                fullSlugPreview: '/2025/10/my-awesome-post',
+                
+                init() {
+                    this.updateSlugPrefix();
+                    this.checkApiStatus();
+                },
+                
+                async checkApiStatus() {
+                    try {
+                        const response = await fetch('http://localhost:3002/api/posts/test', {
+                            method: 'GET',
+                            headers: { 'Content-Type': 'application/json' }
+                        });
+                        this.apiAvailable = true;
+                        this.showMessage('success', 'API Connected', 'Admin API server is running and ready');
+                    } catch (error) {
+                        this.apiAvailable = false;
+                        console.log('API not available:', error.message);
+                    }
+                },
+                
+                startApiServer() {
+                    this.showMessage('info', 'Starting API Server', 'Run: node admin-api.js in your terminal, then refresh this page');
+                },
+                
+                updateSlugPrefix() {
+                    if (this.form.date) {
+                        const date = new Date(this.form.date + 'T00:00:00');
+                        const year = date.getFullYear();
+                        const month = String(date.getMonth() + 1).padStart(2, '0');
+                        this.slugPrefix = `/posts/${year}/${month}/`;
+                        this.updateSlugPreview();
+                    }
+                },
+                
+                updateSlugPreview() {
+                    const slug = this.form.slug || 'my-awesome-post';
+                    this.fullSlugPreview = this.slugPrefix + slug + '/';
+                },
+                
+                generateSlugFromTitle() {
+                    if (this.form.title && !this.form.slug) {
+                        this.form.slug = this.form.title
+                            .toLowerCase()
+                            .replace(/[^a-z0-9\s-]/g, '')
+                            .replace(/\s+/g, '-')
+                            .replace(/-+/g, '-')
+                            .trim();
+                        this.updateSlugPreview();
+                    }
+                },
+                
+                async createPost() {
+                    if (!this.apiAvailable) {
+                        this.showMessage('error', 'API Not Available', 'Please start the admin API server first');
+                        return;
+                    }
+                    
+                    this.isLoading = true;
+                    
+                    try {
+                        // Generate the post content
+                        const dateObj = new Date(this.form.date + 'T00:00:00');
+                        const year = dateObj.getFullYear();
+                        const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+                        const folderName = `${year}-${month}-${this.form.slug}`;
+                        
+                        let markdown = '---\n';
+                        markdown += `title: "${this.form.title}"\n`;
+                        markdown += `date: ${this.form.date}T12:00:00+13:00\n`;
+                        markdown += `draft: ${this.form.draft}\n`;
+                        
+                        if (this.form.tags) {
+                            const tagArray = this.form.tags.split(',').map(t => `"${t.trim()}"`).join(', ');
+                            markdown += `tags: [${tagArray}]\n`;
+                        }
+                        
+                        if (this.form.categories) {
+                            markdown += `categories: ["${this.form.categories}"]\n`;
+                        }
+                        
+                        if (this.form.excerpt) {
+                            markdown += `summary: "${this.form.excerpt}"\n`;
+                        }
+                        
+                        if (this.form.featured) {
+                            markdown += `featured: true\n`;
+                        }
+                        
+                        markdown += '---\n\n';
+                        markdown += this.form.content || `# ${this.form.title}\n\nYour post content goes here.`;
+                        
+                        // Send to API
+                        const response = await fetch('http://localhost:3002/api/posts', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                slug: folderName,
+                                content: markdown
+                            })
+                        });
+                        
+                        const result = await response.json();
+                        
+                        if (result.success) {
+                            this.showMessage('success', 'Post Published!', 
+                                `"${this.form.title}" has been created and deployed. Check your live site in 2-3 minutes.`);
+                            
+                            // Reset form
+                            this.form = {
+                                title: '',
+                                slug: '',
+                                date: new Date().toISOString().slice(0,10),
+                                tags: '',
+                                categories: '',
+                                excerpt: '',
+                                content: '',
+                                draft: false,
+                                featured: false
+                            };
+                            this.updateSlugPrefix();
+                        } else {
+                            this.showMessage('error', 'Publishing Failed', result.message || 'Unknown error occurred');
+                        }
+                        
+                    } catch (error) {
+                        this.showMessage('error', 'Error', 'Failed to publish post: ' + error.message);
+                    } finally {
+                        this.isLoading = false;
+                    }
+                },
+                
+                showMessage(type, title, text) {
+                    this.message = { show: true, type, title, text };
+                    setTimeout(() => this.message.show = false, 8000);
+                }
+            }
+        }
+    </script>
+</body>
+</html>

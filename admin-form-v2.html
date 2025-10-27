@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Create New Post - Admin v2.0</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-orange': '#ff4f00',
+                        'brand-yellow': '#ffcf00',
+                        'brand-blue': '#89bbfe'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #0f172a !important; }
+        .orange-border { border: 4px solid #ff4f00 !important; }
+        .orange-border:focus { border-color: #ff6600 !important; box-shadow: 0 0 0 4px rgba(255, 79, 0, 0.2) !important; }
+    </style>
+</head>
+<body class="min-h-screen bg-neutral-900 text-white">
+    
+    <!-- Header -->
+    <header class="bg-neutral-800 border-b border-neutral-700 p-4">
+        <div class="max-w-4xl mx-auto flex items-center justify-between">
+            <h1 class="text-2xl font-bold text-orange-400">Create New Post - Admin v2.0</h1>
+            <a href="/admin/" class="bg-neutral-700 hover:bg-neutral-600 px-4 py-2 rounded text-sm">← Dashboard</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto p-6">
+        
+        <!-- Success Banner -->
+        <div class="mb-6 p-4 bg-green-900 border border-green-700 rounded-lg">
+            <h2 class="text-green-400 font-bold">✅ ADMIN FORM v2.0 LOADED SUCCESSFULLY!</h2>
+            <p class="text-green-300 text-sm">This version has orange borders and /year/month/slug format</p>
+            <p class="text-green-300 text-sm">Build time: <span id="buildTime"></span></p>
+        </div>
+
+        <!-- Post Creation Form -->
+        <div class="bg-white rounded-lg p-8 shadow-xl" style="border: 4px solid #ff4f00;">
+            
+            <form id="postForm" class="space-y-6">
+                
+                <!-- Post Slug with Preview -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Post Slug</label>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-sm text-gray-600 bg-gray-100 px-3 py-2 rounded" id="slugPrefix">/2025/10/</span>
+                        <input name="slug" required placeholder="my-awesome-post" 
+                               class="flex-1 orange-border rounded-lg px-4 py-2 text-gray-900"
+                               oninput="updateSlugPreview()">
+                    </div>
+                    <p class="mt-2 text-sm font-bold text-orange-600" id="fullSlugPreview">Full URL: /2025/10/my-awesome-post</p>
+                </div>
+
+                <!-- Date and Title -->
+                <div class="grid gap-6 md:grid-cols-2">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Publish Date</label>
+                        <input name="date" type="date" 
+                               class="w-full orange-border rounded-lg px-4 py-2 text-gray-900"
+                               onchange="updateSlugPrefix()">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Post Title</label>
+                        <input name="title" required placeholder="Enter your post title" 
+                               class="w-full orange-border rounded-lg px-4 py-2 text-gray-900"
+                               oninput="generateSlugFromTitle()">
+                    </div>
+                </div>
+
+                <!-- Tags and Categories -->
+                <div class="grid gap-6 md:grid-cols-2">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Tags</label>
+                        <input name="tags" placeholder="AI, automation, technology" 
+                               class="w-full orange-border rounded-lg px-4 py-2 text-gray-900">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Categories</label>
+                        <input name="categories" placeholder="Technology, Business" 
+                               class="w-full orange-border rounded-lg px-4 py-2 text-gray-900">
+                    </div>
+                </div>
+
+                <!-- Summary -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Summary/Excerpt</label>
+                    <textarea name="excerpt" rows="3" placeholder="Brief description of your post..." 
+                              class="w-full orange-border rounded-lg px-4 py-2 text-gray-900"></textarea>
+                </div>
+
+                <!-- Content -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Post Content</label>
+                    <textarea name="content" rows="10" placeholder="Write your post content in Markdown..." 
+                              class="w-full orange-border rounded-lg px-4 py-2 text-gray-900 font-mono text-sm"></textarea>
+                </div>
+
+                <!-- Submit -->
+                <div class="pt-6">
+                    <button type="submit" 
+                            class="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold py-4 px-6 rounded-lg text-lg transition-all">
+                        🚀 Create Post Package
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        // Set build time
+        document.getElementById('buildTime').textContent = new Date().toLocaleString();
+        
+        // Set default date
+        const today = new Date();
+        document.querySelector('input[name="date"]').value = today.toISOString().slice(0,10);
+        updateSlugPrefix();
+
+        // Slug functions
+        function updateSlugPrefix() {
+            const dateInput = document.querySelector('input[name="date"]');
+            const slugPrefix = document.getElementById('slugPrefix');
+            
+            if (dateInput.value) {
+                const date = new Date(dateInput.value + 'T00:00:00');
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                slugPrefix.textContent = `/${year}/${month}/`;
+                updateSlugPreview();
+            }
+        }
+
+        function updateSlugPreview() {
+            const slugPrefix = document.getElementById('slugPrefix').textContent;
+            const slugInput = document.querySelector('input[name="slug"]');
+            const preview = document.getElementById('fullSlugPreview');
+            
+            const slug = slugInput.value || 'my-awesome-post';
+            preview.textContent = `Full URL: ${slugPrefix}${slug}`;
+        }
+
+        function generateSlugFromTitle() {
+            const titleInput = document.querySelector('input[name="title"]');
+            const slugInput = document.querySelector('input[name="slug"]');
+            
+            if (titleInput.value && !slugInput.value) {
+                const slug = titleInput.value
+                    .toLowerCase()
+                    .replace(/[^a-z0-9\s-]/g, '')
+                    .replace(/\s+/g, '-')
+                    .replace(/-+/g, '-')
+                    .trim();
+                
+                slugInput.value = slug;
+                updateSlugPreview();
+            }
+        }
+
+        // Form submission
+        document.getElementById('postForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const date = formData.get('date');
+            const slug = formData.get('slug');
+            const title = formData.get('title');
+            const tags = formData.get('tags');
+            const categories = formData.get('categories');
+            const excerpt = formData.get('excerpt');
+            const content = formData.get('content');
+            
+            // Generate folder name
+            const dateObj = new Date(date + 'T00:00:00');
+            const year = dateObj.getFullYear();
+            const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const folderName = `${year}-${month}-${slug}`;
+            
+            // Generate markdown content
+            let markdown = '---\n';
+            markdown += `title: "${title}"\n`;
+            markdown += `date: ${date}\n`;
+            markdown += `draft: false\n`;
+            
+            if (tags) {
+                const tagArray = tags.split(',').map(t => `"${t.trim()}"`).join(', ');
+                markdown += `tags: [${tagArray}]\n`;
+            }
+            
+            if (categories) {
+                const catArray = categories.split(',').map(c => `"${c.trim()}"`).join(', ');
+                markdown += `categories: [${catArray}]\n`;
+            }
+            
+            if (excerpt) {
+                markdown += `summary: "${excerpt}"\n`;
+            }
+            
+            markdown += '---\n\n';
+            markdown += content || `# ${title}\n\nYour post content goes here.`;
+            
+            // Create downloadable file
+            const blob = new Blob([markdown], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${folderName}-index.md`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert(`✅ Post created!\n\nNext steps:\n1. Create folder: content/posts/${folderName}/\n2. Save downloaded file as: index.md\n3. Hugo will rebuild automatically`);
+        });
+    </script>
+</body>
+</html>

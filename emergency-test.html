@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>🚨 EMERGENCY DEPLOYMENT TEST</title>
+    <style>
+        body { 
+            background: #ff0000; 
+            color: #ffffff; 
+            font-size: 48px; 
+            text-align: center; 
+            padding: 50px;
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+    <h1>🚨 EMERGENCY TEST 🚨</h1>
+    <p>Timestamp: 2025-10-27 09:35:00</p>
+    <p>If you see this RED BLINKING page, deployments are working!</p>
+    <hr>
+    <p style="font-size: 24px;">
+        If this page updates but admin/posts don't:<br>
+        → Static files work, Hugo layouts don't<br>
+        → Check Cloudflare Pages build logs<br>
+        → Verify Hugo version in build settings
+    </p>
+</body>
+</html>
