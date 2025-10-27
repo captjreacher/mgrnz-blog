@@ -5,7 +5,8 @@
   "main": "admin-api.js",
   "scripts": {
     "start": "node admin-api.js",
-    "dev": "nodemon admin-api.js"
+    "dev": "nodemon admin-api.js",
+    "deploy:metadata": "node scripts/update-deployment-status.js"
   },
   "dependencies": {
     "express": "^4.18.2",
