@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Blog Admin - Secure Access</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <style>
+        body { background-color: #0f172a !important; }
+    </style>
+</head>
+<body class="min-h-screen bg-neutral-900 text-white flex items-center justify-center" x-data="authApp()">
+    
+    <!-- Login Form -->
+    <div x-show="!isAuthenticated" class="w-full max-w-md">
+        <div class="bg-neutral-800 p-8 rounded-lg shadow-xl border border-neutral-700">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold text-orange-400 mb-2">Blog Admin</h1>
+                <p class="text-neutral-400">Secure access required</p>
+            </div>
+            
+            <form @submit.prevent="authenticate()" class="space-y-6">
+                <div>
+                    <label class="block text-sm font-medium text-neutral-300 mb-2">Access Code</label>
+                    <input x-model="accessCode" type="password" required
+                           placeholder="Enter your access code"
+                           class="w-full bg-neutral-700 border border-neutral-600 rounded-lg px-4 py-3 text-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20">
+                </div>
+                
+                <div x-show="error" class="p-3 bg-red-900 border border-red-700 rounded-lg">
+                    <p class="text-red-300 text-sm" x-text="error"></p>
+                </div>
+                
+                <button type="submit" :disabled="isLoading"
+                        class="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold py-3 px-6 rounded-lg transition-all disabled:opacity-50">
+                    <span x-show="!isLoading">🔐 Access Admin</span>
+                    <span x-show="isLoading">⏳ Verifying...</span>
+                </button>
+            </form>
+            
+            <div class="mt-6 text-center">
+                <p class="text-xs text-neutral-500">
+                    Secure access • Session expires in 24 hours
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Admin Interface -->
+    <div x-show="isAuthenticated" class="w-full h-full">
+        <iframe src="/admin-production.html" class="w-full h-screen border-0"></iframe>
+    </div>
+
+    <script>
+        function authApp() {
+            return {
+                isAuthenticated: false,
+                accessCode: '',
+                error: '',
+                isLoading: false,
+                
+                init() {
+                    // Check if already authenticated
+                    const authToken = localStorage.getItem('admin_auth');
+                    const authTime = localStorage.getItem('admin_auth_time');
+                    
+                    if (authToken && authTime) {
+                        const now = new Date().getTime();
+                        const authAge = now - parseInt(authTime);
+                        const twentyFourHours = 24 * 60 * 60 * 1000;
+                        
+                        if (authAge < twentyFourHours && authToken === this.getExpectedToken()) {
+                            this.isAuthenticated = true;
+                        } else {
+                            // Clear expired auth
+                            localStorage.removeItem('admin_auth');
+                            localStorage.removeItem('admin_auth_time');
+                        }
+                    }
+                },
+                
+                async authenticate() {
+                    this.isLoading = true;
+                    this.error = '';
+                    
+                    try {
+                        // Simulate authentication delay
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                        
+                        // Simple access code check (in production, use proper authentication)
+                        const validCodes = ['admin2025', 'mgrnz-admin', 'blog-secure'];
+                        
+                        if (validCodes.includes(this.accessCode)) {
+                            const authToken = this.generateAuthToken();
+                            localStorage.setItem('admin_auth', authToken);
+                            localStorage.setItem('admin_auth_time', new Date().getTime().toString());
+                            
+                            this.isAuthenticated = true;
+                            this.accessCode = '';
+                        } else {
+                            this.error = 'Invalid access code. Please try again.';
+                        }
+                    } catch (error) {
+                        this.error = 'Authentication failed. Please try again.';
+                    } finally {
+                        this.isLoading = false;
+                    }
+                },
+                
+                generateAuthToken() {
+                    const timestamp = new Date().getTime();
+                    const random = Math.random().toString(36).substring(2);
+                    return btoa(`${timestamp}-${random}`);
+                },
+                
+                getExpectedToken() {
+                    // In production, implement proper token validation
+                    return localStorage.getItem('admin_auth');
+                }
+            }
+        }
+    </script>
+</body>
+</html>

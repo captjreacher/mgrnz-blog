@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin Access</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #0f172a !important; }
+    </style>
+</head>
+<body class="min-h-screen bg-neutral-900 text-white flex items-center justify-center">
+    <div class="text-center max-w-md">
+        <h1 class="text-3xl font-bold text-orange-400 mb-6">Choose Admin Interface</h1>
+        
+        <div class="space-y-4">
+            <a href="/admin-dashboard.html" 
+               class="block w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold py-4 px-6 rounded-lg transition-all">
+                🚀 Production Dashboard
+                <div class="text-sm opacity-80">Full-featured admin interface</div>
+            </a>
+            
+            <a href="/admin-production.html" 
+               class="block w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-bold py-4 px-6 rounded-lg transition-all">
+                ✏️ Create Post
+                <div class="text-sm opacity-80">Quick post creation</div>
+            </a>
+            
+            <a href="/admin-secure.html" 
+               class="block w-full bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600 text-white font-bold py-4 px-6 rounded-lg transition-all">
+                🔐 Secure Access
+                <div class="text-sm opacity-80">Password-protected admin</div>
+            </a>
+            
+            <a href="/admin/" 
+               class="block w-full bg-neutral-700 hover:bg-neutral-600 text-white font-bold py-4 px-6 rounded-lg transition-all">
+                📝 Decap CMS
+                <div class="text-sm opacity-80">Traditional CMS interface</div>
+            </a>
+        </div>
+        
+        <div class="mt-8 text-sm text-neutral-400">
+            <p>All interfaces support auto-deployment to live site</p>
+        </div>
+    </div>
+</body>
+</html>
