@@ -3,7 +3,7 @@ name = "mgrnz-blog"
 compatibility_date = "2024-10-26"
 
 [build]
-command = "hugo --gc --minify --verbose"
+command = "hugo --gc --minify"
 cwd = "."
 publish = "public"
 
