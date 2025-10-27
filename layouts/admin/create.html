@@ -1,119 +1,180 @@
 {{ define "main" }}
-<div class="space-y-8">
+<div class="space-y-6">
   <!-- Header -->
   <div class="flex items-center justify-between">
     <div>
       <h2 class="text-3xl font-bold text-white">Create New Post</h2>
-      <p class="mt-2 text-neutral-400">Use the wizard below to create a new blog post with all the necessary files.</p>
+      <p class="mt-2 text-neutral-400">Create and publish your blog post with advanced options</p>
     </div>
-    <a href="/admin/" class="rounded-lg bg-neutral-700 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-600">
-      ← Back to Dashboard
-    </a>
+    <div class="flex gap-3">
+      <a href="/admin-auto.html" class="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700 transition-colors">
+        🚀 Quick Create
+      </a>
+      <a href="/admin/" class="rounded-lg bg-neutral-700 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-600 transition-colors">
+        ← Dashboard
+      </a>
+    </div>
   </div>
 
-  <!-- Post Creation Wizard -->
-  <div class="rounded-lg bg-white p-8 shadow-lg" style="border: 2px solid #ff4f00;">
+  <!-- Post Creation Form -->
+  <div class="rounded-lg bg-neutral-800 border border-neutral-700 shadow-xl overflow-hidden">
 
-    <form id="postWizard" class="space-y-6">
+    <!-- Form Header -->
+    <div class="bg-gradient-to-r from-orange-600 to-red-600 px-6 py-4">
+      <h3 class="text-lg font-semibold text-white">Post Creation Wizard</h3>
+      <p class="text-orange-100 text-sm">Fill out the form below to generate your blog post package</p>
+    </div>
+
+    <form id="postWizard" class="p-6 space-y-6">
       <!-- Basic Information -->
       <div class="grid gap-6 md:grid-cols-2">
         <div>
-          <label class="block text-sm font-medium text-neutral-700 mb-2">Post Slug</label>
+          <label class="block text-sm font-medium text-neutral-300 mb-2">Post Slug</label>
           <div class="flex items-center space-x-2">
-            <span class="text-sm text-neutral-600" id="slugPrefix">/2025/10/</span>
-            <input name="slug" required placeholder="my-post-name" 
-                   class="flex-1 rounded-lg border-4 border-orange-500 px-4 py-2 text-neutral-900 focus:border-orange-600 focus:ring-4 focus:ring-orange-200"
+            <span class="text-sm text-neutral-400 bg-neutral-700 px-3 py-2 rounded-lg" id="slugPrefix">/2025/10/</span>
+            <input name="slug" required placeholder="my-awesome-post" 
+                   class="flex-1 rounded-lg border border-neutral-600 bg-neutral-700 px-4 py-2 text-white placeholder-neutral-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20"
                    oninput="updateSlugPreview()">
           </div>
-          <p class="mt-1 text-xs text-neutral-500">URL format: /year/month/your-slug</p>
-          <p class="mt-1 text-sm text-orange-600" id="fullSlugPreview">/2025/10/my-post-name</p>
+          <p class="mt-1 text-xs text-neutral-400">URL format: /year/month/your-slug</p>
+          <p class="mt-1 text-sm text-orange-400 font-medium" id="fullSlugPreview">/2025/10/my-awesome-post</p>
         </div>
         <div>
-          <label class="block text-sm font-medium text-neutral-700 mb-2">Publish Date</label>
+          <label class="block text-sm font-medium text-neutral-300 mb-2">Publish Date</label>
           <input name="date" type="date" 
-                 class="w-full rounded-lg border-4 border-orange-500 px-4 py-2 text-neutral-900 focus:border-orange-600 focus:ring-4 focus:ring-orange-200"
+                 class="w-full rounded-lg border border-neutral-600 bg-neutral-700 px-4 py-2 text-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20"
                  onchange="updateSlugPrefix()">
         </div>
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-neutral-700 mb-2">Post Title</label>
+        <label class="block text-sm font-medium text-neutral-300 mb-2">Post Title *</label>
         <input name="title" required placeholder="Enter your post title" 
-               class="w-full rounded-lg border-4 border-orange-500 px-4 py-2 text-neutral-900 focus:border-orange-600 focus:ring-4 focus:ring-orange-200"
+               class="w-full rounded-lg border border-neutral-600 bg-neutral-700 px-4 py-2 text-white placeholder-neutral-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20"
                oninput="generateSlugFromTitle()">
       </div>
 
       <div class="grid gap-6 md:grid-cols-2">
         <div>
-          <label class="block text-sm font-medium text-neutral-700 mb-2">Tags</label>
+          <label class="block text-sm font-medium text-neutral-300 mb-2">Tags</label>
           <input name="tags" placeholder="AI, automation, technology" 
-                 class="w-full rounded-lg border-4 border-orange-500 px-4 py-2 text-neutral-900 focus:border-orange-600 focus:ring-4 focus:ring-orange-200">
-          <p class="mt-1 text-xs text-neutral-500">Comma-separated tags</p>
+                 class="w-full rounded-lg border border-neutral-600 bg-neutral-700 px-4 py-2 text-white placeholder-neutral-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20">
+          <p class="mt-1 text-xs text-neutral-400">Comma-separated tags</p>
         </div>
         <div>
-          <label class="block text-sm font-medium text-neutral-700 mb-2">Categories</label>
-          <input name="categories" placeholder="Technology, Business" 
-                 class="w-full rounded-lg border-4 border-orange-500 px-4 py-2 text-neutral-900 focus:border-orange-600 focus:ring-4 focus:ring-orange-200">
-          <p class="mt-1 text-xs text-neutral-500">Comma-separated categories</p>
+          <label class="block text-sm font-medium text-neutral-300 mb-2">Categories</label>
+          <select name="categories" class="w-full rounded-lg border border-neutral-600 bg-neutral-700 px-4 py-2 text-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20">
+            <option value="">Select category...</option>
+            <option value="Technology">Technology</option>
+            <option value="Business">Business</option>
+            <option value="AI">AI</option>
+            <option value="Tutorial">Tutorial</option>
+            <option value="Opinion">Opinion</option>
+          </select>
         </div>
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-neutral-700 mb-2">Summary/Excerpt</label>
+        <label class="block text-sm font-medium text-neutral-300 mb-2">Summary/Excerpt</label>
         <textarea name="excerpt" rows="3" placeholder="Brief description of your post..." 
-                  class="w-full rounded-lg border-4 border-orange-500 px-4 py-2 text-neutral-900 focus:border-orange-600 focus:ring-4 focus:ring-orange-200"></textarea>
+                  class="w-full rounded-lg border border-neutral-600 bg-neutral-700 px-4 py-2 text-white placeholder-neutral-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20"></textarea>
       </div>
 
-      <div class="grid gap-6 md:grid-cols-2">
-        <div>
-          <label class="block text-sm font-medium text-neutral-700 mb-2">Hero Image</label>
-          <input name="hero" type="file" accept="image/*" 
-                 class="w-full rounded-lg border-4 border-orange-500 px-4 py-2 text-neutral-900 focus:border-orange-600 focus:ring-4 focus:ring-orange-200">
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-neutral-700 mb-2">Additional Images</label>
-          <input name="library" multiple type="file" accept="image/*" 
-                 class="w-full rounded-lg border-4 border-orange-500 px-4 py-2 text-neutral-900 focus:border-orange-600 focus:ring-4 focus:ring-orange-200">
-        </div>
-      </div>
-
-      <!-- Content Blocks -->
-      <div class="border-t border-neutral-200 pt-6">
+      <!-- Content Section -->
+      <div class="border-t border-neutral-700 pt-6">
         <div class="mb-4 flex items-center justify-between">
-          <h3 class="text-lg font-semibold text-neutral-900">Content Blocks</h3>
+          <h3 class="text-lg font-semibold text-white">Content</h3>
           <div class="flex gap-2">
             <button type="button" id="addText" 
-                    class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
-              + Text Block
+                    class="rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors">
+              📝 Add Text
             </button>
             <button type="button" id="addImage" 
-                    class="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700">
-              + Image Block
+                    class="rounded-lg bg-green-600 px-3 py-2 text-sm font-medium text-white hover:bg-green-700 transition-colors">
+              🖼️ Add Image
             </button>
           </div>
         </div>
-        <div id="blocks" class="space-y-4"></div>
+        <div id="blocks" class="space-y-4">
+          <!-- Default text block -->
+          <div class="rounded-lg border border-neutral-600 bg-neutral-700 p-4">
+            <div class="flex items-center justify-between mb-3">
+              <label class="text-sm font-medium text-neutral-300">Main Content</label>
+            </div>
+            <textarea class="txt w-full rounded-lg border border-neutral-600 bg-neutral-800 px-4 py-2 text-white placeholder-neutral-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 font-mono text-sm" 
+                      rows="8" placeholder="Write your post content in Markdown...
+
+# Your Post Title
+
+Write your content here using Markdown syntax.
+
+## Features
+- **Bold text**
+- *Italic text*
+- [Links](https://example.com)
+- Code blocks
+
+```javascript
+console.log('Hello world');
+```"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Advanced Options -->
+      <div class="border-t border-neutral-700 pt-6">
+        <details class="group">
+          <summary class="flex items-center justify-between cursor-pointer text-neutral-300 hover:text-white">
+            <span class="text-sm font-medium">Advanced Options</span>
+            <span class="text-neutral-400 group-open:rotate-180 transition-transform">▼</span>
+          </summary>
+          <div class="mt-4 space-y-4">
+            <div class="grid gap-6 md:grid-cols-2">
+              <div>
+                <label class="block text-sm font-medium text-neutral-300 mb-2">Hero Image</label>
+                <input name="hero" type="file" accept="image/*" 
+                       class="w-full rounded-lg border border-neutral-600 bg-neutral-700 px-4 py-2 text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-orange-600 file:text-white hover:file:bg-orange-700">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-neutral-300 mb-2">Additional Images</label>
+                <input name="library" multiple type="file" accept="image/*" 
+                       class="w-full rounded-lg border border-neutral-600 bg-neutral-700 px-4 py-2 text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-green-600 file:text-white hover:file:bg-green-700">
+              </div>
+            </div>
+            <div class="flex items-center space-x-4">
+              <label class="flex items-center">
+                <input name="draft" type="checkbox" class="rounded border-neutral-600 bg-neutral-700 text-orange-600 focus:ring-orange-500 focus:ring-2">
+                <span class="ml-2 text-sm text-neutral-300">Save as draft</span>
+              </label>
+              <label class="flex items-center">
+                <input name="featured" type="checkbox" class="rounded border-neutral-600 bg-neutral-700 text-orange-600 focus:ring-orange-500 focus:ring-2">
+                <span class="ml-2 text-sm text-neutral-300">Featured post</span>
+              </label>
+            </div>
+          </div>
+        </details>
       </div>
 
       <!-- Submit -->
-      <div class="border-t border-neutral-200 pt-6">
+      <div class="border-t border-neutral-700 pt-6">
         <button type="submit" 
-                class="w-full rounded-lg bg-gradient-to-r from-orange-600 to-red-600 px-6 py-3 text-lg font-semibold text-white hover:from-orange-700 hover:to-red-700 transition-all">
-          Generate Post Package
+                class="w-full rounded-lg bg-gradient-to-r from-orange-600 to-red-600 px-6 py-4 text-lg font-semibold text-white hover:from-orange-700 hover:to-red-700 transition-all shadow-lg">
+          🚀 Generate Post Package
         </button>
+        <p class="text-center text-xs text-neutral-400 mt-2">
+          Creates a downloadable ZIP file with your post and images
+        </p>
       </div>
     </form>
   </div>
 
   <!-- Result Display -->
-  <div id="result" class="hidden rounded-lg bg-green-50 border border-green-200 p-6">
+  <div id="result" class="hidden rounded-lg bg-green-900 border border-green-700 p-6">
     <div class="flex items-center">
-      <svg class="h-6 w-6 text-green-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-      </svg>
+      <div class="text-2xl mr-3">✅</div>
       <div>
-        <h3 class="text-lg font-semibold text-green-800">Post Package Generated!</h3>
-        <p class="text-green-700" id="resultText"></p>
+        <h3 class="text-lg font-semibold text-green-300">Post Package Generated!</h3>
+        <p class="text-green-200" id="resultText"></p>
       </div>
     </div>
   </div>
@@ -129,26 +190,29 @@ const resultText = document.getElementById('resultText');
 
 function createBlock(type, content) {
   const block = document.createElement('div');
-  block.className = 'rounded-lg border border-neutral-200 bg-neutral-50 p-4';
+  block.className = 'rounded-lg border border-neutral-600 bg-neutral-700 p-4';
   
   if (type === 'text') {
     block.innerHTML = `
       <div class="flex items-center justify-between mb-3">
-        <label class="text-sm font-medium text-neutral-700">Text Block</label>
-        <button type="button" class="remove text-red-600 hover:text-red-800 text-sm">Remove</button>
+        <label class="text-sm font-medium text-neutral-300">📝 Text Block</label>
+        <button type="button" class="remove text-red-400 hover:text-red-300 text-sm px-2 py-1 rounded hover:bg-red-900/20 transition-colors">Remove</button>
       </div>
-      <textarea class="txt w-full rounded-lg border border-neutral-300 px-4 py-2 text-neutral-900 focus:border-orange-500 focus:ring-2 focus:ring-orange-200" 
-                rows="4" placeholder="Write your content in Markdown...">${content || ''}</textarea>
+      <textarea class="txt w-full rounded-lg border border-neutral-600 bg-neutral-800 px-4 py-2 text-white placeholder-neutral-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 font-mono text-sm" 
+                rows="6" placeholder="Write your content in Markdown...
+
+## Section Title
+Your content here...">${content || ''}</textarea>
     `;
   } else if (type === 'image') {
     block.innerHTML = `
       <div class="flex items-center justify-between mb-3">
-        <label class="text-sm font-medium text-neutral-700">Image Block</label>
-        <button type="button" class="remove text-red-600 hover:text-red-800 text-sm">Remove</button>
+        <label class="text-sm font-medium text-neutral-300">🖼️ Image Block</label>
+        <button type="button" class="remove text-red-400 hover:text-red-300 text-sm px-2 py-1 rounded hover:bg-red-900/20 transition-colors">Remove</button>
       </div>
-      <input class="imgName w-full rounded-lg border border-neutral-300 px-4 py-2 text-neutral-900 focus:border-orange-500 focus:ring-2 focus:ring-orange-200" 
+      <input class="imgName w-full rounded-lg border border-neutral-600 bg-neutral-800 px-4 py-2 text-white placeholder-neutral-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" 
              placeholder="image-filename.jpg" value="${content || ''}">
-      <p class="mt-1 text-xs text-neutral-500">Reference an image from your library above</p>
+      <p class="mt-1 text-xs text-neutral-400">Reference an image from your library above</p>
     `;
   }
   
@@ -240,15 +304,21 @@ form.addEventListener('submit', async (e) => {
     if (v) blocks.push({type:'image', value:v});
   });
 
+  // Get form values
+  const draft = fd.get('draft') === 'on';
+  const featured = fd.get('featured') === 'on';
+  const categorySelect = fd.get('categories');
+
   // Build front matter
   const fm = ['---'];
   fm.push(`title: "${title.replace(/"/g,'\\"')}"`);
-  fm.push(`date: ${date}`);
-  fm.push(`draft: false`);
-  if (categories.length) fm.push(`categories: [${categories.map(c=>`"${c.replace(/"/g,'\\"')}"`).join(', ')}]`);
+  fm.push(`date: ${date}T12:00:00+13:00`);
+  fm.push(`draft: ${draft}`);
+  if (categorySelect) fm.push(`categories: ["${categorySelect}"]`);
   if (tags.length) fm.push(`tags: [${tags.map(t=>`"${t.replace(/"/g,'\\"')}"`).join(', ')}]`);
   if (excerpt) fm.push(`summary: "${excerpt.replace(/"/g,'\\"')}"`);
   if (heroName) fm.push(`image: "${heroName}"`);
+  if (featured) fm.push(`featured: true`);
   fm.push('---');
   fm.push('');
 
