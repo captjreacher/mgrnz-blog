@@ -8,10 +8,6 @@
     "clean": "rm -rf public"
   },
   "engines": {
-    "hugo": "0.150.1",
     "node": "18"
-  },
-  "devDependencies": {
-    "hugo-bin": "^0.150.1"
   }
 }
