@@ -1,5 +1,5 @@
-CACHE BUSTER: 2025-10-27-14-45-00
-FORCE REBUILD: aaf7f01
-ISSUE: Partial deployment - static files updating but layouts not
-SOLUTION: Complete cache purge and rebuild
-TIMESTAMP: 1698415500000
+CACHE BUSTER: 2025-10-27 22:16:25 NZDT
+FORCE REBUILD: b894405
+MISSING COMMITS: 53
+NOTE: Updated via scripts/update-deployment-status.js to invalidate CDN cache
+TIMESTAMP: 1761556585903

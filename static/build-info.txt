@@ -1,15 +1,13 @@
-🚨 DEPLOYMENT STATUS: COMPLETE REBUILD FORCED
+🚨 DEPLOYMENT STATUS: COMPLETE REBUILD REQUIRED
 ===============================
-📅 Last Deploy: 2025-10-27 14:45 UTC
+📅 Last Deploy Attempt: 2025-10-27 22:16:25 NZDT
 🔧 Build: Hugo Static Site + COMPLETE CACHE PURGE
-🌐 CDN: Cloudflare Pages (FORCING FULL REBUILD)
-📍 Commit: aaf7f01 (EMERGENCY FIX)
-🎯 Status: PARTIAL DEPLOY DETECTED - FORCING COMPLETE
-⚡ Cache: COMPLETE PURGE + FULL REBUILD
-🔄 Auto-deploy: EMERGENCY OVERRIDE ACTIVE
-🆕 New: Complete site rebuild with all changes
-🔐 Features: All layouts + static files + auth
-🔗 URL: https://mgrnz.com/admin/
-🚨 COMPLETE REBUILD: CACHE BUSTER ACTIVATED
-🔥 CACHE-BUSTER: 1698415500000
+🌐 CDN: Cloudflare Pages (manual trigger still required)
+📍 Latest Commit: b894405 — Force deployment: add test post to trigger Hugo rebuild with admin changes
+👤 Author: Mike
+🆕 Missing Commits: 53
+💾 Live Commit: e3b41a3 — ≡ƒÜÇ AUTO-DEPLOY: Test post created at 2025-10-27 13:27:54
+🔄 Auto-deploy: Emergency override active
+📣 Action: Trigger Cloudflare Pages rebuild + confirm GitHub integration
+🔥 CACHE-BUSTER: 1761556585903
 ===============================

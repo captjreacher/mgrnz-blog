@@ -34,6 +34,13 @@ hugo --gc --minify
 - **Hugo version**: `0.147.8`
 - **Node version**: `18`
 
+### 6. Deployment Metadata Refresh
+- Run `npm run deploy:metadata` before committing to refresh deployment timestamp,
+  cache buster, and Cloudflare escalation notes.
+- The script writes `static/deployment-timestamp.txt`, `static/build-info.txt`,
+  `static/CACHE-BUSTER.txt`, `FORCE-DEPLOY-NOW.md`, and `DEPLOYMENT-MISSING-COMMITS.md`
+  so the live site highlights any missing commits.
+
 ## Next Steps
 1. Commit these changes to your repository
 2. Push to trigger a new deployment
