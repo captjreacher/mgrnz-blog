@@ -4,15 +4,11 @@
   {{ partial "head.html" . }}
   <title>{{ .Title }} - Admin | {{ .Site.Title }}</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
   <style>
     body { background-color: #0f172a !important; }
   </style>
 </head>
-<body class="min-h-screen bg-neutral-900 text-white" x-data="adminAuth()">
-  
-
-  
+<body class="min-h-screen bg-neutral-900 text-white">
   <!-- Admin Interface -->
     <!-- Admin Header -->
     <header class="sticky top-0 z-20 border-b border-neutral-700 bg-neutral-800">
@@ -57,11 +53,11 @@
               <a href="/admin/" class="rounded-lg bg-neutral-700 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-600">← Dashboard</a>
             </div>
             <div class="rounded-lg bg-neutral-800 border border-neutral-700 p-6">
-              <h3 class="text-lg font-semibold text-white mb-4">Post Creation Form</h3>
-              <p class="text-neutral-400 mb-4">Use the static admin forms for now:</p>
+              <h3 class="text-lg font-semibold text-white mb-4">Post Creation Options</h3>
+              <p class="text-neutral-400 mb-4">Choose your preferred creation method:</p>
               <div class="space-y-2">
-                <a href="/admin-auto.html" class="block bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded transition-colors">🚀 Quick Create Form</a>
-                <a href="/admin-form-v2.html" class="block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-colors">📝 Advanced Form</a>
+                <a href="/admin-form-v2.html" class="block bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded transition-colors">🚀 Quick Create Form</a>
+                <p class="text-neutral-500 text-sm px-4 py-2">📝 Advanced Form - Coming soon</p>
               </div>
             </div>
           </div>
@@ -188,94 +184,5 @@
 
   <!-- Admin Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
-  
-  <script>
-    function adminAuth() {
-      return {
-        isAuthenticated: false,
-        accessCode: '',
-        error: '',
-        isLoading: false,
-        
-        init() {
-          // Auto-authenticate for now
-          this.isAuthenticated = true;
-        },
-        
-        async authenticate() {
-          console.log('Attempting authentication with:', this.accessCode);
-          this.isLoading = true;
-          this.error = '';
-          
-          try {
-            await new Promise(resolve => setTimeout(resolve, 500));
-            
-            const validCodes = [
-              'admin2025', 
-              'mgrnz-admin', 
-              'blog-secure',
-              'admin',
-              'mgrnz2025',
-              'test123'
-            ];
-            
-            console.log('Valid codes:', validCodes);
-            console.log('Input code:', this.accessCode);
-            
-            if (validCodes.includes(this.accessCode.trim())) {
-              const authToken = this.generateAuthToken();
-              localStorage.setItem('admin_auth_token', authToken);
-              localStorage.setItem('admin_auth_time', new Date().getTime().toString());
-              
-              this.isAuthenticated = true;
-              this.accessCode = '';
-              console.log('Authentication successful!');
-            } else {
-              this.error = `Invalid access code "${this.accessCode}". Try: admin2025`;
-              console.log('Authentication failed - invalid code');
-            }
-          } catch (error) {
-            this.error = 'Authentication failed. Please try again.';
-            console.error('Auth error:', error);
-          } finally {
-            this.isLoading = false;
-          }
-        },
-        
-        logout() {
-          if (confirm('Are you sure you want to logout?')) {
-            this.clearAuth();
-            this.isAuthenticated = false;
-          }
-        },
-        
-        clearAuth() {
-          localStorage.removeItem('admin_auth_token');
-          localStorage.removeItem('admin_auth_time');
-        },
-        
-        generateAuthToken() {
-          const timestamp = new Date().getTime();
-          const random = Math.random().toString(36).substring(2);
-          return btoa(`${timestamp}-${random}-admin`);
-        },
-        
-        validateToken(token) {
-          try {
-            const decoded = atob(token);
-            return decoded.includes('-admin');
-          } catch {
-            return false;
-          }
-        },
-        
-        testAuth() {
-          console.log('Testing authentication function...');
-          this.accessCode = 'admin2025';
-          this.authenticate();
-        }
-      }
-    }
-  </script>
 </body>
 </html>

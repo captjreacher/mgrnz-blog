@@ -8,7 +8,7 @@
 
   <!-- Quick Actions -->
   <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-    <a href="/admin/create/" class="group block rounded-lg bg-neutral-800 border border-neutral-700 p-6 shadow-md transition-all hover:shadow-lg hover:bg-neutral-700">
+    <a href="/admin-form-v2.html" class="group block rounded-lg bg-neutral-800 border border-neutral-700 p-6 shadow-md transition-all hover:shadow-lg hover:bg-neutral-700">
       <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-900 text-blue-300">
         <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
@@ -28,7 +28,7 @@
       <p class="text-sm text-neutral-400">Edit, delete, or organize your existing blog posts.</p>
     </a>
 
-    <a href="/" class="group block rounded-lg bg-neutral-800 border border-neutral-700 p-6 shadow-md transition-all hover:shadow-lg hover:bg-neutral-700">
+    <a href="/" target="_blank" class="group block rounded-lg bg-neutral-800 border border-neutral-700 p-6 shadow-md transition-all hover:shadow-lg hover:bg-neutral-700">
       <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-purple-900 text-purple-300">
         <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
@@ -50,8 +50,8 @@
           <p class="text-sm text-neutral-400">{{ .Date.Format "Jan 2, 2006" }}</p>
         </div>
         <div class="flex gap-2">
-          <a href="{{ .RelPermalink }}" class="text-sm text-blue-400 hover:text-blue-300">View</a>
-          <a href="/admin/posts/edit/?post={{ .File.BaseFileName }}" class="text-sm text-orange-400 hover:text-orange-300">Edit</a>
+          <a href="{{ .RelPermalink }}" target="_blank" class="text-sm text-blue-400 hover:text-blue-300">View</a>
+          <a href="/admin/posts/#{{ .File.BaseFileName }}" class="text-sm text-orange-400 hover:text-orange-300">Edit</a>
         </div>
       </div>
       {{ end }}
