@@ -1,6 +1,6 @@
 ---
 title: "🚀 Deployment Test Post"
-date: 2025-10-26
+date: 2025-10-27T13:27:54+13:00
 draft: false
 tags: ["test", "deployment"]
 categories: ["testing"]

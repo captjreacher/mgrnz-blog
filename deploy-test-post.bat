@@ -20,7 +20,7 @@ mkdir "content/posts/deployment-test-%YYYY%-%MM%-%DD%-%HH%-%Min%" 2>nul
 (
 echo ---
 echo title: "🚀 Deployment Test Post"
-echo date: 2025-10-26
+echo date: %YYYY%-%MM%-%DD%T%HH%:%Min%:%Sec%+13:00
 echo draft: false
 echo tags: ["test", "deployment"]
 echo categories: ["testing"]
