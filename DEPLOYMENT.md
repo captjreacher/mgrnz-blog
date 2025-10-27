@@ -43,7 +43,7 @@ hugo --gc --minify
 
 ## Next Steps
 1. Commit these changes to your repository
-2. Push to trigger a new deployment
+2. Push to the `work` branch (or `main` if used) to trigger a new deployment
 3. Clear Cloudflare cache if needed
 4. Verify all elements are showing correctly
 

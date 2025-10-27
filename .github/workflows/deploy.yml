@@ -2,7 +2,9 @@ name: Deploy Hugo to Cloudflare Pages
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - work
+      - main
   workflow_dispatch:
     inputs:
       reason:

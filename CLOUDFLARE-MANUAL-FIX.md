@@ -38,7 +38,7 @@ If Cloudflare Pages is broken, we can use GitHub Actions:
 name: Deploy Hugo Site
 on:
   push:
-    branches: [ main ]
+    branches: [ work, main ]
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -56,10 +56,13 @@ jobs:
     - name: Deploy to Cloudflare Pages
       uses: cloudflare/pages-action@v1
       with:
-        apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        apiToken: ${{ secrets.CLOUDFLARE_API_KEY }}
         accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         projectName: mgrnz-blog
         directory: public
+        gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+        # Deploy to the production branch in Cloudflare Pages
+        branch: main
 ```
 
 ## EXPECTED COMMITS TO BE DEPLOYED
