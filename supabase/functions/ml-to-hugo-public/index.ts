@@ -15,25 +15,34 @@ serve(async (req: Request) => {
       );
     }
 
-    // 🔗 Cloudflare deploy hook URL
-    const hook = Deno.env.get("HUGO_WEBHOOK_URL");
-    if (!hook) {
+    // 🔗 GitHub repository details
+    const githubToken = Deno.env.get("GITHUB_TOKEN");
+    const githubRepo = Deno.env.get("GITHUB_REPO") || "captjreacher/mgrnz-blog";
+    
+    if (!githubToken) {
       return new Response(
-        JSON.stringify({ ok: false, error: "Missing HUGO_WEBHOOK_URL secret" }),
+        JSON.stringify({ ok: false, error: "Missing GITHUB_TOKEN secret" }),
         { headers, status: 500 },
       );
     }
 
-    // 🚀 Trigger Cloudflare Pages build
-    const res = await fetch(hook, {
+    // 🚀 Trigger GitHub Actions workflow dispatch
+    const workflowUrl = `https://api.github.com/repos/${githubRepo}/actions/workflows/deploy-gh-pages.yml/dispatches`;
+    
+    const res = await fetch(workflowUrl, {
       method: "POST",
       headers: {
+        "Accept": "application/vnd.github+json",
+        "Authorization": `Bearer ${githubToken}`,
+        "X-GitHub-Api-Version": "2022-11-28",
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        triggered_by: "supabase-ml-to-hugo",
-        payload,
-        timestamp: new Date().toISOString(),
+        ref: "main",
+        inputs: {
+          triggered_by: "supabase-ml-to-hugo",
+          timestamp: new Date().toISOString(),
+        },
       }),
     });
 
@@ -43,10 +52,10 @@ serve(async (req: Request) => {
       JSON.stringify({
         ok: res.ok,
         status: res.status,
-        hook,
+        repo: githubRepo,
         message: res.ok
-          ? "Cloudflare Pages build triggered successfully 🎉"
-          : "Failed to trigger build ❌",
+          ? "GitHub Actions deployment triggered successfully 🎉"
+          : "Failed to trigger GitHub Actions ❌",
         upstream: text.slice(0, 300),
       }),
       { headers, status: res.ok ? 200 : 502 },

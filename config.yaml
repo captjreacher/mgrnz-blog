@@ -67,7 +67,7 @@ params:
   # Homepage
   homepage:
     layout: "page"
-    homepageImage: "/images/home-banner.png"
+    homepageImage: "/images/home-banner.webp"
     showRecent: true
     showRecentItems: 6
     showMoreLink: true

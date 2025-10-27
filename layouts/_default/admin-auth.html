@@ -4,6 +4,7 @@
   {{ partial "head.html" . }}
   <title>Admin Access - {{ .Site.Title }}</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
   <style>
     body { background-color: #0f172a !important; }
   </style>
@@ -115,7 +116,6 @@
     </main>
   </div>
 
-  <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
   <script>
     function adminAuth() {
       return {
