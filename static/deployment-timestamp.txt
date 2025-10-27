@@ -1,7 +1,8 @@
-DEPLOYMENT TIMESTAMP: 2025-10-27 14:35:00
-COMMIT: 1d59733
-STATUS: FORCING CLOUDFLARE DEPLOYMENT
-ISSUE: FIXED - Pipeline reconnected
-EXPECTED: All latest changes now live
-ACTUAL: Admin auth, dark theme, security updates deployed
-FORCE-DEPLOY: NUCLEAR OPTION ACTIVATED
+DEPLOYMENT TIMESTAMP: 2025-10-27 14:45:00
+COMMIT: aaf7f01
+STATUS: PARTIAL DEPLOYMENT DETECTED - FORCING COMPLETE REBUILD
+ISSUE: Static files updating but layouts not deploying
+EXPECTED: Complete site rebuild with all changes
+ACTUAL: Forcing cache purge and complete rebuild
+FORCE-DEPLOY: COMPLETE CACHE PURGE ACTIVATED
+CACHE-BUSTER: 1698415500000

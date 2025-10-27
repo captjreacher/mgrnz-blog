@@ -1,14 +1,15 @@
-🚨 DEPLOYMENT STATUS: FORCE REBUILD
+🚨 DEPLOYMENT STATUS: COMPLETE REBUILD FORCED
 ===============================
-📅 Last Deploy: 2025-10-27 14:35 UTC
-🔧 Build: Hugo Static Site + FORCE DEPLOY
-🌐 CDN: Cloudflare Pages (RECONNECTED)
-📍 Commit: 1d59733 (LATEST)
-🎯 Status: ADMIN SECURITY + DARK THEME DEPLOYED
-⚡ Cache: PURGED AND REBUILT
-🔄 Auto-deploy: FIXED AND ACTIVE
-🆕 New: Secure admin auth + dark create form
-🔐 Features: Authentication + enhanced UX
+📅 Last Deploy: 2025-10-27 14:45 UTC
+🔧 Build: Hugo Static Site + COMPLETE CACHE PURGE
+🌐 CDN: Cloudflare Pages (FORCING FULL REBUILD)
+📍 Commit: aaf7f01 (EMERGENCY FIX)
+🎯 Status: PARTIAL DEPLOY DETECTED - FORCING COMPLETE
+⚡ Cache: COMPLETE PURGE + FULL REBUILD
+🔄 Auto-deploy: EMERGENCY OVERRIDE ACTIVE
+🆕 New: Complete site rebuild with all changes
+🔐 Features: All layouts + static files + auth
 🔗 URL: https://mgrnz.com/admin/
-🚨 NUCLEAR DEPLOYMENT: ACTIVATED
+🚨 COMPLETE REBUILD: CACHE BUSTER ACTIVATED
+🔥 CACHE-BUSTER: 1698415500000
 ===============================
