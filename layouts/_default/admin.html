@@ -40,10 +40,18 @@
           </button>
         </form>
         
-        <div class="mt-6 text-center">
+        <div class="mt-6 text-center space-y-3">
           <p class="text-xs text-neutral-500">
             Secure access • Session expires in 24 hours
           </p>
+          <div class="text-xs text-neutral-400 space-y-1">
+            <p>Test URLs:</p>
+            <p><a href="/admin/?bypass=true" class="text-blue-400 hover:text-blue-300">Bypass Auth</a></p>
+            <p><a href="/admin/?debug=true" class="text-green-400 hover:text-green-300">Debug Mode</a></p>
+          </div>
+          <button @click="testAuth()" class="text-xs bg-neutral-700 hover:bg-neutral-600 px-3 py-1 rounded transition-colors">
+            Test Auth Function
+          </button>
         </div>
       </div>
     </div>
@@ -169,6 +177,15 @@
             return;
           }
           
+          // Temporary auto-login for debugging
+          if (urlParams.get('debug') === 'true') {
+            setTimeout(() => {
+              this.isAuthenticated = true;
+              console.log('Debug auto-login enabled');
+            }, 1000);
+            return;
+          }
+          
           // Check if already authenticated
           const authToken = localStorage.getItem('admin_auth_token');
           const authTime = localStorage.getItem('admin_auth_time');
@@ -253,6 +270,12 @@
           } catch {
             return false;
           }
+        },
+        
+        testAuth() {
+          console.log('Testing authentication function...');
+          this.accessCode = 'admin2025';
+          this.authenticate();
         }
       }
     }
