@@ -1,42 +1,45 @@
-# DISABLED - Using Cloudflare Pages Git integration instead
-# name: Deploy Hugo to Cloudflare Pages
+name: Deploy Hugo to Cloudflare Pages
 
-# on:
-#   push:
-#     branches: [ main ]
-#   pull_request:
-#     branches: [ main ]
-#   workflow_dispatch:
+on:
+  push:
+    branches:
+      - work
+      - main
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Optional note for manual deploy'
+        required: false
+        type: string
 
-# jobs:
-#   deploy:
-#     runs-on: ubuntu-latest
-#     permissions:
-#       contents: read
-#     
-#     steps:
-#     - name: Checkout
-#       uses: actions/checkout@v4
-#       with:
-#         submodules: true
-#         fetch-depth: 0
-# 
-#     - name: Setup Hugo
-#       uses: peaceiris/actions-hugo@v2
-#       with:
-#         hugo-version: '0.150.1'
-#         extended: true
-# 
-#     - name: Build Hugo Site
-#       run: hugo --gc --minify
-# 
-#     - name: Deploy to Cloudflare Pages
-#       uses: cloudflare/pages-action@v1
-#       with:
-#         apiToken: ${{ secrets.CLOUDFLARE_API_KEY }}
-#         accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-#         projectName: mgrnz-blog
-#         directory: public
-#         gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-#         branch: main
-#         wranglerVersion: '3'
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: '0.150.1'
+          extended: true
+
+      - name: Build Hugo site
+        run: hugo --gc --minify
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_KEY }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: mgrnz-blog
+          directory: public
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          branch: main

@@ -38,7 +38,7 @@ If Cloudflare Pages is broken, we can use GitHub Actions:
 name: Deploy Hugo Site
 on:
   push:
-    branches: [ main ]
+    branches: [ work, main ]
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -56,27 +56,37 @@ jobs:
     - name: Deploy to Cloudflare Pages
       uses: cloudflare/pages-action@v1
       with:
-        apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        apiToken: ${{ secrets.CLOUDFLARE_API_KEY }}
         accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         projectName: mgrnz-blog
         directory: public
+        gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+        # Deploy to the production branch in Cloudflare Pages
+        branch: main
 ```
 
 ## EXPECTED COMMITS TO BE DEPLOYED
 
 These commits are stuck and need to go live:
-- `1d59733`: Admin authentication system
-- `7ba9078`: JSZip library fix
-- `6c9749c`: Test post with timestamp 14:24:35
-- `3329fa1`: Dark theme create form
-- `4448357`: Enhanced posts list view
+- `b894405`: Force deployment: add test post to trigger Hugo rebuild with admin changes
+- `9dd40bd`: Embed admin content directly: working create and posts management interfaces
+- `a49a79d`: Fix admin routing: use URL path matching for create and posts pages
+- `88afcc5`: EMERGENCY FIX: Remove auth loop, auto-authenticate, clean interface
+- `5707112`: Add admin debugging: show page info and partial loading status
+- `eef8342`: Fix admin page routing: integrate create and posts forms into main admin layout
+- `86238a8`: Add admin debugging: bypass, debug mode, and test auth button
+- `2ab4d24`: Remove conflicting admin system: eliminate browser prompt, use only main admin interface
+- `6c4befb`: Fix admin authentication: add debugging, test page, and bypass option
+- `ce23921`: Fix admin routing: update layouts to use proper admin system, add create form partial
+- `f8a3cbe`: Fix admin system: hide webhook test, update dark theme, fix layout conflicts
+- `8abb5a1`: Deploy complete admin system: authentication, post creation, and management interface
 
 ## VERIFICATION
 
 After manual intervention, check:
 1. https://mgrnz.com/admin/ (should show auth screen)
 2. https://mgrnz.com/admin/create/ (should show dark theme)
-3. https://mgrnz.com/deployment-timestamp.txt (should show 2f25bf4)
+3. https://mgrnz.com/deployment-timestamp.txt (should show b894405)
 
 ## THIS IS THE DEFINITIVE SOLUTION
 
