@@ -11,54 +11,9 @@
 </head>
 <body class="min-h-screen bg-neutral-900 text-white" x-data="adminAuth()">
   
-  <!-- Authentication Screen -->
-  <div x-show="!isAuthenticated" class="min-h-screen flex items-center justify-center px-4">
-    <div class="w-full max-w-md">
-      <div class="bg-neutral-800 p-8 rounded-lg shadow-xl border border-neutral-700">
-        <div class="text-center mb-8">
-          <div class="text-4xl mb-4">🔐</div>
-          <h1 class="text-3xl font-bold text-orange-400 mb-2">Admin Access Required</h1>
-          <p class="text-neutral-400">Please authenticate to access admin panel</p>
-        </div>
-        
-        <form @submit.prevent="authenticate()" class="space-y-6">
-          <div>
-            <label class="block text-sm font-medium text-neutral-300 mb-2">Access Code</label>
-            <input x-model="accessCode" type="password" required
-                   placeholder="Enter admin access code"
-                   class="w-full bg-neutral-700 border border-neutral-600 rounded-lg px-4 py-3 text-white placeholder-neutral-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20">
-          </div>
-          
-          <div x-show="error" class="p-3 bg-red-900 border border-red-700 rounded-lg">
-            <p class="text-red-300 text-sm" x-text="error"></p>
-          </div>
-          
-          <button type="submit" :disabled="isLoading"
-                  class="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold py-3 px-6 rounded-lg transition-all disabled:opacity-50">
-            <span x-show="!isLoading">🔓 Access Admin</span>
-            <span x-show="isLoading">⏳ Verifying...</span>
-          </button>
-        </form>
-        
-        <div class="mt-6 text-center space-y-3">
-          <p class="text-xs text-neutral-500">
-            Secure access • Session expires in 24 hours
-          </p>
-          <div class="text-xs text-neutral-400 space-y-1">
-            <p>Test URLs:</p>
-            <p><a href="/admin/?bypass=true" class="text-blue-400 hover:text-blue-300">Bypass Auth</a></p>
-            <p><a href="/admin/?debug=true" class="text-green-400 hover:text-green-300">Debug Mode</a></p>
-          </div>
-          <button @click="testAuth()" class="text-xs bg-neutral-700 hover:bg-neutral-600 px-3 py-1 rounded transition-colors">
-            Test Auth Function
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+
   
   <!-- Admin Interface -->
-  <div x-show="isAuthenticated">
     <!-- Admin Header -->
     <header class="sticky top-0 z-20 border-b border-neutral-700 bg-neutral-800">
       <div class="flex items-center justify-between px-6 py-4">
@@ -92,25 +47,10 @@
     <!-- Main Content -->
     <main class="mx-auto max-w-6xl px-6 py-8">
       {{ block "main" . }}
-        <!-- Debug info -->
-        <div class="mb-4 p-2 bg-neutral-700 rounded text-xs text-neutral-300">
-          Debug: Title="{{ .Title }}" | Type="{{ .Type }}" | Kind="{{ .Kind }}" | URL="{{ .RelPermalink }}"
-        </div>
-        
         {{ if eq .Title "Create New Post" }}
-          <div class="mb-4 p-2 bg-green-900 rounded text-sm text-green-300">✅ Loading Create Post Form...</div>
-          {{ if templates.Exists "partials/admin-create.html" }}
-            {{ partial "admin-create.html" . }}
-          {{ else }}
-            <div class="p-4 bg-red-900 rounded text-red-300">❌ admin-create.html partial not found</div>
-          {{ end }}
+          {{ partial "admin-create.html" . }}
         {{ else if eq .Title "Manage Posts" }}
-          <div class="mb-4 p-2 bg-blue-900 rounded text-sm text-blue-300">✅ Loading Posts Management...</div>
-          {{ if templates.Exists "partials/admin-posts.html" }}
-            {{ partial "admin-posts.html" . }}
-          {{ else }}
-            <div class="p-4 bg-red-900 rounded text-red-300">❌ admin-posts.html partial not found</div>
-          {{ end }}
+          {{ partial "admin-posts.html" . }}
         {{ else }}
           <div class="space-y-8">
             <!-- Welcome Section -->
@@ -188,42 +128,8 @@
         isLoading: false,
         
         init() {
-          console.log('Admin auth system initialized');
-          
-          // Check URL for bypass parameter (for testing)
-          const urlParams = new URLSearchParams(window.location.search);
-          if (urlParams.get('bypass') === 'true') {
-            this.isAuthenticated = true;
-            console.log('Bypass authentication enabled');
-            return;
-          }
-          
-          // Temporary auto-login for debugging
-          if (urlParams.get('debug') === 'true') {
-            setTimeout(() => {
-              this.isAuthenticated = true;
-              console.log('Debug auto-login enabled');
-            }, 1000);
-            return;
-          }
-          
-          // Check if already authenticated
-          const authToken = localStorage.getItem('admin_auth_token');
-          const authTime = localStorage.getItem('admin_auth_time');
-          
-          if (authToken && authTime) {
-            const now = new Date().getTime();
-            const authAge = now - parseInt(authTime);
-            const twentyFourHours = 24 * 60 * 60 * 1000;
-            
-            if (authAge < twentyFourHours && this.validateToken(authToken)) {
-              this.isAuthenticated = true;
-              console.log('Already authenticated');
-            } else {
-              this.clearAuth();
-              console.log('Auth expired, cleared');
-            }
-          }
+          // Auto-authenticate for now
+          this.isAuthenticated = true;
         },
         
         async authenticate() {
