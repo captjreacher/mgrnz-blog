@@ -476,19 +476,43 @@
                         markdown += '---\n\n';
                         markdown += this.form.content || `# ${this.form.title}\n\nYour post content goes here.`;
                         
-                        // Create downloadable file
-                        const blob = new Blob([markdown], { type: 'text/markdown' });
-                        const url = URL.createObjectURL(blob);
-                        const a = document.createElement('a');
-                        a.href = url;
-                        a.download = `${folderName}-index.md`;
-                        document.body.appendChild(a);
-                        a.click();
-                        document.body.removeChild(a);
-                        URL.revokeObjectURL(url);
-                        
-                        this.showMessage('success', 'Post Created!', 
-                            `Post "${this.form.title}" has been created and downloaded. Upload to content/posts/${folderName}/ to publish.`);
+                        // Try to create post directly via API first
+                        try {
+                            const response = await fetch('/api/posts', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    slug: folderName,
+                                    content: markdown
+                                })
+                            });
+                            
+                            if (response.ok) {
+                                const result = await response.json();
+                                this.showMessage('success', 'Post Published!', 
+                                    `Post "${this.form.title}" has been created and deployed to the live site. Check https://mgrnz.com/posts/${folderName}/ in 2-3 minutes.`);
+                            } else {
+                                throw new Error('API not available');
+                            }
+                        } catch (apiError) {
+                            // Fallback to file download if API is not available
+                            console.log('API not available, falling back to file download');
+                            
+                            const blob = new Blob([markdown], { type: 'text/markdown' });
+                            const url = URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = url;
+                            a.download = `${folderName}-index.md`;
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+                            URL.revokeObjectURL(url);
+                            
+                            this.showMessage('success', 'Post File Created!', 
+                                `Post "${this.form.title}" has been downloaded. To publish: 1) Create folder content/posts/${folderName}/ 2) Save file as index.md 3) Commit and push to GitHub`);
+                        }
                         
                         // Reset form
                         this.form = {
