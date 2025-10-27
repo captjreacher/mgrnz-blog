@@ -92,65 +92,71 @@
     <!-- Main Content -->
     <main class="mx-auto max-w-6xl px-6 py-8">
       {{ block "main" . }}
-        <div class="space-y-8">
-          <!-- Welcome Section -->
-          <div class="rounded-lg bg-gradient-to-r from-orange-600 to-red-600 p-6 text-white">
-            <h2 class="mb-2 text-2xl font-bold">Welcome back, Mike!</h2>
-            <p class="text-orange-100">Manage your blog posts and site content from here.</p>
-          </div>
+        {{ if eq .Title "Create New Post" }}
+          {{ partial "admin-create.html" . }}
+        {{ else if eq .Title "Manage Posts" }}
+          {{ partial "admin-posts.html" . }}
+        {{ else }}
+          <div class="space-y-8">
+            <!-- Welcome Section -->
+            <div class="rounded-lg bg-gradient-to-r from-orange-600 to-red-600 p-6 text-white">
+              <h2 class="mb-2 text-2xl font-bold">Welcome back, Mike!</h2>
+              <p class="text-orange-100">Manage your blog posts and site content from here.</p>
+            </div>
 
-          <!-- Quick Actions -->
-          <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            <a href="/admin/create/" class="group block rounded-lg bg-neutral-800 border border-neutral-700 p-6 shadow-md transition-all hover:shadow-lg hover:bg-neutral-700">
-              <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-900 text-blue-300">
-                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                </svg>
-              </div>
-              <h3 class="mb-2 text-lg font-semibold text-white">Create New Post</h3>
-              <p class="text-sm text-neutral-400">Write and publish a new blog post with the post wizard.</p>
-            </a>
-
-            <a href="/admin/posts/" class="group block rounded-lg bg-neutral-800 border border-neutral-700 p-6 shadow-md transition-all hover:shadow-lg hover:bg-neutral-700">
-              <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-green-900 text-green-300">
-                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                </svg>
-              </div>
-              <h3 class="mb-2 text-lg font-semibold text-white">Manage Posts</h3>
-              <p class="text-sm text-neutral-400">Edit, delete, or organize your existing blog posts.</p>
-            </a>
-
-            <a href="/" target="_blank" class="group block rounded-lg bg-neutral-800 border border-neutral-700 p-6 shadow-md transition-all hover:shadow-lg hover:bg-neutral-700">
-              <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-purple-900 text-purple-300">
-                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-                </svg>
-              </div>
-              <h3 class="mb-2 text-lg font-semibold text-white">View Site</h3>
-              <p class="text-sm text-neutral-400">Visit the live blog site in a new window.</p>
-            </a>
-          </div>
-
-          <!-- Recent Activity -->
-          <div class="rounded-lg bg-neutral-800 border border-neutral-700 p-6 shadow-md">
-            <h3 class="mb-4 text-lg font-semibold text-white">Recent Posts</h3>
-            <div class="space-y-3">
-              {{ range first 5 (where .Site.RegularPages "Type" "posts") }}
-              <div class="flex items-center justify-between border-b border-neutral-700 pb-3">
-                <div>
-                  <h4 class="font-medium text-white">{{ .Title }}</h4>
-                  <p class="text-sm text-neutral-400">{{ .Date.Format "Jan 2, 2006" }}</p>
+            <!-- Quick Actions -->
+            <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              <a href="/admin/create/" class="group block rounded-lg bg-neutral-800 border border-neutral-700 p-6 shadow-md transition-all hover:shadow-lg hover:bg-neutral-700">
+                <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-900 text-blue-300">
+                  <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                  </svg>
                 </div>
-                <div class="flex gap-2">
-                  <a href="{{ .RelPermalink }}" target="_blank" class="text-sm text-blue-400 hover:text-blue-300">View</a>
-                  <a href="/admin/posts/" class="text-sm text-orange-400 hover:text-orange-300">Edit</a>
+                <h3 class="mb-2 text-lg font-semibold text-white">Create New Post</h3>
+                <p class="text-sm text-neutral-400">Write and publish a new blog post with the post wizard.</p>
+              </a>
+
+              <a href="/admin/posts/" class="group block rounded-lg bg-neutral-800 border border-neutral-700 p-6 shadow-md transition-all hover:shadow-lg hover:bg-neutral-700">
+                <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-green-900 text-green-300">
+                  <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                  </svg>
                 </div>
+                <h3 class="mb-2 text-lg font-semibold text-white">Manage Posts</h3>
+                <p class="text-sm text-neutral-400">Edit, delete, or organize your existing blog posts.</p>
+              </a>
+
+              <a href="/" target="_blank" class="group block rounded-lg bg-neutral-800 border border-neutral-700 p-6 shadow-md transition-all hover:shadow-lg hover:bg-neutral-700">
+                <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-purple-900 text-purple-300">
+                  <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                  </svg>
+                </div>
+                <h3 class="mb-2 text-lg font-semibold text-white">View Site</h3>
+                <p class="text-sm text-neutral-400">Visit the live blog site in a new window.</p>
+              </a>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="rounded-lg bg-neutral-800 border border-neutral-700 p-6 shadow-md">
+              <h3 class="mb-4 text-lg font-semibold text-white">Recent Posts</h3>
+              <div class="space-y-3">
+                {{ range first 5 (where .Site.RegularPages "Type" "posts") }}
+                <div class="flex items-center justify-between border-b border-neutral-700 pb-3">
+                  <div>
+                    <h4 class="font-medium text-white">{{ .Title }}</h4>
+                    <p class="text-sm text-neutral-400">{{ .Date.Format "Jan 2, 2006" }}</p>
+                  </div>
+                  <div class="flex gap-2">
+                    <a href="{{ .RelPermalink }}" target="_blank" class="text-sm text-blue-400 hover:text-blue-300">View</a>
+                    <a href="/admin/posts/" class="text-sm text-orange-400 hover:text-orange-300">Edit</a>
+                  </div>
+                </div>
+                {{ end }}
               </div>
-              {{ end }}
             </div>
           </div>
-        </div>
+        {{ end }}
       {{ end }}
     </main>
   </div>
