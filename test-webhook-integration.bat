@@ -15,7 +15,11 @@ echo.
 
 :: Update webhook test file
 (
-echo # 🔗 WEBHOOK TEST
+echo ---
+echo title: "🔗 WEBHOOK TEST"
+echo date: 2025-10-27
+echo draft: false
+echo ---
 echo.
 echo ## Test Commit: %timestamp%
 echo.
@@ -38,13 +42,13 @@ echo 2. Verify GitHub webhook is active in repository settings
 echo 3. Ensure .env file has correct HUGO_WEBHOOK_URL
 echo.
 echo **Last test**: %timestamp%
-) > webhook-test.md
+) > content/webhook-test.md
 
 echo ✅ Updated webhook-test.md with timestamp: %timestamp%
 echo.
 
 echo Committing and pushing test...
-git add webhook-test.md
+git add content/webhook-test.md
 git commit -m "🧪 WEBHOOK TEST: %timestamp%"
 git push
 

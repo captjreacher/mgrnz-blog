@@ -51,7 +51,17 @@ app.put('/api/posts/:slug', (req, res) => {
     }
     
     fs.writeFileSync(postPath, content, 'utf8');
-    res.json({ success: true, message: 'Post updated successfully' });
+    
+    // Auto-deploy: Add, commit, and push to trigger Cloudflare rebuild
+    const { execSync } = require('child_process');
+    try {
+      execSync('git add .', { cwd: __dirname });
+      execSync(`git commit -m "🚀 ADMIN: Updated post ${slug}"`, { cwd: __dirname });
+      execSync('git push', { cwd: __dirname });
+      res.json({ success: true, message: 'Post updated and deployed successfully' });
+    } catch (gitError) {
+      res.json({ success: true, message: 'Post updated locally (deploy manually)', gitError: gitError.message });
+    }
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
@@ -86,7 +96,17 @@ app.post('/api/posts', (req, res) => {
     }
     
     fs.writeFileSync(postPath, content, 'utf8');
-    res.json({ success: true, message: 'Post created successfully' });
+    
+    // Auto-deploy: Add, commit, and push to trigger Cloudflare rebuild
+    const { execSync } = require('child_process');
+    try {
+      execSync('git add .', { cwd: __dirname });
+      execSync(`git commit -m "🚀 ADMIN: Created post ${slug}"`, { cwd: __dirname });
+      execSync('git push', { cwd: __dirname });
+      res.json({ success: true, message: 'Post created and deployed successfully' });
+    } catch (gitError) {
+      res.json({ success: true, message: 'Post created locally (deploy manually)', gitError: gitError.message });
+    }
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
