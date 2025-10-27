@@ -36,3 +36,5 @@ jobs:
         accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         projectName: mgrnz-blog
         directory: public
+        productionBranch: main
+        wranglerVersion: '3'
