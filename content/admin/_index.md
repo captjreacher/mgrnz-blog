@@ -1,6 +1,6 @@
 ---
 title: "Admin Dashboard"
 type: "admin"
-layout: "list"
+layout: "admin"
 draft: false
 ---

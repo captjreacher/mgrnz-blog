@@ -1,6 +1,7 @@
-<h1>Admin Dashboard</h1>
-<p>This is your private admin area.</p>
-<ul>
-  <li><a href="/admin/create/">📝 Create New Post</a></li>
-  <li><a href="/admin/settings/">⚙️ Site Settings</a></li>
-</ul>
+{{ if eq .Title "Create New Post" }}
+  {{ partial "admin-create.html" . }}
+{{ else if eq .Title "Manage Posts" }}
+  {{ partial "admin-posts.html" . }}
+{{ else }}
+  {{ .Content }}
+{{ end }}

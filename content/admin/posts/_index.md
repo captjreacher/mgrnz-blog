@@ -1,6 +1,6 @@
 ---
 title: "Manage Posts"
 type: "admin"
-layout: "posts"
+layout: "admin"
 draft: false
 ---
