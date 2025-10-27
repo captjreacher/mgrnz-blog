@@ -1,22 +1,55 @@
-<!-- Admin Menu Dropdown -->
-<div class="relative inline-block text-left">
-  <button onclick="toggleAdminMenu()" class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-neutral-700 text-neutral-300 hover:bg-neutral-600 hover:text-white transition-colors">
+<!-- Secure Admin Menu -->
+<div class="relative inline-block text-left" id="adminMenuContainer">
+  <button onclick="checkAdminAccess()" class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-neutral-700 text-neutral-300 hover:bg-neutral-600 hover:text-white transition-colors" title="Admin Access">
     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
     </svg>
   </button>
   
-  <div id="adminDropdown" class="hidden absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
-    <div class="py-1">
-      <a href="/admin/" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dashboard</a>
-      <a href="/admin/posts/" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Manage Posts</a>
-      <a href="/admin/create/" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Create Post</a>
+  <div id="adminDropdown" class="hidden absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-neutral-800 border border-neutral-700 z-50">
+    <div class="py-2">
+      <div class="px-4 py-2 text-xs text-neutral-400 border-b border-neutral-700">
+        🔐 Secure Admin Access
+      </div>
+      <a href="/admin/" class="block px-4 py-2 text-sm text-neutral-300 hover:bg-neutral-700 hover:text-white transition-colors">
+        📊 Dashboard
+      </a>
+      <a href="/admin/posts/" class="block px-4 py-2 text-sm text-neutral-300 hover:bg-neutral-700 hover:text-white transition-colors">
+        📝 Manage Posts
+      </a>
+      <a href="/admin/create/" class="block px-4 py-2 text-sm text-neutral-300 hover:bg-neutral-700 hover:text-white transition-colors">
+        ✏️ Create Post
+      </a>
+      <div class="border-t border-neutral-700 mt-2 pt-2">
+        <a href="/admin-simple.html" class="block px-4 py-2 text-sm text-green-400 hover:bg-green-900/20 transition-colors">
+          🚀 Quick Access
+        </a>
+      </div>
     </div>
   </div>
 </div>
 
 <script>
+function checkAdminAccess() {
+  const authToken = localStorage.getItem('admin_auth_token');
+  const authTime = localStorage.getItem('admin_auth_time');
+  
+  if (authToken && authTime) {
+    const now = new Date().getTime();
+    const authAge = now - parseInt(authTime);
+    const twentyFourHours = 24 * 60 * 60 * 1000;
+    
+    if (authAge < twentyFourHours) {
+      // User is authenticated, show menu
+      toggleAdminMenu();
+      return;
+    }
+  }
+  
+  // User not authenticated, redirect to admin login
+  window.location.href = '/admin/';
+}
+
 function toggleAdminMenu() {
   const dropdown = document.getElementById('adminDropdown');
   dropdown.classList.toggle('hidden');
@@ -25,7 +58,7 @@ function toggleAdminMenu() {
 // Close dropdown when clicking outside
 document.addEventListener('click', function(event) {
   const dropdown = document.getElementById('adminDropdown');
-  const button = event.target.closest('button[onclick="toggleAdminMenu()"]');
+  const button = event.target.closest('button[onclick="checkAdminAccess()"]');
   
   if (!button && !dropdown.contains(event.target)) {
     dropdown.classList.add('hidden');

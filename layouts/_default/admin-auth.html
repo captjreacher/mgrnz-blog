@@ -2,9 +2,8 @@
 <html lang="{{ .Site.Language.Lang }}" class="dark">
 <head>
   {{ partial "head.html" . }}
-  <title>{{ .Title }} - Admin | {{ .Site.Title }}</title>
+  <title>Admin Access - {{ .Site.Title }}</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
   <style>
     body { background-color: #0f172a !important; }
   </style>
@@ -17,8 +16,8 @@
       <div class="bg-neutral-800 p-8 rounded-lg shadow-xl border border-neutral-700">
         <div class="text-center mb-8">
           <div class="text-4xl mb-4">🔐</div>
-          <h1 class="text-3xl font-bold text-orange-400 mb-2">Admin Access Required</h1>
-          <p class="text-neutral-400">Please authenticate to access admin panel</p>
+          <h1 class="text-3xl font-bold text-orange-400 mb-2">Admin Access</h1>
+          <p class="text-neutral-400">Secure authentication required</p>
         </div>
         
         <form @submit.prevent="authenticate()" class="space-y-6">
@@ -44,13 +43,18 @@
           <p class="text-xs text-neutral-500">
             Secure access • Session expires in 24 hours
           </p>
+          <div class="mt-4 pt-4 border-t border-neutral-700">
+            <p class="text-xs text-neutral-400">
+              Need access? Contact the site administrator
+            </p>
+          </div>
         </div>
       </div>
     </div>
   </div>
   
   <!-- Admin Interface -->
-  <div x-show="isAuthenticated">
+  <div x-show="isAuthenticated" class="min-h-screen">
     <!-- Admin Header -->
     <header class="sticky top-0 z-20 border-b border-neutral-700 bg-neutral-800">
       <div class="flex items-center justify-between px-6 py-4">
@@ -58,7 +62,7 @@
           <a href="{{ "/" | relURL }}" class="text-orange-500 hover:text-orange-400 transition-colors">
             ← Back to Site
           </a>
-          <h1 class="text-xl font-bold text-white">{{ .Title }}</h1>
+          <h1 class="text-xl font-bold text-white">Admin Dashboard</h1>
           <span class="px-2 py-1 bg-green-900 text-green-300 text-xs rounded-full">Authenticated</span>
         </div>
         
@@ -87,15 +91,31 @@
         <div class="text-center py-16">
           <div class="text-6xl mb-4">🛡️</div>
           <h2 class="text-2xl font-bold text-white mb-4">Secure Admin Area</h2>
-          <p class="text-neutral-400">You have successfully authenticated to the admin panel.</p>
+          <p class="text-neutral-400 mb-8">You have successfully authenticated to the admin panel.</p>
+          
+          <div class="grid gap-4 md:grid-cols-3 max-w-2xl mx-auto">
+            <a href="/admin/" class="bg-neutral-800 border border-neutral-700 rounded-lg p-6 hover:bg-neutral-700 transition-colors">
+              <div class="text-2xl mb-2">📊</div>
+              <div class="text-white font-medium">Dashboard</div>
+              <div class="text-neutral-400 text-sm">Site overview</div>
+            </a>
+            <a href="/admin/create/" class="bg-neutral-800 border border-neutral-700 rounded-lg p-6 hover:bg-neutral-700 transition-colors">
+              <div class="text-2xl mb-2">✏️</div>
+              <div class="text-white font-medium">Create Post</div>
+              <div class="text-neutral-400 text-sm">New content</div>
+            </a>
+            <a href="/admin/posts/" class="bg-neutral-800 border border-neutral-700 rounded-lg p-6 hover:bg-neutral-700 transition-colors">
+              <div class="text-2xl mb-2">📝</div>
+              <div class="text-white font-medium">Manage Posts</div>
+              <div class="text-neutral-400 text-sm">Edit content</div>
+            </a>
+          </div>
         </div>
       {{ end }}
     </main>
   </div>
 
-  <!-- Admin Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
-  
+  <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
   <script>
     function adminAuth() {
       return {
@@ -117,6 +137,7 @@
             if (authAge < twentyFourHours && this.validateToken(authToken)) {
               this.isAuthenticated = true;
             } else {
+              // Clear expired auth
               this.clearAuth();
             }
           }
@@ -127,8 +148,10 @@
           this.error = '';
           
           try {
+            // Simulate authentication delay
             await new Promise(resolve => setTimeout(resolve, 1000));
             
+            // Check access codes
             const validCodes = [
               'admin2025', 
               'mgrnz-admin', 
