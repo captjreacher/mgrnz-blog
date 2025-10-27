@@ -1,4 +1,4 @@
-# Netlify/Cloudflare Pages build configuration
+# Cloudflare Pages build configuration
 [build]
   command = "hugo --gc --minify"
   publish = "public"
@@ -7,9 +7,26 @@
   HUGO_VERSION = "0.150.1"
   HUGO_ENV = "production"
   NODE_VERSION = "18"
+  TZ = "UTC"
 
 # Redirect rules for admin
 [[redirects]]
   from = "/admin/*"
   to = "/admin/index.html"
   status = 200
+
+# Cache headers for deployment tracking files
+[[headers]]
+  for = "/deployment-timestamp.txt"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+    
+[[headers]]
+  for = "/build-info.txt"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+    
+[[headers]]
+  for = "/CACHE-BUSTER.txt"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
