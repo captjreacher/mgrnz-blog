@@ -92,10 +92,25 @@
     <!-- Main Content -->
     <main class="mx-auto max-w-6xl px-6 py-8">
       {{ block "main" . }}
+        <!-- Debug info -->
+        <div class="mb-4 p-2 bg-neutral-700 rounded text-xs text-neutral-300">
+          Debug: Title="{{ .Title }}" | Type="{{ .Type }}" | Kind="{{ .Kind }}" | URL="{{ .RelPermalink }}"
+        </div>
+        
         {{ if eq .Title "Create New Post" }}
-          {{ partial "admin-create.html" . }}
+          <div class="mb-4 p-2 bg-green-900 rounded text-sm text-green-300">✅ Loading Create Post Form...</div>
+          {{ if templates.Exists "partials/admin-create.html" }}
+            {{ partial "admin-create.html" . }}
+          {{ else }}
+            <div class="p-4 bg-red-900 rounded text-red-300">❌ admin-create.html partial not found</div>
+          {{ end }}
         {{ else if eq .Title "Manage Posts" }}
-          {{ partial "admin-posts.html" . }}
+          <div class="mb-4 p-2 bg-blue-900 rounded text-sm text-blue-300">✅ Loading Posts Management...</div>
+          {{ if templates.Exists "partials/admin-posts.html" }}
+            {{ partial "admin-posts.html" . }}
+          {{ else }}
+            <div class="p-4 bg-red-900 rounded text-red-300">❌ admin-posts.html partial not found</div>
+          {{ end }}
         {{ else }}
           <div class="space-y-8">
             <!-- Welcome Section -->
