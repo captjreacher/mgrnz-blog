@@ -89,7 +89,7 @@
                         await new Promise(resolve => setTimeout(resolve, 1000));
                         
                         // Simple access code check (in production, use proper authentication)
-                        const validCodes = ['admin2025', 'mgrnz-admin', 'blog-secure'];
+                        const validCodes = ['admin2025', 'mgrnz-admin', 'blog-secure', 'admin', 'mgrnz2025'];
                         
                         if (validCodes.includes(this.accessCode)) {
                             const authToken = this.generateAuthToken();
