@@ -69,10 +69,10 @@
   </div>
 
   <!-- Posts List -->
-  <div class="rounded-lg bg-white shadow-lg overflow-hidden">
+  <div class="rounded-lg bg-neutral-800 border border-neutral-700 shadow-lg overflow-hidden">
     <!-- Table Header -->
-    <div class="bg-neutral-50 px-6 py-3 border-b border-neutral-200">
-      <div class="grid grid-cols-12 gap-4 text-xs font-medium text-neutral-500 uppercase tracking-wider">
+    <div class="bg-neutral-700 px-6 py-3 border-b border-neutral-600">
+      <div class="grid grid-cols-12 gap-4 text-xs font-medium text-neutral-300 uppercase tracking-wider">
         <div class="col-span-4">Title</div>
         <div class="col-span-2">Status</div>
         <div class="col-span-2">Date</div>
@@ -82,9 +82,9 @@
     </div>
     
     <!-- Posts Table -->
-    <div class="divide-y divide-neutral-200">
+    <div class="divide-y divide-neutral-700">
       {{ range (where .Site.RegularPages "Type" "posts") }}
-      <div class="px-6 py-4 hover:bg-neutral-50 transition-colors" data-post-slug="{{ .File.BaseFileName }}">
+      <div class="px-6 py-4 hover:bg-neutral-700 transition-colors" data-post-slug="{{ .File.BaseFileName }}">
         <!-- Hidden content storage -->
         <script type="application/json" class="post-content" data-slug="{{ .File.BaseFileName }}">{{ .RawContent | jsonify }}</script>
         
@@ -92,9 +92,9 @@
           <!-- Title Column -->
           <div class="col-span-4">
             <div class="flex flex-col">
-              <h4 class="text-sm font-semibold text-neutral-900 truncate">{{ .Title }}</h4>
+              <h4 class="text-sm font-semibold text-white truncate">{{ .Title }}</h4>
               {{ if .Summary }}
-              <p class="text-xs text-neutral-600 mt-1 line-clamp-1">{{ .Summary }}</p>
+              <p class="text-xs text-neutral-400 mt-1 line-clamp-1">{{ .Summary }}</p>
               {{ end }}
             </div>
           </div>
@@ -114,9 +114,9 @@
           
           <!-- Date Column -->
           <div class="col-span-2">
-            <div class="text-sm text-neutral-900">{{ .Date.Format "Jan 2, 2006" }}</div>
+            <div class="text-sm text-white">{{ .Date.Format "Jan 2, 2006" }}</div>
             {{ if .ReadingTime }}
-            <div class="text-xs text-neutral-500">{{ .ReadingTime }} min read</div>
+            <div class="text-xs text-neutral-400">{{ .ReadingTime }} min read</div>
             {{ end }}
           </div>
           
