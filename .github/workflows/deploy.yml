@@ -35,4 +35,3 @@ jobs:
         projectName: mgrnz-blog
         directory: public
         gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-        wranglerVersion: '3'
