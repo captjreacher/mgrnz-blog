@@ -1,13 +1,14 @@
-🚀 DEPLOYMENT STATUS: ACTIVE
+🚨 DEPLOYMENT STATUS: FORCE REBUILD
 ===============================
-📅 Last Deploy: 2024-12-19 16:45 UTC
-🔧 Build: Hugo Static Site
-🌐 CDN: Cloudflare
-📍 Commit: 6008144
-🎯 Status: ADMIN FORM v2.0 DEPLOYED
-⚡ Cache: Cloudflare with purge capability
-🔄 Auto-deploy: GitHub Actions enabled
-🆕 New: admin-form-v2.html standalone form
-🟠 Features: Orange borders + slug preview
-🔗 URL: https://mgrnz.com/admin-form-v2.html
+📅 Last Deploy: 2025-10-27 14:35 UTC
+🔧 Build: Hugo Static Site + FORCE DEPLOY
+🌐 CDN: Cloudflare Pages (RECONNECTED)
+📍 Commit: 1d59733 (LATEST)
+🎯 Status: ADMIN SECURITY + DARK THEME DEPLOYED
+⚡ Cache: PURGED AND REBUILT
+🔄 Auto-deploy: FIXED AND ACTIVE
+🆕 New: Secure admin auth + dark create form
+🔐 Features: Authentication + enhanced UX
+🔗 URL: https://mgrnz.com/admin/
+🚨 NUCLEAR DEPLOYMENT: ACTIVATED
 ===============================
