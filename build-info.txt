@@ -1,13 +1,7 @@
-🎯 CLOUDFLARE PAGES CONFIG TEST: 2025-10-27 23:30:00
-========================================
-📅 Config Test: 2025-10-27 23:30:00
-🔧 Build: Hugo Static Site (Newly Configured)
-🌐 CDN: Cloudflare Pages (Build System V2)
-📍 Commit: a9c50d4
-✅ Status: TESTING NEW CONFIGURATION
-🚀 Hugo Version: 0.150.1
-⚡ Cache Buster: 45821
-🔄 Auto-deploy: NEWLY CONFIGURED
-📋 Config: Build system V2, Node.js 18.17.1
-🎯 Goal: Verify automatic deployment works
-========================================
+Build triggered at: 2025-10-28 11:45 UTC
+Latest commit: c18c897
+Features deployed:
+- MailerLite subscribe form with orange branding
+- Fixed post deletion with better error handling
+- Debug tools for troubleshooting
+- Cleaned up test posts
