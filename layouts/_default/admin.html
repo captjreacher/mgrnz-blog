@@ -47,9 +47,9 @@
     <!-- Main Content -->
     <main class="mx-auto max-w-6xl px-6 py-8">
       {{ block "main" . }}
-        {{ if eq .Title "Create New Post" }}
+        {{ if or (eq .Title "Create New Post") (eq .RelPermalink "/admin/create/") }}
           {{ partial "admin-create.html" . }}
-        {{ else if eq .Title "Manage Posts" }}
+        {{ else if or (eq .Title "Manage Posts") (eq .RelPermalink "/admin/posts/") }}
           {{ partial "admin-posts.html" . }}
         {{ else }}
           <div class="space-y-8">
