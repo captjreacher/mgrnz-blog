@@ -1,45 +1,48 @@
-name: Deploy Hugo to Cloudflare Pages
+# DISABLED - Using Cloudflare Pages Git integration instead
+# This workflow was causing deployment conflicts
 
-on:
-  push:
-    branches:
-      - work
-      - main
-  workflow_dispatch:
-    inputs:
-      reason:
-        description: 'Optional note for manual deploy'
-        required: false
-        type: string
+# name: Deploy Hugo to Cloudflare Pages
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
+# on:
+#   push:
+#     branches:
+#       - work
+#       - main
+#   workflow_dispatch:
+#     inputs:
+#       reason:
+#         description: 'Optional note for manual deploy'
+#         required: false
+#         type: string
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          submodules: true
-          fetch-depth: 0
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+#     permissions:
+#       contents: read
 
-      - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v2
-        with:
-          hugo-version: '0.150.1'
-          extended: true
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v4
+#         with:
+#           submodules: true
+#           fetch-depth: 0
 
-      - name: Build Hugo site
-        run: hugo --gc --minify
+#       - name: Setup Hugo
+#         uses: peaceiris/actions-hugo@v2
+#         with:
+#           hugo-version: '0.150.1'
+#           extended: true
 
-      - name: Deploy to Cloudflare Pages
-        uses: cloudflare/pages-action@v1
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_KEY }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: mgrnz-blog
-          directory: public
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          branch: main
+#       - name: Build Hugo site
+#         run: hugo --gc --minify
+
+#       - name: Deploy to Cloudflare Pages
+#         uses: cloudflare/pages-action@v1
+#         with:
+#           apiToken: ${{ secrets.CLOUDFLARE_API_KEY }}
+#           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+#           projectName: mgrnz-blog
+#           directory: public
+#           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+#           branch: main
