@@ -159,6 +159,16 @@
         isLoading: false,
         
         init() {
+          console.log('Admin auth system initialized');
+          
+          // Check URL for bypass parameter (for testing)
+          const urlParams = new URLSearchParams(window.location.search);
+          if (urlParams.get('bypass') === 'true') {
+            this.isAuthenticated = true;
+            console.log('Bypass authentication enabled');
+            return;
+          }
+          
           // Check if already authenticated
           const authToken = localStorage.getItem('admin_auth_token');
           const authTime = localStorage.getItem('admin_auth_time');
@@ -170,39 +180,49 @@
             
             if (authAge < twentyFourHours && this.validateToken(authToken)) {
               this.isAuthenticated = true;
+              console.log('Already authenticated');
             } else {
               this.clearAuth();
+              console.log('Auth expired, cleared');
             }
           }
         },
         
         async authenticate() {
+          console.log('Attempting authentication with:', this.accessCode);
           this.isLoading = true;
           this.error = '';
           
           try {
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            await new Promise(resolve => setTimeout(resolve, 500));
             
             const validCodes = [
               'admin2025', 
               'mgrnz-admin', 
               'blog-secure',
               'admin',
-              'mgrnz2025'
+              'mgrnz2025',
+              'test123'
             ];
             
-            if (validCodes.includes(this.accessCode)) {
+            console.log('Valid codes:', validCodes);
+            console.log('Input code:', this.accessCode);
+            
+            if (validCodes.includes(this.accessCode.trim())) {
               const authToken = this.generateAuthToken();
               localStorage.setItem('admin_auth_token', authToken);
               localStorage.setItem('admin_auth_time', new Date().getTime().toString());
               
               this.isAuthenticated = true;
               this.accessCode = '';
+              console.log('Authentication successful!');
             } else {
-              this.error = 'Invalid access code. Please try again.';
+              this.error = `Invalid access code "${this.accessCode}". Try: admin2025`;
+              console.log('Authentication failed - invalid code');
             }
           } catch (error) {
             this.error = 'Authentication failed. Please try again.';
+            console.error('Auth error:', error);
           } finally {
             this.isLoading = false;
           }
