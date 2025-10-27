@@ -4,3 +4,12 @@ node_modules/
 /public/
 /resources/_gen/
 .hugo_build.lock
+
+# Environment variables (contains secrets)
+.env
+.env.local
+.env.production
+.env.staging
+
+# Supabase
+.supabase/
