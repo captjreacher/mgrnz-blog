@@ -98,9 +98,9 @@
         © {{ now.Year }} {{ .Site.Title }} - Build {{ now.Format "2006-01-02 15:04" }}
         <!-- Admin Access -->
         <div class="mt-2">
-          <button onclick="simpleAdminAccess()" class="text-neutral-500 hover:text-orange-400 text-sm transition-colors">
+          <a href="/admin/" class="text-neutral-500 hover:text-orange-400 text-sm transition-colors">
             Admin
-          </button>
+          </a>
         </div>
       </div>
     </div>
@@ -162,25 +162,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script src="/js/mobile-menu.js?v={{ now.Unix }}"></script>
   
-  <script>
-  // Simple prompt-based admin access
-  function simpleAdminAccess() {
-    var password = prompt('Enter admin access code:');
-    
-    if (password === null) {
-      // User clicked cancel
-      return;
-    }
-    
-    if (password === 'admin' || password === 'mgrnz2025') {
-      sessionStorage.setItem('adminAccess', 'true');
-      console.log('Admin access granted, redirecting...');
-      window.location.href = '/admin/#login-success';
-    } else {
-      alert('Invalid access code. Try: admin or mgrnz2025');
-    }
-  }
-  </script>
+  <!-- Admin system moved to dedicated admin layout -->
 
   {{ partial "footer.html" . }}
 </body>
