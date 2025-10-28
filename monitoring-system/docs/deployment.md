@@ -1,113 +1,93 @@
 # Production Deployment Guide
 
-This document describes how to deploy and operate the monitoring system in the `production` environment. It covers configuration, startup procedures, validation checks, and ongoing maintenance tasks.
+This document describes how to operate the monitoring system in the production environment. It covers configuration artifacts, startup scripts, operational routines, and maintenance tasks required to keep the trigger → pipeline → dashboard stack healthy.
 
-## Directory layout
+## 1. Prerequisites
 
-```
-monitoring-system/
-├── config/
-│   └── production/
-│       ├── monitoring.config.json
-│       └── dashboard.config.json
-├── scripts/
-│   ├── start-monitoring.sh
-│   └── start-dashboard.sh
-└── src/
-    └── startup.js
-```
+- Node.js 20.x or newer on the host that will run the monitoring stack.
+- Environment variables for GitHub access and webhook secrets:
+  - `GITHUB_TOKEN`, `GITHUB_OWNER`, `GITHUB_REPO`
+  - `SUPABASE_WEBHOOK_SECRET`, `MAILERLITE_WEBHOOK_SECRET`
+  - Optional `MONITORING_DATA_DIR` to override the default data directory.
+- Outbound network access to GitHub, Supabase edge functions, and Cloudflare Pages APIs.
+- Systemd or another process supervisor to keep the Node services alive.
 
-## Configuration
+## 2. Configuration Artifacts
 
-### Monitoring configuration (`monitoring.config.json`)
+Production configuration lives in [`config/production/`](../config/production/):
 
-* `engine` – runtime options consumed by `TestCycleEngine`.
-  * `dataDir`: absolute or relative path where pipeline state is persisted.
-  * `monitoring.interval`: poll cadence (milliseconds) for periodic jobs.
-  * `monitoring.timeout`: timeout applied to long-running pipelines before they are marked failed.
-  * `storage.maxRecords`: cap for retained historical pipeline runs.
-  * `alerts.maxHistory`: cap for retained alert history in memory.
-* `monitors` – connection details for GitHub, Supabase, and webhook listeners.
-* `endpoints` – base URLs for downstream services used by monitors.
-* `notifications` – toggle delivery channels for alert notifications.
+- `monitoring.config.json` – runtime settings for the engine and monitors
+  - `monitoring.interval`, `monitoring.timeout`, `monitoring.retryAttempts`
+  - `storage` block defining retention and cleanup rules
+  - `triggers` secrets for webhook validation and git polling intervals
+  - `monitors` toggles for GitHub, Supabase, and MailerLite integrations
+  - `alerts` thresholds and notification destinations
+- `dashboard.config.json` – dashboard server host/port, WebSocket path, and CORS limits
+- `start-monitoring.sh` – shell entrypoint to launch monitors and processing workers
+- `start-dashboard.sh` – shell entrypoint to launch only the dashboard API/UI
 
-### Dashboard configuration (`dashboard.config.json`)
+Update these files before deployment with the correct hostnames, secrets, and retention policies. Committed defaults are safe templates and do not contain credentials.
 
-* `host` / `port`: network binding for the web dashboard (default `0.0.0.0:4173`).
-* `publicUrl`: canonical URL for reverse proxies and alert messages.
-* `security.trustedOrigins`: domains permitted to load the dashboard and issue API requests.
-* `cacheControl`: HTTP cache settings for static assets.
+## 3. Startup Scripts
 
-> **Tip:** copy the sample files and update secrets (e.g. API tokens) in environment variables or a secure secrets manager. Avoid committing environment-specific values to the repository.
+Both startup scripts automatically set environment defaults and call `scripts/production-start.js`, which wires together the engine, trigger monitor, GitHub monitor, build tracker, performance analyzer, and dashboard server.
 
-## Startup scripts
-
-### Prerequisites
-
-1. Install Node.js 18 or newer on the deployment host.
-2. Install dependencies:
-   ```bash
-   npm install --production
-   ```
-3. Make the helper scripts executable (one-time setup):
-   ```bash
-   chmod +x scripts/start-monitoring.sh scripts/start-dashboard.sh
-   ```
-
-### Launch the full monitoring stack
+### Launch monitors + processors
 
 ```bash
-MONITORING_CONFIG=/etc/mgrnz/monitoring.config.json \
-DASHBOARD_CONFIG=/etc/mgrnz/dashboard.config.json \
-scripts/start-monitoring.sh
+./config/production/start-monitoring.sh
 ```
-
-* Sets `NODE_ENV=production` and starts `src/startup.js`.
-* Initializes `TestCycleEngine`, loads persisted pipeline state, and starts periodic monitoring tasks.
-* Launches the dashboard HTTP/WebSocket server.
 
 ### Launch dashboard only
 
 ```bash
-scripts/start-dashboard.sh
+./config/production/start-dashboard.sh
 ```
 
-* Proxies to `start-monitoring.sh --dashboard-only`.
-* Initializes the engine for read-only access without starting background monitors (useful for read replicas).
+Use `MONITORING_CONFIG` or `DASHBOARD_CONFIG` to point to custom configuration files. `MONITORING_DATA_DIR` overrides the on-disk persistence directory and is created automatically when the scripts run.
 
-### Launch engine only (no dashboard)
+## 4. Runtime Management
 
-```bash
-scripts/start-monitoring.sh --engine-only
-```
+- **Process supervision** – wrap the startup scripts in systemd services or PM2 to guarantee restart on failure.
+- **Logs** – stdout/stderr contain structured JSON logs from monitors; rotate using `logrotate` or supervisor-specific tooling.
+- **Health probes** – dashboard exposes `/health` and `/api/status`. Configure your load balancer to hit these endpoints for liveness.
+- **Graceful shutdown** – `SIGINT`/`SIGTERM` triggers the production starter to stop monitoring intervals and close the dashboard server cleanly.
 
-* Runs monitoring components while suppressing the dashboard web server.
+## 5. Maintenance Tasks
 
-## Validation checklist
+| Task | Frequency | Command/Action |
+| ---- | --------- | -------------- |
+| Data retention cleanup | Daily | Engine automatically enforces `storage.maxRecords`; adjust in `monitoring.config.json` if load changes. |
+| Back up state | Weekly | Archive `${MONITORING_DATA_DIR}` (pipeline runs, metrics, alert history). |
+| Token rotation | Quarterly | Rotate GitHub personal access tokens and Supabase secrets, then restart services. |
+| Dependency updates | Monthly | Pull latest repo changes, run `npm install`, then redeploy. |
 
-After bootstrapping the service, verify:
+## 6. Recovery Playbook
 
-1. `GET /api/status` returns `running: true`, a recent `bootTimestamp`, and non-empty `metrics.totalRuns` if historical data exists.
-2. A synthetic pipeline fixture (see `tests/fixtures/pipeline-fixtures.js`) can be ingested end-to-end and is visible from the dashboard.
-3. WebSocket clients receive `pipeline_completed` events when `TestCycleEngine` calls `completePipelineRun`.
-4. Alert history is populated when `AlertManager` detects failures and cleared when `resolveAlert` is invoked.
+1. Inspect `/api/pipeline-runs?status=failed` for the most recent failures.
+2. Review generated alerts (pipeline failure, slow pipeline, stage failure) to determine the faulty stage.
+3. Trigger a manual rerun by replaying the Supabase webhook or dispatching the GitHub workflow.
+4. Validate dashboard metrics return to normal ranges (response time < threshold, build time < threshold).
+5. If filesystem corruption is suspected, restore the latest `${MONITORING_DATA_DIR}` backup before restarting services.
 
-Automated system tests (`npm test -- system`) exercise these scenarios and should pass before promoting a build to production.
+## 7. Alerting Integration
 
-## Maintenance tasks
+The engine emits alert events for:
 
-* **Data rotation:** the engine enforces `storage.maxRecords`, but you can manually purge with `node -e "import('./src/core/test-cycle-engine.js').then(async ({ TestCycleEngine }) => { const engine = new TestCycleEngine({ dataDir: './data/production' }); await engine.initialize(); await engine.dataStore.cleanup(2000); })"`.
-* **Alert hygiene:** periodically resolve stale alerts via `engine.resolveAlert(alertId)` to prevent dashboard clutter; `alerts.maxHistory` keeps the in-memory list bounded.
-* **Config refresh:** edit the JSON config files and send `SIGTERM` to the running process. `startup.js` traps the signal, performs a graceful shutdown, and can be relaunched with updated settings.
-* **Dependency updates:** run `npm outdated` monthly, update packages, and execute the full Vitest suite (`npm test`).
+- `pipeline_failure` – unsuccessful runs
+- `slow_pipeline` – runs exceeding `alerts.thresholds.responseTime`
+- `stage_failure` – any stage marked as failed
 
-## Troubleshooting
+Extend `monitoring.config.json` → `alerts.notifications` to enable email or webhook forwarding. Dashboard clients subscribe to WebSocket events for live alert streaming.
 
-| Symptom | Suggested action |
-| --- | --- |
-| Dashboard API returns 500 errors | Confirm configuration file paths (`MONITORING_CONFIG`, `DASHBOARD_CONFIG`) and inspect logs printed by `startup.js`. |
-| WebSocket clients disconnect unexpectedly | Check reverse proxy timeouts and ensure `security.trustedOrigins` includes the dashboard host. |
-| Alerts never resolve | Validate that automation calls `engine.resolveAlert` after recovery workflows succeed. |
-| No pipeline data after restart | Ensure `engine.dataDir` points to a persistent volume and that the process user has read/write permissions. |
+## 8. Verification Checklist
 
-For emergency situations, stop the process with `SIGINT`/`SIGTERM`, correct configuration or credentials, and relaunch using the startup scripts above.
+After deployment or restart:
+
+1. `curl http://localhost:8080/health` returns HTTP 200.
+2. `curl http://localhost:8080/api/pipeline-runs?limit=5` returns JSON with recent runs.
+3. GitHub monitor logs show successful polling (no authentication errors).
+4. A synthetic webhook replay creates a new pipeline run visible on the dashboard.
+5. Alert counts reset after recovery and new alerts appear only on subsequent failures.
+
+Follow this guide to keep the monitoring stack reliable, observable, and ready for production workloads.

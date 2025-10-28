@@ -1,18 +1,22 @@
 {
-  "host": "0.0.0.0",
-  "port": 4173,
-  "publicUrl": "https://monitor.mgrnz.com",
-  "cacheControl": {
-    "maxAgeSeconds": 30,
-    "staleWhileRevalidateSeconds": 120
+  "server": {
+    "host": "0.0.0.0",
+    "port": 8080,
+    "basePath": "/",
+    "websocketPath": "/ws"
+  },
+  "metrics": {
+    "defaultRange": "24h",
+    "retentionHours": 168,
+    "refreshInterval": 15000
   },
   "security": {
-    "trustedOrigins": [
-      "https://mgrnz.com",
-      "https://admin.mgrnz.com"
-    ],
-    "cors": {
-      "enabled": true
-    }
+    "corsOrigins": ["https://mgrnz.com"],
+    "rateLimitPerMinute": 120,
+    "apiKeyHeader": "x-monitoring-key"
+  },
+  "alerts": {
+    "showResolved": true,
+    "historyLimit": 200
   }
 }
