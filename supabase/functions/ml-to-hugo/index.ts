@@ -165,7 +165,16 @@ serve(async (req) => {
       );
     }
 
-    const path = `${contentDir}/${slug}/index.md`;
+    // Create folder structure: YYYY/DD-MMMM/post-name.md
+    const postDate = new Date();
+    const year = postDate.getFullYear();
+    const day = String(postDate.getDate()).padStart(2, '0');
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                       'July', 'August', 'September', 'October', 'November', 'December'];
+    const monthName = monthNames[postDate.getMonth()];
+    const folderName = `${day}-${monthName}`;
+    
+    const path = `${contentDir}/${year}/${folderName}/${slug}.md`;
     const commitRes = await fetch(
       `https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(path)}`,
       {

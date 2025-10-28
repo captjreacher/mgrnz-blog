@@ -1,369 +1,58 @@
-{{ define "main" }}
-<div class="space-y-8">
-  <!-- Header -->
-  <div class="flex items-center justify-between">
-    <div>
-      <h2 class="text-3xl font-bold text-white">Edit Post</h2>
-      <p class="mt-2 text-neutral-400" id="editingPost">Select a post to edit</p>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Redirecting to Working Edit Form...</title>
+    <meta http-equiv="refresh" content="0; url=/admin-edit-v2-fixed.html">
+    <style>
+        body {
+            background: #0f172a;
+            color: white;
+            font-family: system-ui, -apple-system, sans-serif;
+            text-align: center;
+            padding: 100px 20px;
+        }
+        .redirect-message {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 40px;
+            background: #1f2937;
+            border-radius: 12px;
+            border: 2px solid #ff4f00;
+        }
+        .redirect-link {
+            color: #ff4f00;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .redirect-link:hover {
+            color: #ff6600;
+        }
+        .spinner {
+            border: 3px solid #374151;
+            border-top: 3px solid #ff4f00;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+    <script>
+        // Immediate redirect
+        window.location.replace('/admin-edit-v2-fixed.html');
+    </script>
+</head>
+<body>
+    <div class="redirect-message">
+        <h2>🔄 Redirecting to Working Edit Form</h2>
+        <div class="spinner"></div>
+        <p>Taking you to the functional edit interface...</p>
+        <p>If you're not redirected automatically:</p>
+        <a href="/admin-edit-v2-fixed.html" class="redirect-link">Click here to go to the working edit form</a>
     </div>
-    <div class="flex gap-3">
-      <a href="/admin/posts/" class="rounded-lg bg-neutral-700 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-600">
-        ← Back to Posts
-      </a>
-    </div>
-  </div>
-
-  <!-- Post Selector -->
-  <div class="rounded-lg bg-white p-6 shadow-lg" id="postSelector">
-    <h3 class="text-lg font-semibold text-neutral-900 mb-4">Select Post to Edit</h3>
-    <div class="grid gap-3">
-      {{ range (where .Site.RegularPages "Type" "posts") }}
-      <button onclick="loadPost('{{ .File.BaseFileName }}')" 
-              class="flex items-center justify-between p-4 border border-neutral-200 rounded-lg hover:bg-neutral-50 text-left">
-        <div>
-          <h4 class="font-medium text-neutral-900">{{ .Title }}</h4>
-          <p class="text-sm text-neutral-600">{{ .Date.Format "Jan 2, 2006" }}</p>
-        </div>
-        <svg class="h-5 w-5 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-        </svg>
-      </button>
-      {{ end }}
-    </div>
-  </div>
-
-  <!-- Edit Form -->
-  <div class="rounded-lg bg-white p-8 shadow-lg hidden" id="editForm">
-    <form id="postForm" class="space-y-6">
-      <input type="hidden" id="postSlug">
-      
-      <div class="grid gap-6 md:grid-cols-2">
-        <div>
-          <label class="block text-sm font-medium text-neutral-700 mb-2">Post Slug</label>
-          <input id="slug" disabled
-                 class="w-full rounded-lg border-4 border-neutral-500 px-4 py-2 text-neutral-500 bg-neutral-100">
-          <p class="mt-1 text-xs text-neutral-500">Slug cannot be changed after creation</p>
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-neutral-700 mb-2">Publish Date</label>
-          <input id="date" type="date"
-                 class="w-full rounded-lg border-4 border-neutral-500 px-4 py-2 text-white bg-neutral-800 focus:border-orange-500 focus:ring-4 focus:ring-orange-300">
-        </div>
-      </div>
-
-      <div>
-        <label class="block text-sm font-medium text-neutral-700 mb-2">Post Title</label>
-        <input id="title" required
-               class="w-full rounded-lg border-4 border-neutral-500 px-4 py-2 text-white bg-neutral-800 focus:border-orange-500 focus:ring-4 focus:ring-orange-300">
-      </div>
-
-      <div class="grid gap-6 md:grid-cols-2">
-        <div>
-          <label class="block text-sm font-medium text-neutral-700 mb-2">Tags</label>
-          <input id="tags"
-                 class="w-full rounded-lg border-4 border-neutral-500 px-4 py-2 text-white bg-neutral-800 focus:border-orange-500 focus:ring-4 focus:ring-orange-300">
-          <p class="mt-1 text-xs text-neutral-500">Comma-separated tags</p>
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-neutral-700 mb-2">Categories</label>
-          <input id="categories"
-                 class="w-full rounded-lg border-4 border-neutral-500 px-4 py-2 text-white bg-neutral-800 focus:border-orange-500 focus:ring-4 focus:ring-orange-300">
-          <p class="mt-1 text-xs text-neutral-500">Comma-separated categories</p>
-        </div>
-      </div>
-
-      <div>
-        <label class="block text-sm font-medium text-neutral-700 mb-2">Summary/Excerpt</label>
-        <textarea id="summary" rows="3"
-                  class="w-full rounded-lg border-4 border-neutral-500 px-4 py-2 text-white bg-neutral-800 focus:border-orange-500 focus:ring-4 focus:ring-orange-300"></textarea>
-      </div>
-
-      <div>
-        <label class="block text-sm font-medium text-neutral-700 mb-2">Content</label>
-        <textarea id="content" rows="20"
-                  class="w-full rounded-lg border-4 border-neutral-500 px-4 py-2 text-white bg-neutral-800 focus:border-orange-500 focus:ring-4 focus:ring-orange-300 font-mono text-sm"></textarea>
-        <p class="mt-1 text-xs text-neutral-500">Edit the markdown content directly</p>
-      </div>
-
-      <div>
-        <label class="flex items-center">
-          <input id="draft" type="checkbox"
-                 class="rounded border-neutral-300 text-orange-600 focus:ring-orange-500">
-          <span class="ml-2 text-sm text-neutral-700">Save as draft</span>
-        </label>
-      </div>
-
-      <div class="flex justify-end gap-3 pt-6 border-t border-neutral-200">
-        <button type="button" onclick="showPostSelector()" class="rounded-lg border border-neutral-300 px-6 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50">
-          ← Back to Selection
-        </button>
-        <button type="submit" class="rounded-lg bg-orange-600 px-6 py-2 text-sm font-medium text-white hover:bg-orange-700">
-          Save Changes
-        </button>
-      </div>
-    </form>
-  </div>
-
-  <!-- Loading indicator -->
-  <div id="loading" class="hidden text-center py-8">
-    <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-orange-600"></div>
-    <p class="mt-2 text-neutral-400">Loading...</p>
-  </div>
-</div>
-
-<script>
-let currentSlug = null;
-
-// Check URL for post parameter
-function getUrlParameter(name) {
-  name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-  var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-  var results = regex.exec(location.search);
-  return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-}
-
-// Load post from API
-async function loadPost(slug) {
-  currentSlug = slug;
-  showLoading();
-  
-  try {
-    const response = await fetch(`http://localhost:3002/api/posts/${slug}`);
-    const data = await response.json();
-    
-    if (data.success) {
-      populateForm(slug, data.content);
-      showEditForm();
-    } else {
-      alert('Error loading post: ' + data.error);
-      showPostSelector();
-    }
-  } catch (error) {
-    alert('Error connecting to API: ' + error.message);
-    showPostSelector();
-  }
-}
-
-// Parse frontmatter and content
-function parseFrontmatter(content) {
-  // Normalize line endings - handle both \r\n and \n
-  const normalizedContent = content.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
-  const lines = normalizedContent.split('\n');
-  
-  console.log('Normalized content lines:', lines.slice(0, 10));
-  
-  if (lines[0] !== '---') return { frontmatter: {}, content: content };
-  
-  let endIndex = -1;
-  for (let i = 1; i < lines.length; i++) {
-    if (lines[i] === '---') {
-      endIndex = i;
-      break;
-    }
-  }
-  
-  if (endIndex === -1) return { frontmatter: {}, content: content };
-  
-  const frontmatterLines = lines.slice(1, endIndex);
-  const contentLines = lines.slice(endIndex + 1);
-  
-  console.log('Frontmatter lines:', frontmatterLines);
-  
-  const frontmatter = {};
-  frontmatterLines.forEach(line => {
-    const colonIndex = line.indexOf(':');
-    if (colonIndex > 0) {
-      const key = line.substring(0, colonIndex).trim();
-      let value = line.substring(colonIndex + 1).trim();
-      
-      console.log(`Parsing: "${key}" = "${value}"`);
-      
-      // Remove quotes
-      if ((value.startsWith('"') && value.endsWith('"')) || 
-          (value.startsWith("'") && value.endsWith("'"))) {
-        value = value.slice(1, -1);
-      }
-      
-      // Parse arrays
-      if (value.startsWith('[') && value.endsWith(']')) {
-        value = value.slice(1, -1).split(',').map(v => v.trim().replace(/['"]/g, ''));
-      }
-      
-      // Parse booleans
-      if (value === 'true') value = true;
-      if (value === 'false') value = false;
-      
-      frontmatter[key] = value;
-    }
-  });
-  
-  return { frontmatter, content: contentLines.join('\n').trim() };
-}
-
-// Populate form with post data
-function populateForm(slug, rawContent) {
-  console.log('Raw content from API:', rawContent);
-  console.log('First 200 chars:', rawContent.substring(0, 200));
-  
-  const { frontmatter, content } = parseFrontmatter(rawContent);
-  
-  console.log('Parsed frontmatter:', frontmatter);
-  console.log('Parsed content:', content.substring(0, 100));
-  console.log('Date value:', frontmatter.date, 'Type:', typeof frontmatter.date);
-  
-  // Generate URL slug format from date
-  let urlSlug = slug;
-  if (frontmatter.date) {
-    // Handle different date formats
-    let dateStr = String(frontmatter.date).trim();
-    
-    // If it's just YYYY-MM-DD format, parse it directly
-    if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
-      const [year, month, day] = dateStr.split('-');
-      urlSlug = `/${year}/${month}/`;
-      console.log('Parsed date parts:', { year, month, day });
-    } else {
-      // Try other date parsing methods
-      const date = new Date(dateStr);
-      if (!isNaN(date.getTime())) {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        urlSlug = `/${year}/${month}/`;
-        console.log('Parsed with Date constructor:', { year, month });
-      }
-    }
-  }
-  
-  console.log('Final slug:', urlSlug);
-  
-  document.getElementById('postSlug').value = slug;
-  document.getElementById('slug').value = urlSlug;
-  document.getElementById('title').value = frontmatter.title || '';
-  document.getElementById('date').value = frontmatter.date || '';
-  document.getElementById('tags').value = Array.isArray(frontmatter.tags) ? frontmatter.tags.join(', ') : (frontmatter.tags || '');
-  document.getElementById('categories').value = Array.isArray(frontmatter.categories) ? frontmatter.categories.join(', ') : (frontmatter.categories || '');
-  document.getElementById('summary').value = frontmatter.summary || '';
-  document.getElementById('content').value = content;
-  document.getElementById('draft').checked = frontmatter.draft === true;
-  
-  document.getElementById('editingPost').textContent = `Editing: ${frontmatter.title || slug}`;
-}
-
-// Generate markdown content
-function generateMarkdown() {
-  const title = document.getElementById('title').value;
-  const date = document.getElementById('date').value;
-  const tags = document.getElementById('tags').value.split(',').map(t => t.trim()).filter(Boolean);
-  const categories = document.getElementById('categories').value.split(',').map(c => c.trim()).filter(Boolean);
-  const summary = document.getElementById('summary').value;
-  const content = document.getElementById('content').value;
-  const draft = document.getElementById('draft').checked;
-  
-  let frontMatter = '---\n';
-  frontMatter += `title: "${title.replace(/"/g, '\\"')}"\n`;
-  frontMatter += `date: ${date}\n`;
-  frontMatter += `draft: ${draft}\n`;
-  
-  if (categories.length) {
-    frontMatter += `categories: [${categories.map(c => `"${c.replace(/"/g, '\\"')}"`).join(', ')}]\n`;
-  }
-  
-  if (tags.length) {
-    frontMatter += `tags: [${tags.map(t => `"${t.replace(/"/g, '\\"')}"`).join(', ')}]\n`;
-  }
-  
-  if (summary.trim()) {
-    frontMatter += `summary: "${summary.replace(/"/g, '\\"')}"\n`;
-  }
-  
-  frontMatter += '---\n\n';
-  
-  return frontMatter + content;
-}
-
-// Save post
-async function savePost() {
-  if (!currentSlug) return;
-  
-  showLoading();
-  
-  try {
-    const content = generateMarkdown();
-    const response = await fetch(`http://localhost:3002/api/posts/${currentSlug}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ content })
-    });
-    
-    const data = await response.json();
-    
-    if (data.success) {
-      alert('Post saved successfully!');
-      showEditForm();
-    } else {
-      alert('Error saving post: ' + data.error);
-      showEditForm();
-    }
-  } catch (error) {
-    alert('Error connecting to API: ' + error.message);
-    showEditForm();
-  }
-}
-
-// UI functions
-function showPostSelector() {
-  document.getElementById('postSelector').classList.remove('hidden');
-  document.getElementById('editForm').classList.add('hidden');
-  document.getElementById('loading').classList.add('hidden');
-  document.getElementById('editingPost').textContent = 'Select a post to edit';
-}
-
-function showEditForm() {
-  document.getElementById('postSelector').classList.add('hidden');
-  document.getElementById('editForm').classList.remove('hidden');
-  document.getElementById('loading').classList.add('hidden');
-}
-
-function showLoading() {
-  document.getElementById('postSelector').classList.add('hidden');
-  document.getElementById('editForm').classList.add('hidden');
-  document.getElementById('loading').classList.remove('hidden');
-}
-
-// Update slug when date changes
-function updateSlugFromDate() {
-  const dateInput = document.getElementById('date');
-  const slugInput = document.getElementById('slug');
-  
-  if (dateInput.value) {
-    const date = new Date(dateInput.value + 'T00:00:00');
-    if (!isNaN(date.getTime())) {
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0');
-      const newSlug = `/${year}/${month}/`;
-      slugInput.value = newSlug;
-      console.log('Updated slug to:', newSlug);
-    }
-  }
-}
-
-// Form submission
-document.getElementById('postForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  savePost();
-});
-
-// Add date change listener
-document.getElementById('date').addEventListener('change', updateSlugFromDate);
-
-// Check for URL parameter on load
-window.addEventListener('load', function() {
-  const postParam = getUrlParameter('post');
-  if (postParam) {
-    loadPost(postParam);
-  }
-});
-</script>
-{{ end }}
+</body>
+</html>

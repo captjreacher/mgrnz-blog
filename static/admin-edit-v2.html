@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Edit Post - Admin v2.0</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-orange': '#ff4f00',
+                        'brand-yellow': '#ffcf00',
+                        'brand-blue': '#89bbfe'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #0f172a !important; }
+        .orange-border { border: 4px solid #ff4f00 !important; }
+        .orange-border:focus { border-color: #ff6600 !important; box-shadow: 0 0 0 4px rgba(255, 79, 0, 0.2) !important; }
+    </style>
+</head>
+<body class="min-h-screen bg-neutral-900 text-white">
+    
+    <!-- Header -->
+    <header class="bg-neutral-800 border-b border-neutral-700 p-4">
+        <div class="max-w-4xl mx-auto flex items-center justify-between">
+            <h1 class="text-2xl font-bold text-orange-400">Edit Post - Admin v2.0</h1>
+            <a href="/admin/posts/" class="bg-neutral-700 hover:bg-neutral-600 px-4 py-2 rounded text-sm">← Back to Posts</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto p-6">
+        
+        <!-- Post Selector -->
+        <div id="postSelector" class="bg-neutral-800 rounded-lg p-8 shadow-xl border-4 border-orange-500 mb-6">
+            <h3 class="text-xl font-semibold text-white mb-4">Select Post to Edit</h3>
+            <div class="space-y-3" id="postList">
+                <div class="text-center py-8">
+                    <div class="text-4xl mb-4">⏳</div>
+                    <p class="text-neutral-400">Loading posts...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Form -->
+        <div id="editForm" class="bg-neutral-800 rounded-lg p-8 shadow-xl border-4 border-orange-500 hidden">
+            
+            <form id="postForm" class="space-y-6">
+                <input type="hidden" id="originalPath">
+                <input type="hidden" id="originalSha">
+                
+                <!-- Post Info -->
+                <div class="bg-neutral-700 rounded-lg p-4 border-2 border-blue-500">
+                    <h3 class="text-lg font-semibold text-blue-400 mb-3">📝 Post Information</h3>
+                    <div class="grid gap-6 md:grid-cols-2">
+                        <div>
+                            <label class="block text-sm font-medium text-neutral-300 mb-2">Post Folder</label>
+                            <input id="folderName" disabled
+                                   class="w-full rounded-lg px-4 py-2 text-neutral-400 bg-neutral-600 cursor-not-allowed">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-neutral-300 mb-2">Publish Date</label>
+                            <input id="date" type="date" 
+                                   class="w-full orange-border rounded-lg px-4 py-2 text-white bg-neutral-700">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Post Content -->
+                <div>
+                    <label class="block text-sm font-medium text-neutral-300 mb-2">Post Title</label>
+                    <input id="title" required placeholder="Enter your post title" 
+                           class="w-full orange-border rounded-lg px-4 py-2 text-white bg-neutral-700">
+                </div>
+
+                <div class="grid gap-6 md:grid-cols-2">
+                    <div>
+                        <label class="block text-sm font-medium text-neutral-300 mb-2">Tags</label>
+                        <input id="tags" placeholder="AI, automation, technology" 
+                               class="w-full orange-border rounded-lg px-4 py-2 text-white bg-neutral-700">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-neutral-300 mb-2">Categories</label>
+                        <input id="categories" placeholder="Technology, Business" 
+                               class="w-full orange-border rounded-lg px-4 py-2 text-white bg-neutral-700">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-neutral-300 mb-2">Featured Image URL</label>
+                    <input id="image" placeholder="/images/2025/10/my-post-image.webp" 
+                           class="w-full orange-border rounded-lg px-4 py-2 text-white bg-neutral-700">
+                    <p class="text-xs text-neutral-400 mt-1">Optional: URL to featured image for post cards and social sharing</p>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-neutral-300 mb-2">Summary/Excerpt</label>
+                    <textarea id="excerpt" rows="3" placeholder="Brief description of your post..." 
+                              class="w-full orange-border rounded-lg px-4 py-2 text-white bg-neutral-700"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-neutral-300 mb-2">Post Content</label>
+                    <textarea id="content" rows="15" placeholder="Write your post content in Markdown..." 
+                              class="w-full orange-border rounded-lg px-4 py-2 text-white bg-neutral-700 font-mono text-sm"></textarea>
+                </div>
+
+                <div class="flex items-center">
+                    <input id="draft" type="checkbox" class="rounded border-neutral-300 text-orange-600 focus:ring-orange-500">
+                    <label for="draft" class="ml-2 text-sm text-neutral-300">Save as draft</label>
+                </div>
+
+                <!-- GitHub Token Section -->
+                <div id="tokenSection" class="bg-neutral-700 rounded-lg p-4 border-2 border-yellow-500">
+                    <h3 class="text-lg font-semibold text-yellow-400 mb-3">🔑 GitHub Authentication</h3>
+                    <div class="space-y-3">
+                        <div id="tokenStatus" class="text-sm">
+                            <span id="tokenStatusText" class="text-neutral-300">Checking for saved token...</span>
+                        </div>
+                        <div id="tokenInput" class="hidden">
+                            <label class="block text-sm font-medium text-neutral-300 mb-2">GitHub Personal Access Token</label>
+                            <input type="password" id="githubToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" 
+                                   class="w-full orange-border rounded-lg px-4 py-2 text-white bg-neutral-800">
+                            <p class="text-xs text-neutral-400 mt-1">
+                                Create one at: <a href="https://github.com/settings/tokens" target="_blank" class="text-blue-400 hover:underline">github.com/settings/tokens</a> with "repo" scope
+                            </p>
+                            <button type="button" onclick="saveToken()" class="mt-2 bg-green-600 hover:bg-green-700 px-4 py-2 rounded text-sm">
+                                💾 Save Token
+                            </button>
+                        </div>
+                        <button type="button" id="clearTokenBtn" onclick="clearToken()" class="hidden text-red-400 hover:text-red-300 text-sm">
+                            🗑️ Clear Saved Token
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Submit -->
+                <div class="pt-6 flex gap-3">
+                    <button type="button" onclick="showPostSelector()" 
+                            class="bg-neutral-600 hover:bg-neutral-700 text-white font-bold py-3 px-6 rounded-lg">
+                        ← Back to Selection
+                    </button>
+                    <button type="submit" id="submitBtn" disabled
+                            class="flex-1 bg-gradient-to-r from-gray-500 to-gray-600 text-white font-bold py-3 px-6 rounded-lg transition-all cursor-not-allowed">
+                        🔒 Enter GitHub Token First
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        let currentPost = null;
+        
+        // Check for saved GitHub token on page load
+        checkGitHubToken();
+        loadPostList();
+
+        // Load list of posts from GitHub
+        async function loadPostList() {
+            const token = localStorage.getItem('github_token');
+            if (!token) {
+                document.getElementById('postList').innerHTML = `
+                    <div class="text-center py-8">
+                        <div class="text-4xl mb-4">🔒</div>
+                        <p class="text-neutral-400">Please enter your GitHub token first to load posts</p>
+                    </div>
+                `;
+                return;
+            }
+
+            try {
+                const response = await fetch('https://api.github.com/repos/captjreacher/mgrnz-blog/contents/content/posts', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`GitHub API error: ${response.status}`);
+                }
+
+                const folders = await response.json();
+                const postFolders = folders.filter(item => item.type === 'dir');
+
+                if (postFolders.length === 0) {
+                    document.getElementById('postList').innerHTML = `
+                        <div class="text-center py-8">
+                            <div class="text-4xl mb-4">📝</div>
+                            <p class="text-neutral-400">No posts found</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const postListHtml = postFolders.map(folder => `
+                    <button onclick="loadPost('${folder.name}')" 
+                            class="w-full flex items-center justify-between p-4 border-2 border-neutral-600 rounded-lg hover:border-orange-500 hover:bg-neutral-700 text-left transition-all">
+                        <div>
+                            <h4 class="font-medium text-white">${folder.name}</h4>
+                            <p class="text-sm text-neutral-400">Click to edit</p>
+                        </div>
+                        <svg class="h-5 w-5 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                `).join('');
+
+                document.getElementById('postList').innerHTML = postListHtml;
+
+            } catch (error) {
+                console.error('Error loading posts:', error);
+                document.getElementById('postList').innerHTML = `
+                    <div class="text-center py-8">
+                        <div class="text-4xl mb-4">❌</div>
+                        <p class="text-neutral-400">Error loading posts: ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Load specific post content
+        async function loadPost(folderName) {
+            const token = localStorage.getItem('github_token');
+            if (!token) {
+                alert('GitHub token required');
+                return;
+            }
+
+            try {
+                // Show loading
+                document.getElementById('postList').innerHTML = `
+                    <div class="text-center py-8">
+                        <div class="text-4xl mb-4">⏳</div>
+                        <p class="text-neutral-400">Loading ${folderName}...</p>
+                    </div>
+                `;
+
+                const response = await fetch(`https://api.github.com/repos/captjreacher/mgrnz-blog/contents/content/posts/${folderName}/index.md`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`GitHub API error: ${response.status}`);
+                }
+
+                const fileData = await response.json();
+                console.log('GitHub API response:', fileData);
+                
+                // Decode base64 content and handle line breaks
+                let content = '';
+                try {
+                    content = atob(fileData.content.replace(/\s/g, ''));
+                    console.log('Decoded content:', content);
+                } catch (error) {
+                    console.error('Error decoding content:', error);
+                    throw new Error('Failed to decode post content');
+                }
+                
+                currentPost = {
+                    folderName: folderName,
+                    path: fileData.path,
+                    sha: fileData.sha,
+                    content: content
+                };
+
+                populateForm(content, folderName);
+                showEditForm();
+
+            } catch (error) {
+                console.error('Error loading post:', error);
+                alert(`Error loading post: ${error.message}`);
+                loadPostList();
+            }
+        }
+
+        // Parse frontmatter and populate form
+        function populateForm(content, folderName) {
+            console.log('Populating form with content:', content.substring(0, 200));
+            
+            const lines = content.split('\n');
+            let frontmatter = {};
+            let postContent = '';
+            
+            console.log('First few lines:', lines.slice(0, 10));
+            
+            if (lines[0] === '---') {
+                let endIndex = -1;
+                for (let i = 1; i < lines.length; i++) {
+                    if (lines[i] === '---') {
+                        endIndex = i;
+                        break;
+                    }
+                }
+                
+                console.log('Frontmatter end index:', endIndex);
+                
+                if (endIndex > 0) {
+                    const frontmatterLines = lines.slice(1, endIndex);
+                    postContent = lines.slice(endIndex + 1).join('\n').trim();
+                    
+                    console.log('Frontmatter lines:', frontmatterLines);
+                    console.log('Post content:', postContent.substring(0, 100));
+                    
+                    frontmatterLines.forEach(line => {
+                        const colonIndex = line.indexOf(':');
+                        if (colonIndex > 0) {
+                            const key = line.substring(0, colonIndex).trim();
+                            let value = line.substring(colonIndex + 1).trim();
+                            
+                            // Remove quotes
+                            if ((value.startsWith('"') && value.endsWith('"')) || 
+                                (value.startsWith("'") && value.endsWith("'"))) {
+                                value = value.slice(1, -1);
+                            }
+                            
+                            // Parse arrays
+                            if (value.startsWith('[') && value.endsWith(']')) {
+                                value = value.slice(1, -1).split(',').map(v => v.trim().replace(/['"]/g, ''));
+                            }
+                            
+                            // Parse booleans
+                            if (value === 'true') value = true;
+                            if (value === 'false') value = false;
+                            
+                            frontmatter[key] = value;
+                            console.log(`Parsed: ${key} = ${value}`);
+                        }
+                    });
+                }
+            } else {
+                // No frontmatter, entire content is post content
+                postContent = content;
+                console.log('No frontmatter found, using entire content as post content');
+            }
+            
+            // Populate form fields
+            console.log('Populating form fields...');
+            console.log('Frontmatter object:', frontmatter);
+            console.log('Post content length:', postContent.length);
+            
+            try {
+                document.getElementById('originalPath').value = currentPost.path;
+                document.getElementById('originalSha').value = currentPost.sha;
+                document.getElementById('folderName').value = folderName;
+                document.getElementById('title').value = frontmatter.title || '';
+                document.getElementById('date').value = frontmatter.date || '';
+                document.getElementById('tags').value = Array.isArray(frontmatter.tags) ? frontmatter.tags.join(', ') : (frontmatter.tags || '');
+                document.getElementById('categories').value = Array.isArray(frontmatter.categories) ? frontmatter.categories.join(', ') : (frontmatter.categories || '');
+                document.getElementById('image').value = frontmatter.image || '';
+                document.getElementById('excerpt').value = frontmatter.summary || '';
+                document.getElementById('content').value = postContent;
+                document.getElementById('draft').checked = frontmatter.draft === true;
+                
+                console.log('Form fields populated successfully');
+                console.log('Title field value:', document.getElementById('title').value);
+                console.log('Content field value length:', document.getElementById('content').value.length);
+            } catch (error) {
+                console.error('Error populating form fields:', error);
+                alert('Error populating form fields: ' + error.message);
+            }
+        }
+
+        // Form submission
+        document.getElementById('postForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitButton = document.getElementById('submitBtn');
+            const originalText = submitButton.innerHTML;
+            
+            submitButton.innerHTML = '⏳ Saving Changes...';
+            submitButton.disabled = true;
+            
+            try {
+                const token = localStorage.getItem('github_token');
+                if (!token) {
+                    throw new Error('GitHub token is required');
+                }
+                
+                // Generate updated markdown
+                const title = document.getElementById('title').value;
+                const date = document.getElementById('date').value;
+                const tags = document.getElementById('tags').value;
+                const categories = document.getElementById('categories').value;
+                const image = document.getElementById('image').value;
+                const excerpt = document.getElementById('excerpt').value;
+                const content = document.getElementById('content').value;
+                const draft = document.getElementById('draft').checked;
+                
+                let markdown = '---\n';
+                markdown += `title: "${title.replace(/"/g, '\\"')}"\n`;
+                markdown += `date: ${date}\n`;
+                markdown += `draft: ${draft}\n`;
+                
+                if (tags) {
+                    const tagArray = tags.split(',').map(t => `"${t.trim().replace(/"/g, '\\"')}"`).join(', ');
+                    markdown += `tags: [${tagArray}]\n`;
+                }
+                
+                if (categories) {
+                    const catArray = categories.split(',').map(c => `"${c.trim().replace(/"/g, '\\"')}"`).join(', ');
+                    markdown += `categories: [${catArray}]\n`;
+                }
+                
+                if (image) {
+                    markdown += `image: "${image.replace(/"/g, '\\"')}"\n`;
+                }
+                
+                if (excerpt) {
+                    markdown += `summary: "${excerpt.replace(/"/g, '\\"')}"\n`;
+                }
+                
+                markdown += '---\n\n';
+                markdown += content;
+                
+                // Update file via GitHub API
+                const response = await fetch(`https://api.github.com/repos/captjreacher/mgrnz-blog/contents/${currentPost.path}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: `Update post: ${title}`,
+                        content: btoa(unescape(encodeURIComponent(markdown))),
+                        sha: currentPost.sha,
+                        branch: 'main'
+                    })
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    if (response.status === 401 || response.status === 403) {
+                        localStorage.removeItem('github_token');
+                        throw new Error('Invalid GitHub token. Please try again with a fresh token.');
+                    }
+                    throw new Error(errorData.message || `GitHub API error: ${response.status} - ${response.statusText}`);
+                }
+                
+                submitButton.innerHTML = '🎉 Changes Saved!';
+                
+                alert(`✅ Post "${title}" updated successfully!\n\n🚀 GitHub Actions will rebuild your site automatically.\n\nChanges will be live in a few minutes.`);
+                
+                // Go back to post list
+                setTimeout(() => {
+                    showPostSelector();
+                    loadPostList();
+                }, 2000);
+                
+            } catch (error) {
+                console.error('Error saving post:', error);
+                alert(`❌ Error saving post:\n\n${error.message}\n\nPlease try again.`);
+                
+                submitButton.innerHTML = originalText;
+                submitButton.disabled = false;
+            }
+        });
+
+        // UI Functions
+        function showPostSelector() {
+            document.getElementById('postSelector').classList.remove('hidden');
+            document.getElementById('editForm').classList.add('hidden');
+        }
+
+        function showEditForm() {
+            document.getElementById('postSelector').classList.add('hidden');
+            document.getElementById('editForm').classList.remove('hidden');
+        }
+
+        // GitHub Token Management Functions
+        function checkGitHubToken() {
+            const token = localStorage.getItem('github_token');
+            const statusText = document.getElementById('tokenStatusText');
+            const tokenInput = document.getElementById('tokenInput');
+            const clearTokenBtn = document.getElementById('clearTokenBtn');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            if (token) {
+                statusText.innerHTML = '✅ <span class="text-green-400">GitHub token saved and ready</span>';
+                tokenInput.classList.add('hidden');
+                clearTokenBtn.classList.remove('hidden');
+                submitBtn.disabled = false;
+                submitBtn.className = 'flex-1 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold py-3 px-6 rounded-lg transition-all';
+                submitBtn.innerHTML = '💾 Save Changes';
+            } else {
+                statusText.innerHTML = '⚠️ <span class="text-yellow-400">GitHub token required</span>';
+                tokenInput.classList.remove('hidden');
+                clearTokenBtn.classList.add('hidden');
+                submitBtn.disabled = true;
+                submitBtn.className = 'flex-1 bg-gradient-to-r from-gray-500 to-gray-600 text-white font-bold py-3 px-6 rounded-lg transition-all cursor-not-allowed';
+                submitBtn.innerHTML = '🔒 Enter GitHub Token First';
+            }
+        }
+        
+        function saveToken() {
+            const tokenInput = document.getElementById('githubToken');
+            const token = tokenInput.value.trim();
+            
+            if (!token) {
+                alert('Please enter a valid GitHub token');
+                return;
+            }
+            
+            if (!token.startsWith('ghp_') && !token.startsWith('github_pat_')) {
+                if (!confirm('This doesn\'t look like a GitHub Personal Access Token. Continue anyway?')) {
+                    return;
+                }
+            }
+            
+            localStorage.setItem('github_token', token);
+            tokenInput.value = '';
+            checkGitHubToken();
+            loadPostList(); // Reload posts now that we have a token
+            alert('✅ GitHub token saved successfully!');
+        }
+        
+        function clearToken() {
+            if (confirm('Are you sure you want to clear the saved GitHub token?')) {
+                localStorage.removeItem('github_token');
+                checkGitHubToken();
+                alert('🗑️ GitHub token cleared');
+            }
+        }
+    </script>
+</body>
+</html>

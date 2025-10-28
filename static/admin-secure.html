@@ -61,8 +61,8 @@
                 isLoading: false,
                 
                 init() {
-                    // Check if already authenticated
-                    const authToken = localStorage.getItem('admin_auth');
+                    // Check if already authenticated using the same tokens as the main admin system
+                    const authToken = localStorage.getItem('admin_auth_token');
                     const authTime = localStorage.getItem('admin_auth_time');
                     
                     if (authToken && authTime) {
@@ -70,11 +70,11 @@
                         const authAge = now - parseInt(authTime);
                         const twentyFourHours = 24 * 60 * 60 * 1000;
                         
-                        if (authAge < twentyFourHours && authToken === this.getExpectedToken()) {
+                        if (authAge < twentyFourHours) {
                             this.isAuthenticated = true;
                         } else {
                             // Clear expired auth
-                            localStorage.removeItem('admin_auth');
+                            localStorage.removeItem('admin_auth_token');
                             localStorage.removeItem('admin_auth_time');
                         }
                     }
@@ -93,7 +93,7 @@
                         
                         if (validCodes.includes(this.accessCode)) {
                             const authToken = this.generateAuthToken();
-                            localStorage.setItem('admin_auth', authToken);
+                            localStorage.setItem('admin_auth_token', authToken);
                             localStorage.setItem('admin_auth_time', new Date().getTime().toString());
                             
                             this.isAuthenticated = true;
@@ -116,7 +116,7 @@
                 
                 getExpectedToken() {
                     // In production, implement proper token validation
-                    return localStorage.getItem('admin_auth');
+                    return localStorage.getItem('admin_auth_token');
                 }
             }
         }

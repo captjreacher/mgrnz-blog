@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MailerLite API Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #ff4f00;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #e63d00;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            display: none;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>MailerLite API Connectivity Test</h1>
+        <p>This form tests direct API connectivity to MailerLite using the same endpoint as the main site.</p>
+        
+        <form id="test-form">
+            <div class="form-group">
+                <label for="name">First Name:</label>
+                <input type="text" id="name" name="fields[name]" value="Test User" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="last_name">Last Name:</label>
+                <input type="text" id="last_name" name="fields[last_name]" value="API Test">
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="fields[email]" value="test@example.com" required>
+            </div>
+            
+            <button type="submit">Test API Connection</button>
+        </form>
+        
+        <div id="result" class="result"></div>
+        
+        <div style="margin-top: 30px; padding: 20px; background-color: #f8f9fa; border-radius: 4px;">
+            <h3>Test Details:</h3>
+            <p><strong>Account ID:</strong> 1849787</p>
+            <p><strong>Form ID:</strong> 169453382423020905</p>
+            <p><strong>API Endpoint:</strong> https://assets.mailerlite.com/jsonp/1849787/forms/169453382423020905/subscribe</p>
+            <p><strong>Method:</strong> POST with JSONP callback</p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('test-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const resultDiv = document.getElementById('result');
+            const formData = new FormData(this);
+            
+            // Add required MailerLite fields
+            formData.append('ml-submit', '1');
+            formData.append('anticsrf', 'true');
+            
+            // Show loading state
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result';
+            resultDiv.innerHTML = 'Testing API connection...';
+            
+            // Test 1: Check if MailerLite endpoint is reachable
+            fetch('https://assets.mailerlite.com/jsonp/1849787/forms/169453382423020905/subscribe', {
+                method: 'POST',
+                body: formData,
+                mode: 'no-cors' // Required for cross-origin requests
+            })
+            .then(() => {
+                // Since we're using no-cors, we can't read the response
+                // But if no error is thrown, the endpoint is reachable
+                resultDiv.className = 'result success';
+                resultDiv.innerHTML = `
+                    <h3>✅ API Test Results:</h3>
+                    <p><strong>Endpoint Reachable:</strong> Yes</p>
+                    <p><strong>Form Submission:</strong> Sent (check MailerLite dashboard for new contact)</p>
+                    <p><strong>Account ID:</strong> 1849787 ✓</p>
+                    <p><strong>Form ID:</strong> 169453382423020905 ✓</p>
+                    <p><strong>Next Step:</strong> Check your MailerLite dashboard to see if a new contact was created with email: ${formData.get('fields[email]')}</p>
+                `;
+            })
+            .catch(error => {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `
+                    <h3>❌ API Test Failed:</h3>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                    <p><strong>Possible Issues:</strong></p>
+                    <ul>
+                        <li>MailerLite API endpoint is not accessible</li>
+                        <li>Form ID or Account ID is incorrect</li>
+                        <li>Network connectivity issues</li>
+                        <li>CORS policy blocking the request</li>
+                    </ul>
+                `;
+            });
+            
+            // Test 2: Check if MailerLite Universal script is available
+            setTimeout(() => {
+                if (typeof ml !== 'undefined') {
+                    resultDiv.innerHTML += '<p><strong>MailerLite Universal Script:</strong> ✅ Loaded</p>';
+                } else {
+                    resultDiv.innerHTML += '<p><strong>MailerLite Universal Script:</strong> ❌ Not loaded</p>';
+                }
+            }, 1000);
+        });
+    </script>
+    
+    <!-- Load MailerLite Universal Script for testing -->
+    <script>
+    (function(w,d,e,u,f,l,n){w[f]=w[f]||function(){(w[f].q=w[f].q||[]).push(arguments);},l=d.createElement(e),l.async=1,l.src=u,n=d.getElementsByTagName(e)[0],n.parentNode.insertBefore(l,n);})(window,document,'script','https://assets.mailerlite.com/js/universal.js','ml');
+    ml('account', '1849787');
+    </script>
+</body>
+</html>

@@ -20,10 +20,16 @@
       <a href="/admin/create/" class="block px-4 py-2 text-sm text-neutral-300 hover:bg-neutral-700 hover:text-white transition-colors">
         ✏️ Create Post
       </a>
+      <a href="/admin-edit-v2-fixed.html" class="block px-4 py-2 text-sm text-neutral-300 hover:bg-neutral-700 hover:text-white transition-colors">
+        🔧 Edit Posts
+      </a>
       <div class="border-t border-neutral-700 mt-2 pt-2">
         <a href="/admin-simple.html" class="block px-4 py-2 text-sm text-green-400 hover:bg-green-900/20 transition-colors">
           🚀 Quick Access
         </a>
+        <button onclick="logoutAdmin()" class="block w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-red-900/20 transition-colors">
+          🚪 Logout
+        </button>
       </div>
     </div>
   </div>
@@ -43,6 +49,10 @@ function checkAdminAccess() {
       // User is authenticated, show menu
       toggleAdminMenu();
       return;
+    } else {
+      // Session expired, clear tokens
+      localStorage.removeItem('admin_auth_token');
+      localStorage.removeItem('admin_auth_time');
     }
   }
   
@@ -53,6 +63,17 @@ function checkAdminAccess() {
 function toggleAdminMenu() {
   const dropdown = document.getElementById('adminDropdown');
   dropdown.classList.toggle('hidden');
+}
+
+function logoutAdmin() {
+  if (confirm('Are you sure you want to logout?')) {
+    localStorage.removeItem('admin_auth_token');
+    localStorage.removeItem('admin_auth_time');
+    // Hide the dropdown
+    document.getElementById('adminDropdown').classList.add('hidden');
+    // Show confirmation
+    alert('✅ Logged out successfully');
+  }
 }
 
 // Close dropdown when clicking outside

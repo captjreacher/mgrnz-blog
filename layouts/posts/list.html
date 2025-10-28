@@ -20,45 +20,88 @@
       {{ range $index, $post := $recent }}
       {{ if eq $index 0 }}
       <!-- Featured Post (Large Card) -->
-      <article class="card overflow-hidden rounded-lg transition-all hover:shadow-xl bg-white border border-neutral-200 shadow-lg">
+      <article class="card overflow-hidden rounded-lg transition-all hover:shadow-xl bg-white border border-neutral-200 shadow-lg group">
+        {{ $featuredImage := "" }}
         {{ if $post.Params.image }}
-        <div class="h-64 w-full">
-          <img src="{{ $post.Params.image }}" alt="{{ $post.Title }}" class="h-full w-full object-cover">
+          {{ $featuredImage = $post.Params.image }}
+        {{ else if $post.Params.featured_image }}
+          {{ $featuredImage = $post.Params.featured_image }}
+        {{ else }}
+          <!-- Extract first image from content if no featured image is set -->
+          {{ $content := $post.RawContent }}
+          {{ $imageMatches := findRE `!\[.*?\]\(([^)]+)\)` $content 1 }}
+          {{ if $imageMatches }}
+            {{ $imageMatch := index $imageMatches 0 }}
+            {{ $urlMatches := findRE `\(([^)]+)\)` $imageMatch 1 }}
+            {{ if $urlMatches }}
+              {{ $urlMatch := index $urlMatches 0 }}
+              {{ $featuredImage = strings.TrimPrefix (strings.TrimSuffix $urlMatch ")") "(" }}
+            {{ end }}
+          {{ end }}
+        {{ end }}
+        
+        {{ if $featuredImage }}
+        <div class="relative h-80 w-full overflow-hidden">
+          <img src="{{ $featuredImage }}" alt="{{ $post.Title }}" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+          <div class="absolute top-4 left-4">
+            <span class="rounded-full bg-gradient-to-r from-orange-500 to-red-500 px-4 py-2 text-sm font-bold text-white shadow-lg backdrop-blur-sm">
+              ⭐ FEATURED
+            </span>
+          </div>
+        </div>
+        {{ else }}
+        <!-- Fallback gradient background if no image -->
+        <div class="relative h-80 w-full bg-gradient-to-br from-orange-500 via-red-500 to-pink-600 flex items-center justify-center">
+          <div class="text-center text-white">
+            <div class="text-6xl mb-4">📝</div>
+            <div class="text-xl font-bold">{{ $post.Title | truncate 30 }}</div>
+          </div>
+          <div class="absolute top-4 left-4">
+            <span class="rounded-full bg-black/30 backdrop-blur-sm px-4 py-2 text-sm font-bold text-white shadow-lg">
+              ⭐ FEATURED
+            </span>
+          </div>
         </div>
         {{ end }}
+        
         <div class="p-8">
-          <div class="mb-2 flex items-center gap-2">
-            <span class="rounded-full bg-gradient-to-r from-orange-500 to-red-500 px-3 py-1 text-xs font-semibold text-white shadow-md">FEATURED</span>
-            <time class="text-sm text-neutral-600" datetime="{{ $post.Date.Format "2006-01-02" }}">
-              {{ $post.Date.Format "Jan 2, 2006" }}
+          <div class="mb-4 flex items-center gap-3">
+            <time class="text-sm font-medium text-neutral-600 bg-neutral-100 px-3 py-1 rounded-full" datetime="{{ $post.Date.Format "2006-01-02" }}">
+              📅 {{ $post.Date.Format "Jan 2, 2006" }}
             </time>
+            {{ if $post.ReadingTime }}
+            <span class="text-sm font-medium text-neutral-600 bg-neutral-100 px-3 py-1 rounded-full">
+              ⏱️ {{ $post.ReadingTime }} min read
+            </span>
+            {{ end }}
           </div>
           
-          <header class="mb-4">
-            <h3 class="mb-3 text-3xl font-bold text-neutral-900">
+          <header class="mb-6">
+            <h3 class="mb-4 text-4xl font-bold text-neutral-900 leading-tight">
               <a href="{{ $post.RelPermalink }}" class="hover:text-orange-600 transition-colors">{{ $post.Title }}</a>
             </h3>
           </header>
           
           {{ if $post.Summary }}
-          <p class="mb-6 text-lg text-neutral-700 leading-relaxed">{{ $post.Summary }}</p>
+          <p class="mb-8 text-xl text-neutral-700 leading-relaxed">{{ $post.Summary }}</p>
           {{ else if $post.Content }}
-          <p class="mb-6 text-lg text-neutral-700 leading-relaxed">{{ $post.Plain | truncate 200 }}</p>
+          <p class="mb-8 text-xl text-neutral-700 leading-relaxed">{{ $post.Plain | truncate 250 }}</p>
           {{ end }}
           
-          <div class="flex items-center justify-between">
+          <div class="flex items-center justify-between flex-wrap gap-4">
             {{ if $post.Params.tags }}
             <div class="flex flex-wrap gap-2">
               {{ range first 4 $post.Params.tags }}
-              <span class="rounded-full bg-neutral-100 border border-neutral-300 px-3 py-1 text-xs text-neutral-700 hover:bg-neutral-200 transition-colors">
-                {{ . }}
+              <span class="rounded-full bg-gradient-to-r from-orange-100 to-red-100 border border-orange-200 px-4 py-2 text-sm font-medium text-orange-800 hover:from-orange-200 hover:to-red-200 transition-all">
+                #{{ . }}
               </span>
               {{ end }}
             </div>
             {{ end }}
             
-            <a href="{{ $post.RelPermalink }}" class="inline-flex items-center rounded-lg bg-gradient-to-r from-orange-600 to-red-600 px-6 py-3 text-sm font-semibold text-white hover:from-orange-700 hover:to-red-700 transition-all shadow-md hover:shadow-lg">
-              Read More →
+            <a href="{{ $post.RelPermalink }}" class="inline-flex items-center rounded-lg bg-gradient-to-r from-orange-600 to-red-600 px-8 py-4 text-base font-bold text-white hover:from-orange-700 hover:to-red-700 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+              Read Full Article →
             </a>
           </div>
         </div>
@@ -68,39 +111,68 @@
       {{ if eq $index 1 }}
       <div class="grid gap-6 md:grid-cols-2">
       {{ end }}
-        <article class="card overflow-hidden rounded-lg transition-all hover:shadow-xl bg-white border border-neutral-200 shadow-md hover:shadow-lg">
+        <article class="card overflow-hidden rounded-lg transition-all hover:shadow-xl bg-white border border-neutral-200 shadow-md hover:shadow-lg group">
+          {{ $cardImage := "" }}
           {{ if $post.Params.image }}
-          <div class="h-40 w-full">
-            <img src="{{ $post.Params.image }}" alt="{{ $post.Title }}" class="h-full w-full object-cover">
+            {{ $cardImage = $post.Params.image }}
+          {{ else if $post.Params.featured_image }}
+            {{ $cardImage = $post.Params.featured_image }}
+          {{ else }}
+            <!-- Extract first image from content if no featured image is set -->
+            {{ $content := $post.RawContent }}
+            {{ $imageMatches := findRE `!\[.*?\]\(([^)]+)\)` $content 1 }}
+            {{ if $imageMatches }}
+              {{ $imageMatch := index $imageMatches 0 }}
+              {{ $urlMatches := findRE `\(([^)]+)\)` $imageMatch 1 }}
+              {{ if $urlMatches }}
+                {{ $urlMatch := index $urlMatches 0 }}
+                {{ $cardImage = strings.TrimPrefix (strings.TrimSuffix $urlMatch ")") "(" }}
+              {{ end }}
+            {{ end }}
+          {{ end }}
+          
+          {{ if $cardImage }}
+          <div class="relative h-48 w-full overflow-hidden">
+            <img src="{{ $cardImage }}" alt="{{ $post.Title }}" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
+          </div>
+          {{ else }}
+          <!-- Fallback gradient background if no image -->
+          <div class="h-48 w-full bg-gradient-to-br from-orange-400 via-red-400 to-pink-500 flex items-center justify-center">
+            <div class="text-center text-white">
+              <div class="text-3xl mb-2">📝</div>
+              <div class="text-sm font-medium">{{ $post.Title | truncate 20 }}</div>
+            </div>
           </div>
           {{ end }}
+          
           <div class="p-6">
-            <header class="mb-3">
-              <h3 class="mb-2 text-lg font-semibold text-neutral-900">
+            <header class="mb-4">
+              <h3 class="mb-3 text-xl font-bold text-neutral-900 leading-tight">
                 <a href="{{ $post.RelPermalink }}" class="hover:text-orange-600 transition-colors">{{ $post.Title }}</a>
               </h3>
               
-              <div class="flex flex-wrap items-center gap-3 text-sm text-neutral-600">
-                <time datetime="{{ $post.Date.Format "2006-01-02" }}">
-                  {{ $post.Date.Format "Jan 2, 2006" }}
+              <div class="flex flex-wrap items-center gap-2 text-xs text-neutral-600">
+                <time class="bg-neutral-100 px-2 py-1 rounded-full" datetime="{{ $post.Date.Format "2006-01-02" }}">
+                  📅 {{ $post.Date.Format "Jan 2" }}
                 </time>
                 {{ if $post.ReadingTime }}
-                <span>{{ $post.ReadingTime }} min read</span>
+                <span class="bg-neutral-100 px-2 py-1 rounded-full">⏱️ {{ $post.ReadingTime }}m</span>
                 {{ end }}
               </div>
             </header>
             
             {{ if $post.Summary }}
-            <p class="mb-4 text-neutral-700 text-sm">{{ $post.Summary | truncate 100 }}</p>
+            <p class="mb-4 text-neutral-700 text-sm leading-relaxed">{{ $post.Summary | truncate 120 }}</p>
             {{ else if $post.Content }}
-            <p class="mb-4 text-neutral-700 text-sm">{{ $post.Plain | truncate 100 }}</p>
+            <p class="mb-4 text-neutral-700 text-sm leading-relaxed">{{ $post.Plain | truncate 120 }}</p>
             {{ end }}
             
             {{ if $post.Params.tags }}
             <div class="flex flex-wrap gap-2">
-              {{ range first 2 $post.Params.tags }}
-              <span class="rounded-full bg-gradient-to-r from-orange-500 to-red-500 px-3 py-1 text-xs text-white shadow-sm">
-                {{ . }}
+              {{ range first 3 $post.Params.tags }}
+              <span class="rounded-full bg-gradient-to-r from-orange-500 to-red-500 px-3 py-1 text-xs font-medium text-white shadow-sm">
+                #{{ . }}
               </span>
               {{ end }}
             </div>

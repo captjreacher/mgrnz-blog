@@ -3,89 +3,169 @@ title: "Subscribe"
 url: "/subscribe/"
 ---
 
-Want new posts by email? Pop your address below.
+<style>
+.subscribe-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+}
 
-<style type="text/css">
-@import url("https://assets.mlcdn.com/fonts.css?version=1761560");
+.subscribe-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.subscribe-header h1 {
+    color: #ff4f00;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+.subscribe-header p {
+    color: #666;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.ml-embedded {
+    margin: 0 auto;
+}
+
+/* Custom styling for MailerLite form */
+.ml-form-embedContainer {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+}
+
+.benefits {
+    margin-top: 40px;
+    text-align: center;
+}
+
+.benefits h3 {
+    color: #333;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+.benefits ul {
+    list-style: none;
+    padding: 0;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.benefits li {
+    color: #666;
+    margin-bottom: 12px;
+    padding-left: 24px;
+    position: relative;
+}
+
+.benefits li:before {
+    content: "✓";
+    color: #ff4f00;
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+}
 </style>
 
-<style type="text/css">
-/* LOADER */
-.ml-form-embedSubmitLoad {display: inline-block;width: 20px;height: 20px;}
-.g-recaptcha {transform: scale(1);-webkit-transform: scale(1);transform-origin: 0 0;-webkit-transform-origin: 0 0;}
-.sr-only {position: absolute;width: 1px;height: 1px;padding: 0;margin: -1px;overflow: hidden;clip: rect(0,0,0,0);border: 0;}
-.ml-form-embedSubmitLoad:after {content: " ";display: block;width: 11px;height: 11px;margin: 1px;border-radius: 50%;border: 4px solid #fff;border-color: #ffffff #ffffff #ffffff transparent;animation: ml-form-embedSubmitLoad 1.2s linear infinite;}
-@keyframes ml-form-embedSubmitLoad {0% {transform: rotate(0deg);}100% {transform: rotate(360deg);}}
-#mlb2-32599344.ml-form-embedContainer {box-sizing: border-box;display: table;margin: 0 auto;position: static;width: 100% !important;}
-#mlb2-32599344.ml-form-embedContainer .ml-form-embedWrapper {background-color: #ff4f00 !important;border-width: 0px;border-color: transparent;border-radius: 4px;border-style: solid;box-sizing: border-box;display: inline-block !important;margin: 0;padding: 0;position: relative;width: 400px;max-width: 100%;}
-#mlb2-32599344.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody {padding: 20px 20px 0 20px;}
-#mlb2-32599344.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-embedContent h4 {color: #ffffff;font-family: 'Poppins', sans-serif;font-size: 30px;font-weight: 700;margin: 0 0 10px 0;text-align: left;}
-#mlb2-32599344.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-embedContent p {color: #ffffff;font-family: 'Open Sans', Arial, Helvetica, sans-serif;font-size: 15px;font-weight: 400;line-height: 21px;margin: 0 0 10px 0;text-align: left;}
-#mlb2-32599344.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-fieldRow {margin: 0 0 10px 0;width: 100%;}
-#mlb2-32599344.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-fieldRow input {background-color: #ffffff !important;color: #333333 !important;border-color: #fff6f6;border-radius: 4px !important;border-style: solid !important;border-width: 0px !important;font-family: 'Poppins', sans-serif;font-size: 14px !important;height: auto;line-height: 21px !important;margin-bottom: 0;margin-top: 0;margin-left: 0;margin-right: 0;padding: 10px 10px !important;width: 100% !important;box-sizing: border-box !important;}
-#mlb2-32599344.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-embedSubmit {margin: 0 0 20px 0;float: left;width: 100%;}
-#mlb2-32599344.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-embedSubmit button {background-color: #000000 !important;border: none !important;border-radius: 4px !important;box-shadow: none !important;color: #ffffff !important;cursor: pointer;font-family: 'Open Sans', Arial, Helvetica, sans-serif !important;font-size: 14px !important;font-weight: 700 !important;line-height: 21px !important;height: auto;padding: 10px !important;width: 100% !important;box-sizing: border-box !important;}
-#mlb2-32599344.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-embedSubmit button:hover {background-color: #333333 !important;}
-.ml-form-recaptcha {margin-bottom: 20px;}
-</style>
-
-<div id="mlb2-32599344" class="ml-form-embedContainer ml-subscribe-form ml-subscribe-form-32599344">
-  <div class="ml-form-align-center">
-    <div class="ml-form-embedWrapper embedForm">
-      <div class="ml-form-embedBody ml-form-embedBodyDefault row-form">
-        <div class="ml-form-embedContent">
-          <h4>Mike's Blog</h4>
-          <p>Signup for my written articles, news and special offers.</p>
-        </div>
-        <form class="ml-block-form" action="https://assets.mailerlite.com/jsonp/1849787/forms/169453382423020905/subscribe" data-code="" method="post" target="_blank">
-          <div class="ml-form-formContent">
-            <div class="ml-form-fieldRow">
-              <div class="ml-field-group ml-field-name">
-                <input aria-label="name" type="text" class="form-control" name="fields[name]" placeholder="Name" autocomplete="given-name">
-              </div>
-            </div>
-            <div class="ml-form-fieldRow">
-              <div class="ml-field-group ml-field-last_name">
-                <input aria-label="last_name" type="text" class="form-control" name="fields[last_name]" placeholder="Last name" autocomplete="family-name">
-              </div>
-            </div>
-            <div class="ml-form-fieldRow ml-last-item">
-              <div class="ml-field-group ml-field-email ml-validate-email ml-validate-required">
-                <input aria-label="email" aria-required="true" type="email" class="form-control" name="fields[email]" placeholder="Email" autocomplete="email">
-              </div>
-            </div>
-          </div>
-          <div class="ml-form-recaptcha ml-validate-required">
-            <div class="g-recaptcha" data-sitekey="6Lf1KHQUAAAAAFNKEX1hdSWCS3mRMv4FlFaNslaD"></div>
-          </div>
-          <input type="hidden" name="ml-submit" value="1">
-          <div class="ml-form-embedSubmit">
-            <button type="submit" class="primary">Subscribe</button>
-            <button disabled="disabled" style="display: none;" type="button" class="loading">
-              <div class="ml-form-embedSubmitLoad"></div>
-              <span class="sr-only">Loading...</span>
-            </button>
-          </div>
-          <input type="hidden" name="anticsrf" value="true">
-        </form>
-      </div>
-      <div class="ml-form-successBody row-success" style="display: none">
-        <div class="ml-form-successContent">
-          <h4>Thank you!</h4>
-          <p>You have successfully joined our subscriber list.</p>
-        </div>
-      </div>
+<div class="subscribe-container">
+    <div class="subscribe-header">
+        <h1>Subscribe to Mike's Blog</h1>
+        <p>Get the latest insights on AI, technology, and business delivered straight to your inbox. Join our community of forward-thinking professionals.</p>
     </div>
-  </div>
+
+    <!-- MailerLite Embedded Form -->
+    <div class="ml-embedded" data-form="169453382423020905"></div>
+
+    <div class="benefits">
+        <h3>What You'll Get:</h3>
+        <ul>
+            <li>Weekly insights on AI and technology trends</li>
+            <li>Business strategy and innovation tips</li>
+            <li>Exclusive content not available on the blog</li>
+            <li>Early access to new posts and announcements</li>
+        </ul>
+    </div>
 </div>
 
 <script>
-function ml_webform_success_32599344() {
-  var $ = ml_jQuery || jQuery;
-  $('.ml-subscribe-form-32599344 .row-success').show();
-  $('.ml-subscribe-form-32599344 .row-form').hide();
+// Initialize MailerLite form after page load
+document.addEventListener('DOMContentLoaded', function() {
+    // The MailerLite Universal script will automatically initialize embedded forms
+    if (typeof ml !== 'undefined') {
+        ml('forms', 'load');
+        
+        // Add custom form validation and error handling
+        setTimeout(() => {
+            const embeddedForm = document.querySelector('.ml-embedded form');
+            if (embeddedForm) {
+                embeddedForm.addEventListener('submit', function(e) {
+                    const email = this.querySelector('input[type="email"]');
+                    if (email && (!email.value || !email.value.includes('@'))) {
+                        e.preventDefault();
+                        alert('Please enter a valid email address.');
+                        email.focus();
+                        return false;
+                    }
+                });
+            }
+        }, 2000); // Wait for MailerLite to initialize
+    } else {
+        // Fallback if MailerLite Universal script fails to load
+        console.warn('MailerLite Universal script not loaded. Form may not work properly.');
+        
+        // Show fallback message
+        setTimeout(() => {
+            const container = document.querySelector('.ml-embedded');
+            if (container && !container.innerHTML.trim()) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 40px; background: #f8f9fa; border-radius: 8px; border: 2px dashed #dee2e6;">
+                        <h3 style="color: #6c757d; margin-bottom: 16px;">Form Loading Issue</h3>
+                        <p style="color: #6c757d; margin-bottom: 20px;">The subscription form is having trouble loading. You can still subscribe using the link below:</p>
+                        <a href="https://dashboard.mailerlite.com/forms/1849787/169453382423020905/share" 
+                           target="_blank" 
+                           style="display: inline-block; background: #ff4f00; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: bold;">
+                           Subscribe via MailerLite →
+                        </a>
+                    </div>
+                `;
+            }
+        }, 5000);
+    }
+});
+
+// Function to check if subscription was successful
+function checkSubscriptionStatus() {
+    // Check if user recently subscribed
+    const subscriptionTime = localStorage.getItem('subscription_time');
+    if (subscriptionTime) {
+        const timeDiff = Date.now() - parseInt(subscriptionTime);
+        if (timeDiff < 300000) { // 5 minutes
+            // Show success message if recently subscribed
+            const container = document.querySelector('.subscribe-container');
+            if (container) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 40px;">
+                        <div style="width: 80px; height: 80px; background: #28a745; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                            <span style="color: white; font-size: 40px;">✓</span>
+                        </div>
+                        <h1 style="color: #28a745; margin-bottom: 16px;">Already Subscribed!</h1>
+                        <p style="color: #666;">You recently subscribed to our newsletter. Thank you!</p>
+                        <p style="margin-top: 20px;"><a href="/" style="color: #ff4f00;">← Back to Blog</a></p>
+                    </div>
+                `;
+            }
+        }
+    }
 }
+
+// Check subscription status on page load
+checkSubscriptionStatus();
 </script>
-<script src="https://www.google.com/recaptcha/api.js"></script>
-<script src="https://groot.mailerlite.com/js/w/webforms.min.js?v176e10baa5e7ed80d35ae235be3d5024" type="text/javascript"></script>
-<script>fetch("https://assets.mailerlite.com/jsonp/1849787/forms/169453382423020905/takel")</script>

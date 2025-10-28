@@ -141,7 +141,7 @@
               👁️ View
             </a>
             
-            <button onclick="editPost('{{ .File.BaseFileName }}', '{{ .Title }}', '{{ .Date.Format "2006-01-02" }}', {{ .Params.tags | jsonify }}, {{ .Params.categories | jsonify }}, '{{ .Summary }}', {{ .Draft }})"
+            <button onclick="editPost('{{ .File.BaseFileName }}', '{{ .Title }}', '{{ .Date.Format "2006-01-02" }}', {{ .Params.tags | default slice | jsonify }}, {{ .Params.categories | default slice | jsonify }}, '{{ .Summary }}', {{ .Draft }})"
                     class="inline-flex items-center rounded-lg bg-orange-600 hover:bg-orange-700 px-3 py-1.5 text-xs font-medium text-white transition-colors"
                     title="Edit Post">
               ✏️ Edit
@@ -179,9 +179,9 @@
 </div>
 
 <!-- Edit Post Modal -->
-<div id="editModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+<div id="editModal" class="fixed inset-0 z-[60] hidden overflow-y-auto" style="display: none;">
   <div class="flex min-h-screen items-center justify-center px-4">
-    <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity"></div>
+    <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity" onclick="closeEditModal()"></div>
     
     <div class="relative w-full max-w-4xl rounded-lg bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto">
       <div class="mb-4 flex items-center justify-between">
@@ -289,19 +289,46 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function editPost(slug, title, date, tags, categories, summary, draft) {
-  document.getElementById('editSlug').value = slug;
-  document.getElementById('editTitle').value = title;
-  document.getElementById('editDate').value = date;
-  document.getElementById('editTags').value = (tags || []).join(', ');
-  document.getElementById('editCategories').value = (categories || []).join(', ');
-  document.getElementById('editSummary').value = summary || '';
-  document.getElementById('editContent').value = 'Loading content...';
-  document.getElementById('editDraft').checked = draft;
+  console.log('Edit button clicked for:', slug);
   
-  // Load content separately to avoid JavaScript escaping issues
-  loadPostContent(slug);
+  // Test if modal exists
+  const modal = document.getElementById('editModal');
+  if (!modal) {
+    alert('Error: Edit modal not found in DOM');
+    return;
+  }
   
-  document.getElementById('editModal').classList.remove('hidden');
+  // Test if form elements exist
+  const elements = ['editSlug', 'editTitle', 'editDate', 'editTags', 'editCategories', 'editSummary', 'editContent', 'editDraft'];
+  for (const id of elements) {
+    if (!document.getElementById(id)) {
+      alert(`Error: Element ${id} not found`);
+      return;
+    }
+  }
+  
+  try {
+    document.getElementById('editSlug').value = slug;
+    document.getElementById('editTitle').value = title;
+    document.getElementById('editDate').value = date;
+    document.getElementById('editTags').value = Array.isArray(tags) ? tags.join(', ') : (tags || '');
+    document.getElementById('editCategories').value = Array.isArray(categories) ? categories.join(', ') : (categories || '');
+    document.getElementById('editSummary').value = summary || '';
+    document.getElementById('editContent').value = 'Loading content...';
+    document.getElementById('editDraft').checked = draft;
+    
+    // Load content separately to avoid JavaScript escaping issues
+    loadPostContent(slug);
+    
+    // Show modal
+    modal.classList.remove('hidden');
+    modal.style.display = 'block';
+    
+    console.log('Modal should be visible now');
+  } catch (error) {
+    alert('Error opening edit modal: ' + error.message);
+    console.error('Edit modal error:', error);
+  }
 }
 
 function loadPostContent(slug) {
@@ -335,7 +362,11 @@ console.log('Hello world');
 }
 
 function closeEditModal() {
-  document.getElementById('editModal').classList.add('hidden');
+  const modal = document.getElementById('editModal');
+  if (modal) {
+    modal.classList.add('hidden');
+    modal.style.display = 'none';
+  }
 }
 
 async function debugPath(filePath, title, isFolder) {

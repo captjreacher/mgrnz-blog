@@ -4,44 +4,175 @@
   {{ partial "head.html" . }}
   <title>{{ .Title }} - Admin | {{ .Site.Title }}</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/css/admin-fix.css">
   <style>
     body { background-color: #0f172a !important; }
   </style>
 </head>
 <body class="min-h-screen bg-neutral-900 text-white">
-  <!-- Admin Header -->
-  <header class="sticky top-0 z-20 border-b border-neutral-700 bg-neutral-800">
-    <div class="flex items-center justify-between px-6 py-4">
-      <div class="flex items-center gap-4">
-        <a href="{{ "/" | relURL }}" class="text-orange-500 hover:text-orange-400 transition-colors">
-          ← Back to Site
-        </a>
-        <h1 class="text-xl font-bold text-white">{{ .Title }}</h1>
-      </div>
-      
-      <nav class="flex items-center space-x-4">
-        <a href="/admin/" class="rounded-lg px-3 py-2 text-sm font-medium text-neutral-300 hover:bg-neutral-700 hover:text-white transition-colors">
-          📊 Dashboard
-        </a>
-        <a href="/admin-form-v2.html" class="rounded-lg px-3 py-2 text-sm font-medium text-neutral-300 hover:bg-neutral-700 hover:text-white transition-colors">
-          ✏️ Create
-        </a>
-        <a href="/admin/posts/" class="rounded-lg px-3 py-2 text-sm font-medium text-neutral-300 hover:bg-neutral-700 hover:text-white transition-colors">
-          📝 Posts
-        </a>
-        <button onclick="manageGitHubToken()" class="rounded-lg px-3 py-2 text-sm font-medium text-neutral-300 hover:bg-neutral-700 hover:text-white transition-colors">
-          ⚙️ Settings
-        </button>
-      </nav>
-    </div>
-  </header>
 
-  <!-- Main Content -->
-  <main class="mx-auto max-w-6xl px-6 py-8">
-    {{ block "main" . }}{{ end }}
-  </main>
+  <!-- Authentication Screen -->
+  <div id="authScreen" class="min-h-screen flex items-center justify-center">
+    <div class="w-full max-w-md">
+      <div class="bg-neutral-800 p-8 rounded-lg shadow-xl border border-neutral-700">
+        <div class="text-center mb-8">
+          <h1 class="text-3xl font-bold text-orange-400 mb-2">Blog Admin</h1>
+          <p class="text-neutral-400">Authentication required</p>
+        </div>
+        
+        <form onsubmit="authenticate(event)" class="space-y-6">
+          <div>
+            <label class="block text-sm font-medium text-neutral-300 mb-2">Access Code</label>
+            <input id="accessCode" type="password" required
+                   placeholder="Enter your access code"
+                   class="w-full bg-neutral-700 border border-neutral-600 rounded-lg px-4 py-3 text-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20">
+          </div>
+          
+          <div id="authError" class="hidden p-3 bg-red-900 border border-red-700 rounded-lg">
+            <p class="text-red-300 text-sm">Invalid access code. Please try again.</p>
+          </div>
+          
+          <button type="submit" id="authButton"
+                  class="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold py-3 px-6 rounded-lg transition-all">
+            🔐 Access Admin
+          </button>
+        </form>
+        
+        <div class="mt-6 text-center">
+          <p class="text-xs text-neutral-500">
+            Secure access • Session expires in 24 hours
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin Interface -->
+  <div id="adminInterface" class="hidden">
+    <!-- Admin Header -->
+    <header class="sticky top-0 z-20 border-b border-neutral-700 bg-neutral-800">
+      <div class="flex items-center justify-between px-6 py-4">
+        <div class="flex items-center gap-4">
+          <a href="{{ "/" | relURL }}" class="text-orange-500 hover:text-orange-400 transition-colors">
+            ← Back to Site
+          </a>
+          <h1 class="text-xl font-bold text-white">{{ .Title }}</h1>
+          <span class="px-2 py-1 bg-green-900 text-green-300 text-xs rounded-full">Authenticated</span>
+        </div>
+        
+        <nav class="flex items-center space-x-4">
+          <a href="/admin/" class="rounded-lg px-3 py-2 text-sm font-medium text-neutral-300 hover:bg-neutral-700 hover:text-white transition-colors">
+            📊 Dashboard
+          </a>
+          <a href="/admin-form-v2.html" class="rounded-lg px-3 py-2 text-sm font-medium text-neutral-300 hover:bg-neutral-700 hover:text-white transition-colors">
+            ✏️ Create
+          </a>
+          <a href="/admin/posts/" class="rounded-lg px-3 py-2 text-sm font-medium text-neutral-300 hover:bg-neutral-700 hover:text-white transition-colors">
+            📝 Posts
+          </a>
+          <button onclick="manageGitHubToken()" class="rounded-lg px-3 py-2 text-sm font-medium text-neutral-300 hover:bg-neutral-700 hover:text-white transition-colors">
+            ⚙️ Settings
+          </button>
+          <div class="border-l border-neutral-600 pl-4">
+            <button onclick="logout()" class="rounded-lg px-3 py-2 text-sm font-medium text-red-400 hover:bg-red-900 hover:text-red-300 transition-colors">
+              🚪 Logout
+            </button>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="mx-auto max-w-6xl px-6 py-8">
+      {{ block "main" . }}{{ end }}
+    </main>
+  </div>
 
   <script>
+    function checkAuthentication() {
+      const authToken = localStorage.getItem('admin_auth_token');
+      const authTime = localStorage.getItem('admin_auth_time');
+      
+      if (authToken && authTime) {
+        const now = new Date().getTime();
+        const authAge = now - parseInt(authTime);
+        const twentyFourHours = 24 * 60 * 60 * 1000;
+        
+        if (authAge < twentyFourHours) {
+          // User is authenticated, show admin interface
+          showAdminInterface();
+          return;
+        } else {
+          // Session expired, clear tokens
+          localStorage.removeItem('admin_auth_token');
+          localStorage.removeItem('admin_auth_time');
+        }
+      }
+      
+      // User not authenticated, show login screen
+      showAuthScreen();
+    }
+    
+    function showAuthScreen() {
+      document.getElementById('authScreen').classList.remove('hidden');
+      document.getElementById('adminInterface').classList.add('hidden');
+    }
+    
+    function showAdminInterface() {
+      document.getElementById('authScreen').classList.add('hidden');
+      document.getElementById('adminInterface').classList.remove('hidden');
+    }
+    
+    function authenticate(event) {
+      event.preventDefault();
+      
+      const accessCode = document.getElementById('accessCode').value;
+      const authButton = document.getElementById('authButton');
+      const authError = document.getElementById('authError');
+      
+      // Show loading state
+      authButton.innerHTML = '⏳ Verifying...';
+      authButton.disabled = true;
+      authError.classList.add('hidden');
+      
+      // Simulate authentication delay
+      setTimeout(() => {
+        const validCodes = ['admin2025', 'mgrnz-admin', 'blog-secure', 'admin', 'mgrnz2025'];
+        
+        if (validCodes.includes(accessCode)) {
+          // Generate and store auth token
+          const authToken = generateAuthToken();
+          localStorage.setItem('admin_auth_token', authToken);
+          localStorage.setItem('admin_auth_time', new Date().getTime().toString());
+          
+          // Show admin interface
+          showAdminInterface();
+          
+          // Clear form
+          document.getElementById('accessCode').value = '';
+        } else {
+          // Show error
+          authError.classList.remove('hidden');
+        }
+        
+        // Reset button
+        authButton.innerHTML = '🔐 Access Admin';
+        authButton.disabled = false;
+      }, 1000);
+    }
+    
+    function generateAuthToken() {
+      const timestamp = new Date().getTime();
+      const random = Math.random().toString(36).substring(2);
+      return btoa(`${timestamp}-${random}`);
+    }
+    
+    function logout() {
+      localStorage.removeItem('admin_auth_token');
+      localStorage.removeItem('admin_auth_time');
+      showAuthScreen();
+    }
+    
     function manageGitHubToken() {
       const currentToken = localStorage.getItem('github_token');
       const hasToken = currentToken ? 'Yes (hidden for security)' : 'No';
@@ -60,6 +191,16 @@
           alert('✅ GitHub token cleared.');
         }
       }
+    }
+    
+    // Initialize authentication check when DOM is ready
+    document.addEventListener('DOMContentLoaded', checkAuthentication);
+    
+    // Also run immediately in case DOMContentLoaded already fired
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', checkAuthentication);
+    } else {
+      checkAuthentication();
     }
   </script>
 </body>

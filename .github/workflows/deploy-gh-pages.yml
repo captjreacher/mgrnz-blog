@@ -15,9 +15,10 @@ on:
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
+  actions: read
 
 # Allow only one concurrent deployment
 concurrency:
@@ -36,6 +37,7 @@ jobs:
       - name: Checkout submodules
         run: |
           git submodule update --init --recursive
+          git submodule status
 
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
@@ -43,8 +45,15 @@ jobs:
           hugo-version: '0.150.1'
           extended: true
 
+      - name: Verify Hugo installation
+        run: hugo version
+
       - name: Build with Hugo
-        run: hugo --gc --minify
+        run: |
+          echo "Building Hugo site..."
+          hugo --gc --minify
+          echo "Build completed. Checking output..."
+          ls -la public/
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
@@ -52,6 +61,6 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
           publish_branch: gh-pages
-          cname: www.mgrnz.com
+          cname: mgrnz.com
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
