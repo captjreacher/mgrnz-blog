@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pipeline Monitoring Dashboard</title>
+    <link rel="stylesheet" href="/static/dashboard.css">
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-content">
+                <h1>Pipeline Monitoring Dashboard</h1>
+                <div class="connection-status">
+                    <span id="connection-indicator" class="status-indicator disconnected"></span>
+                    <span id="connection-text">Connecting...</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Dashboard -->
+        <main class="dashboard-main">
+            <!-- System Status Overview -->
+            <section class="status-overview">
+                <h2>System Status</h2>
+                <div class="status-cards">
+                    <div class="status-card">
+                        <h3>Pipeline Status</h3>
+                        <div id="pipeline-status" class="status-value">Loading...</div>
+                    </div>
+                    <div class="status-card">
+                        <h3>Active Runs</h3>
+                        <div id="active-runs" class="status-value">0</div>
+                    </div>
+                    <div class="status-card">
+                        <h3>Success Rate</h3>
+                        <div id="success-rate" class="status-value">0%</div>
+                    </div>
+                    <div class="status-card">
+                        <h3>Avg Duration</h3>
+                        <div id="avg-duration" class="status-value">0s</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Real-time Pipeline Runs -->
+            <section class="pipeline-runs">
+                <h2>Recent Pipeline Runs</h2>
+                <div class="runs-controls">
+                    <button id="refresh-runs" class="btn btn-primary">Refresh</button>
+                    <select id="status-filter">
+                        <option value="">All Statuses</option>
+                        <option value="running">Running</option>
+                        <option value="completed">Completed</option>
+                        <option value="failed">Failed</option>
+                    </select>
+                </div>
+                <div id="runs-container" class="runs-list">
+                    <div class="loading">Loading pipeline runs...</div>
+                </div>
+            </section>
+
+            <!-- Alerts Section -->
+            <section class="alerts-section">
+                <h2>Active Alerts</h2>
+                <div id="alerts-container" class="alerts-list">
+                    <div class="no-alerts">No active alerts</div>
+                </div>
+            </section>
+
+            <!-- Performance Metrics -->
+            <section class="metrics-section">
+                <h2>Performance Metrics</h2>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <h3>Webhook Latency</h3>
+                        <div id="webhook-latency" class="metric-value">0ms</div>
+                        <div class="metric-trend" id="webhook-trend"></div>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Build Time</h3>
+                        <div id="build-time" class="metric-value">0s</div>
+                        <div class="metric-trend" id="build-trend"></div>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Deploy Time</h3>
+                        <div id="deploy-time" class="metric-value">0s</div>
+                        <div class="metric-trend" id="deploy-trend"></div>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Site Response</h3>
+                        <div id="site-response" class="metric-value">0ms</div>
+                        <div class="metric-trend" id="site-trend"></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Real-time Activity Feed -->
+        <aside class="activity-feed">
+            <h3>Live Activity</h3>
+            <div id="activity-container" class="activity-list">
+                <div class="activity-item">
+                    <span class="activity-time">--:--:--</span>
+                    <span class="activity-message">Waiting for activity...</span>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Modal for Pipeline Run Details -->
+    <div id="run-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Pipeline Run Details</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="run-details-content">
+                    Loading...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/static/dashboard.js"></script>
+</body>
+</html>

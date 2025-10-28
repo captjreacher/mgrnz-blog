@@ -1,0 +1,32 @@
+{
+  "name": "automated-test-cycle-monitor",
+  "version": "1.0.0",
+  "description": "Comprehensive monitoring system for mgrnz.com deployment pipeline",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "vitest --run",
+    "test:watch": "vitest",
+    "dev": "node --watch src/index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "jsdom": "^27.0.1",
+    "node-fetch": "^3.3.2",
+    "uuid": "^9.0.1",
+    "ws": "^8.14.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "vitest": "^1.0.0"
+  },
+  "keywords": [
+    "monitoring",
+    "deployment",
+    "pipeline",
+    "automation"
+  ],
+  "author": "mgrnz.com",
+  "license": "MIT"
+}

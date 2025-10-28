@@ -1,0 +1,47 @@
+.pda-protected-grid-view .attachment-preview {
+    box-shadow: 0 0 0.5rem red;
+}
+
+.compat-field-pda_protection_setting .field {
+    float: left;
+    width: 100%;
+    margin: 0;
+}
+
+.media-frame.mode-grid .pda-protected-grid-view:focus {
+    box-shadow: inset 0 0 2px 3px #f1f1f1, inset 0 0 0 7px lightpink;
+}
+
+.wp-core-ui .attachment.details.pda-protected-grid-view,
+.wp-core-ui .attachment.details.pda-protected-grid-view:focus {
+    box-shadow: inset 0 0 2px 3px #f1f1f1, inset 0 0 0 7px lightpink;
+}
+
+.pda-protected-selection-view {
+    box-shadow: inset 0 0 2px 3px #f1f1f1, inset 0 0 0 7px lightpink;
+}
+
+.pda-protected-selection-view .attachment-preview {
+    box-shadow: none;
+}
+
+.pda-protected-selection-view .attachment.details.pda-protected-grid-view,
+.pda-protected-selection-view .attachment.details.pda-protected-grid-view:focus {
+    box-shadow: 0 0 0 1px #fff,0 0 0 3px #0073aa;
+}
+
+.pda_wrap_protection_setting input {
+    margin-top: 0 !important;
+}
+
+.pda_file_access_permission  {
+    margin-bottom: 10px;
+}
+.pda_wrap_fap {
+    margin-bottom: 0;
+    margin-top: 10px;
+}
+
+select.pda_file_access_permission {
+    width: 100% !important;
+}
