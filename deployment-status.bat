@@ -56,7 +56,7 @@ echo.
 echo STEP 3: Test Integration
 echo ----------------------------------------
 echo 1. Run: .\test-webhook-integration.bat
-echo 2. Check Cloudflare Pages dashboard
+echo 2. Check GitHub Actions workflow: Deploy Hugo to GitHub Pages
 echo 3. Test admin form: https://mgrnz.com/admin-form-v2.html
 echo.
 
@@ -65,9 +65,9 @@ echo    EXPECTED RESULTS AFTER SETUP
 echo ========================================
 echo.
 echo ✅ MailerLite campaigns will create blog posts automatically
-echo ✅ Cloudflare commits will sync with Hugo site
+echo ✅ GitHub Pages commits will sync with Hugo site
 echo ✅ Admin console changes will go live automatically
-echo ✅ Complete webhook pipeline: MailerLite → Supabase → GitHub → Cloudflare
+echo ✅ Complete webhook pipeline: MailerLite → Supabase → GitHub → GitHub Pages
 echo.
 
 echo 🔒 SECURITY: Your .env file is now safe and won't be committed

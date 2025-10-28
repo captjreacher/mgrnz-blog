@@ -4,14 +4,30 @@
  */
 
 export class WebSocketHandler {
-  constructor(wss, testCycleEngine) {
+  constructor(wss, testCycleEngine, notificationManager = null) {
     this.wss = wss;
     this.engine = testCycleEngine;
     this.clients = new Map(); // Map of client ID to client info
     this.subscriptions = new Map(); // Map of event types to client sets
     this.clientCounter = 0;
+    this.notificationManager = null;
 
     this.setupEventHandlers();
+
+    if (notificationManager) {
+      this.setNotificationManager(notificationManager);
+    }
+  }
+
+  setNotificationManager(notificationManager) {
+    this.notificationManager = notificationManager;
+
+    if (this.notificationManager?.getChannel) {
+      const dashboardChannel = this.notificationManager.getChannel('dashboard');
+      if (dashboardChannel && typeof dashboardChannel.setWebSocketHandler === 'function') {
+        dashboardChannel.setWebSocketHandler(this);
+      }
+    }
   }
 
   setupEventHandlers() {

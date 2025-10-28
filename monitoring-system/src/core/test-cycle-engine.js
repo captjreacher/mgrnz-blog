@@ -7,7 +7,7 @@ import { Validators } from '../utils/validators.js';
  * Manages pipeline runs, coordinates monitoring components, and tracks state
  */
 export class TestCycleEngine {
-  constructor(config = {}) {
+  constructor(config = {}, options = {}) {
     this.dataStore = new DataStore(config.dataDir);
     this.config = config;
     this.activePipelines = new Map();
@@ -31,7 +31,7 @@ export class TestCycleEngine {
   async initialize() {
     try {
       await this.dataStore.initialize();
-      
+
       // Load configuration from storage if available
       const storedConfig = await this.dataStore.getConfig();
       this.config = { ...storedConfig, ...this.config };
@@ -189,6 +189,8 @@ export class TestCycleEngine {
       await this._updatePipelineRun(pipelineRun);
 
       console.log(`Updated stage ${stageName} for run ${runId}: ${status}`);
+
+      await this._evaluatePipelineAlerts(pipelineRun);
     } catch (error) {
       console.error('Failed to update pipeline stage:', error.message);
       throw error;
@@ -241,6 +243,8 @@ export class TestCycleEngine {
       this.lastPipelineActivity = now;
 
       console.log(`Completed pipeline run ${runId}: ${success ? 'SUCCESS' : 'FAILED'}`);
+
+      await this._evaluatePipelineAlerts(pipelineRun);
     } catch (error) {
       console.error('Failed to complete pipeline run:', error.message);
       throw error;
@@ -276,6 +280,8 @@ export class TestCycleEngine {
       await this._updatePipelineRun(pipelineRun);
 
       console.log(`Added error to run ${runId}: ${type} - ${message}`);
+
+      await this._evaluatePipelineAlerts(pipelineRun);
     } catch (error) {
       console.error('Failed to add error:', error.message);
       throw error;
