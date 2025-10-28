@@ -172,7 +172,7 @@ export class ConfigManager {
       if (typeof config.alerts.enabled !== 'boolean') {
         errors.push('alerts.enabled must be a boolean');
       }
-      
+
       if (config.alerts.thresholds) {
         const thresholds = config.alerts.thresholds;
         if (typeof thresholds.errorRate !== 'number' || thresholds.errorRate < 0 || thresholds.errorRate > 100) {
@@ -183,6 +183,47 @@ export class ConfigManager {
         }
         if (typeof thresholds.buildTime !== 'number' || thresholds.buildTime < 0) {
           errors.push('alerts.thresholds.buildTime must be a non-negative number');
+        }
+      }
+
+      if (config.alerts.cooldowns) {
+        const cooldowns = config.alerts.cooldowns;
+        if (typeof cooldowns.default !== 'number' || cooldowns.default < 0) {
+          errors.push('alerts.cooldowns.default must be a non-negative number');
+        }
+        if (cooldowns.byType && typeof cooldowns.byType === 'object') {
+          Object.entries(cooldowns.byType).forEach(([type, value]) => {
+            if (typeof value !== 'number' || value < 0) {
+              errors.push(`alerts.cooldowns.byType.${type} must be a non-negative number`);
+            }
+          });
+        }
+      }
+
+      if (config.alerts.notifications) {
+        const notifications = config.alerts.notifications;
+        if (notifications.email) {
+          if (notifications.email.enabled && (!notifications.email.recipients || notifications.email.recipients.length === 0)) {
+            errors.push('alerts.notifications.email.recipients must include at least one recipient when email notifications are enabled');
+          }
+          if (notifications.email.smtp) {
+            const smtp = notifications.email.smtp;
+            if (smtp.port !== undefined && (typeof smtp.port !== 'number' || smtp.port <= 0)) {
+              errors.push('alerts.notifications.email.smtp.port must be a positive number');
+            }
+          }
+        }
+
+        if (notifications.webhook) {
+          if (notifications.webhook.enabled) {
+            const urlPattern = /^https?:\/\//;
+            if (!notifications.webhook.url || !urlPattern.test(notifications.webhook.url)) {
+              errors.push('alerts.notifications.webhook.url must be a valid URL when webhook notifications are enabled');
+            }
+          }
+          if (notifications.webhook.timeout !== undefined && (typeof notifications.webhook.timeout !== 'number' || notifications.webhook.timeout <= 0)) {
+            errors.push('alerts.notifications.webhook.timeout must be a positive number');
+          }
         }
       }
     }
@@ -233,6 +274,38 @@ export class ConfigManager {
           errorRate: 10,          // 10%
           responseTime: 5000,     // 5 seconds
           buildTime: 300000       // 5 minutes
+        },
+        cooldowns: {
+          default: 300000,
+          byType: {}
+        },
+        notifications: {
+          console: { enabled: true },
+          dashboard: { enabled: true },
+          email: {
+            enabled: false,
+            from: 'alerts@mgrnz.com',
+            subjectPrefix: '[mgrnz] ',
+            recipients: [],
+            notifyOnLifecycle: true,
+            smtp: {
+              host: 'smtp.example.com',
+              port: 587,
+              secure: false,
+              auth: {
+                user: '',
+                pass: ''
+              }
+            }
+          },
+          webhook: {
+            enabled: false,
+            url: '',
+            headers: {},
+            timeout: 5000,
+            verifySsl: true,
+            notifyOnLifecycle: true
+          }
         }
       },
       storage: {
