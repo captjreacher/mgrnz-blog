@@ -1,0 +1,22 @@
+{
+  "server": {
+    "host": "0.0.0.0",
+    "port": 8080,
+    "basePath": "/",
+    "websocketPath": "/ws"
+  },
+  "metrics": {
+    "defaultRange": "24h",
+    "retentionHours": 168,
+    "refreshInterval": 15000
+  },
+  "security": {
+    "corsOrigins": ["https://mgrnz.com"],
+    "rateLimitPerMinute": 120,
+    "apiKeyHeader": "x-monitoring-key"
+  },
+  "alerts": {
+    "showResolved": true,
+    "historyLimit": 200
+  }
+}
