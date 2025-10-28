@@ -1,0 +1,22 @@
+{
+  "jobs": [
+    {
+      "name": "daily-aggregate-report",
+      "interval": 86400000,
+      "aggregate": true,
+      "limit": 50,
+      "format": "html",
+      "output": "./exports/reports",
+      "fileNamePrefix": "daily-monitoring"
+    },
+    {
+      "name": "hourly-json-export",
+      "interval": 3600000,
+      "aggregate": false,
+      "runId": "latest",
+      "format": "json",
+      "output": "./exports/reports",
+      "fileNamePrefix": "latest-run"
+    }
+  ]
+}
