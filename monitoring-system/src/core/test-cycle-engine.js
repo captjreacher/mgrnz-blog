@@ -1,4 +1,6 @@
 import { DataStore } from '../storage/data-store.js';
+import { AnalyticsStore } from '../storage/analytics-store.js';
+import { AnalyticsEngine } from '../analytics/analytics-engine.js';
 import { IdGenerator } from '../utils/id-generator.js';
 import { Validators } from '../utils/validators.js';
 
@@ -9,6 +11,13 @@ import { Validators } from '../utils/validators.js';
 export class TestCycleEngine {
   constructor(config = {}, options = {}) {
     this.dataStore = new DataStore(config.dataDir);
+    this.analyticsStore = new AnalyticsStore(config.dataDir);
+    this.analyticsEngine = new AnalyticsEngine({
+      dataStore: this.dataStore,
+      analyticsStore: this.analyticsStore,
+      dataDir: config.dataDir,
+      config: config.analytics
+    });
     this.config = config;
     this.activePipelines = new Map();
     this.isRunning = false;
@@ -31,6 +40,7 @@ export class TestCycleEngine {
   async initialize() {
     try {
       await this.dataStore.initialize();
+      await this.analyticsEngine.initialize();
 
       // Load configuration from storage if available
       const storedConfig = await this.dataStore.getConfig();
@@ -239,8 +249,13 @@ export class TestCycleEngine {
       // Remove from active pipelines
       this.activePipelines.delete(runId);
 
-      this._updateMetricsSummary(success, pipelineRun.duration || 0);
-      this.lastPipelineActivity = now;
+      if (this.analyticsEngine) {
+        try {
+          await this.analyticsEngine.updateAfterRun(pipelineRun);
+        } catch (analyticsError) {
+          console.error('Failed to update analytics:', analyticsError.message);
+        }
+      }
 
       console.log(`Completed pipeline run ${runId}: ${success ? 'SUCCESS' : 'FAILED'}`);
 
