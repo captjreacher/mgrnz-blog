@@ -7,12 +7,17 @@ import { Validators } from '../utils/validators.js';
  * Manages pipeline runs, coordinates monitoring components, and tracks state
  */
 export class TestCycleEngine {
-  constructor(config = {}) {
+  constructor(config = {}, options = {}) {
     this.dataStore = new DataStore(config.dataDir);
     this.config = config;
     this.activePipelines = new Map();
     this.isRunning = false;
     this.monitoringInterval = null;
+    this.alertManager = options.alertManager || config.alertManager || null;
+    this._alertWrapInitialized = false;
+    this._originalSaveWebhookRecord = this.dataStore.saveWebhookRecord.bind(this.dataStore);
+
+    this._wrapDataStoreForAlerts();
   }
 
   /**
@@ -21,11 +26,13 @@ export class TestCycleEngine {
   async initialize() {
     try {
       await this.dataStore.initialize();
-      
+
       // Load configuration from storage if available
       const storedConfig = await this.dataStore.getConfig();
       this.config = { ...storedConfig, ...this.config };
-      
+
+      this._wrapDataStoreForAlerts();
+
       console.log('Test Cycle Engine initialized successfully');
       return true;
     } catch (error) {
@@ -177,12 +184,15 @@ export class TestCycleEngine {
       await this._updatePipelineRun(pipelineRun);
 
       console.log(`Updated stage ${stageName} for run ${runId}: ${status}`);
+
+      await this._evaluatePipelineAlerts(pipelineRun);
     } catch (error) {
       console.error('Failed to update pipeline stage:', error.message);
       throw error;
     }
-  }  /*
-*
+  }
+
+  /**
    * Complete a pipeline run
    * @param {string} runId - Pipeline run ID
    * @param {boolean} success - Whether the pipeline completed successfully
@@ -220,11 +230,13 @@ export class TestCycleEngine {
       }
 
       await this._updatePipelineRun(pipelineRun);
-      
+
       // Remove from active pipelines
       this.activePipelines.delete(runId);
 
       console.log(`Completed pipeline run ${runId}: ${success ? 'SUCCESS' : 'FAILED'}`);
+
+      await this._evaluatePipelineAlerts(pipelineRun);
     } catch (error) {
       console.error('Failed to complete pipeline run:', error.message);
       throw error;
@@ -260,6 +272,8 @@ export class TestCycleEngine {
       await this._updatePipelineRun(pipelineRun);
 
       console.log(`Added error to run ${runId}: ${type} - ${message}`);
+
+      await this._evaluatePipelineAlerts(pipelineRun);
     } catch (error) {
       console.error('Failed to add error:', error.message);
       throw error;
@@ -359,6 +373,42 @@ export class TestCycleEngine {
     if (this.activePipelines.has(pipelineRun.id)) {
       this.activePipelines.set(pipelineRun.id, pipelineRun);
     }
+  }
+
+  setAlertManager(alertManager) {
+    this.alertManager = alertManager;
+    this._alertWrapInitialized = false;
+    this._wrapDataStoreForAlerts();
+  }
+
+  async _evaluatePipelineAlerts(pipelineRun) {
+    if (!this.alertManager || !pipelineRun) {
+      return;
+    }
+
+    try {
+      await this.alertManager.checkAlerts(pipelineRun);
+    } catch (error) {
+      console.error('Failed to evaluate pipeline alerts:', error.message);
+    }
+  }
+
+  _wrapDataStoreForAlerts() {
+    if (!this.alertManager || !this.dataStore || this._alertWrapInitialized) {
+      return;
+    }
+
+    this.dataStore.saveWebhookRecord = async (webhookRecord) => {
+      const savedRecord = await this._originalSaveWebhookRecord(webhookRecord);
+      try {
+        await this.alertManager.checkWebhookAlerts(savedRecord);
+      } catch (error) {
+        console.error('Failed to process webhook alerts:', error.message);
+      }
+      return savedRecord;
+    };
+
+    this._alertWrapInitialized = true;
   }
 
   async _performPeriodicTasks() {
