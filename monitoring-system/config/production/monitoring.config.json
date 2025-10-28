@@ -1,0 +1,49 @@
+{
+  "engine": {
+    "dataDir": "./data/production",
+    "monitoring": {
+      "interval": 15000,
+      "timeout": 900000,
+      "retryAttempts": 3
+    },
+    "storage": {
+      "maxRecords": 5000,
+      "cleanupInterval": 43200000
+    },
+    "alerts": {
+      "maxHistory": 500
+    }
+  },
+  "monitors": {
+    "github": {
+      "owner": "captjreacher",
+      "repo": "mgrnz-blog",
+      "pollInterval": 60000
+    },
+    "supabase": {
+      "enabled": true,
+      "endpoint": "https://your-project.supabase.co/functions/v1/ml-to-hugo-public",
+      "timeout": 30000
+    },
+    "webhooks": {
+      "enabled": true,
+      "port": 8787,
+      "host": "0.0.0.0"
+    }
+  },
+  "endpoints": {
+    "github": "https://api.github.com/repos/captjreacher/mgrnz-blog",
+    "site": "https://mgrnz.com"
+  },
+  "notifications": {
+    "console": true,
+    "email": {
+      "enabled": false,
+      "from": "alerts@mgrnz.com"
+    },
+    "slack": {
+      "enabled": false,
+      "webhookUrl": ""
+    }
+  }
+}
