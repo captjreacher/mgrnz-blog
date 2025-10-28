@@ -59,6 +59,9 @@ export class DashboardServer {
     this.app.get('/api/pipeline-runs/:id', this.getPipelineRun.bind(this));
     this.app.get('/api/metrics', this.getMetrics.bind(this));
     this.app.get('/api/alerts', this.getAlerts.bind(this));
+    this.app.get('/api/realtime/pipeline-status', this.getRealtimePipelineStatus.bind(this));
+    this.app.get('/api/realtime/webhook-flows', this.getWebhookFlows.bind(this));
+    this.app.get('/api/realtime/performance', this.getPerformanceSnapshot.bind(this));
     
     // Health check endpoint
     this.app.get('/health', (req, res) => {
@@ -198,6 +201,314 @@ export class DashboardServer {
       console.error('Error getting alerts:', error);
       res.status(500).json({ error: 'Failed to get alerts' });
     }
+  }
+
+  async getRealtimePipelineStatus(req, res) {
+    try {
+      const limit = parseInt(req.query.limit) || 25;
+      const summary = await this._buildPipelineSummary(limit);
+      res.json(summary);
+    } catch (error) {
+      console.error('Error building pipeline summary:', error);
+      res.status(500).json({ error: 'Failed to build pipeline summary' });
+    }
+  }
+
+  async getWebhookFlows(req, res) {
+    try {
+      const limit = parseInt(req.query.limit) || 25;
+      const summary = await this._buildWebhookSummary(limit);
+      res.json(summary);
+    } catch (error) {
+      console.error('Error building webhook flow summary:', error);
+      res.status(500).json({ error: 'Failed to build webhook flow summary' });
+    }
+  }
+
+  async getPerformanceSnapshot(req, res) {
+    try {
+      const range = req.query.range || '3h';
+      const limit = parseInt(req.query.limit) || 50;
+      const snapshot = await this._buildPerformanceSnapshot(range, limit);
+      res.json(snapshot);
+    } catch (error) {
+      console.error('Error building performance snapshot:', error);
+      res.status(500).json({ error: 'Failed to build performance snapshot' });
+    }
+  }
+
+  async _buildPipelineSummary(limit = 25) {
+    try {
+      const runs = await this._fetchPipelineRuns({ limit });
+      const totals = { running: 0, completed: 0, failed: 0, queued: 0, cancelled: 0 };
+      const durations = [];
+      const cumulative = { ...totals };
+      const trend = [];
+
+      runs.forEach((run, index) => {
+        const statusKey = run.status || 'unknown';
+        if (totals[statusKey] === undefined) {
+          totals[statusKey] = 0;
+          cumulative[statusKey] = 0;
+        }
+        totals[statusKey] += 1;
+
+        const duration = run.metrics?.totalPipelineTime ?? run.duration;
+        if (typeof duration === 'number' && !Number.isNaN(duration)) {
+          durations.push(duration);
+        }
+      });
+
+      runs.slice().reverse().forEach((run, index) => {
+        const statusKey = run.status || 'unknown';
+        if (cumulative[statusKey] === undefined) {
+          cumulative[statusKey] = 0;
+        }
+        cumulative[statusKey] += 1;
+        trend.push({
+          runId: run.id,
+          status: run.status,
+          timestamp: run.startTime,
+          index,
+          totals: { ...cumulative },
+          totalRuns: index + 1
+        });
+      });
+
+      const outcomes = (totals.completed || 0) + (totals.failed || 0);
+      const successRate = outcomes > 0 ? (totals.completed / outcomes) * 100 : 0;
+      const averageDuration = durations.length
+        ? durations.reduce((sum, value) => sum + value, 0) / durations.length
+        : 0;
+
+      const activeRuns = typeof this.engine.getActivePipelineRuns === 'function'
+        ? await this.engine.getActivePipelineRuns()
+        : runs.filter(run => run.status === 'running');
+
+      const recentRuns = runs.slice(0, limit).map(run => ({
+        id: run.id,
+        status: run.status,
+        trigger: run.trigger,
+        startTime: run.startTime,
+        endTime: run.endTime,
+        metrics: run.metrics,
+        duration: run.metrics?.totalPipelineTime ?? run.duration
+      }));
+
+      return {
+        totals: { running: 0, completed: 0, failed: 0, queued: 0, cancelled: 0, ...totals },
+        successRate,
+        averageDuration,
+        activeRuns: activeRuns.map(run => ({
+          id: run.id,
+          status: run.status,
+          startTime: run.startTime,
+          trigger: run.trigger
+        })),
+        recentRuns,
+        trend,
+        totalRuns: runs.length,
+        generatedAt: new Date().toISOString()
+      };
+    } catch (error) {
+      console.error('Failed to build pipeline summary:', error);
+      return {
+        totals: { running: 0, completed: 0, failed: 0, queued: 0, cancelled: 0 },
+        successRate: 0,
+        averageDuration: 0,
+        activeRuns: [],
+        recentRuns: [],
+        trend: [],
+        totalRuns: 0,
+        generatedAt: new Date().toISOString()
+      };
+    }
+  }
+
+  async _buildWebhookSummary(limit = 25) {
+    const emptySummary = {
+      totals: { received: 0, processed: 0, failed: 0 },
+      sources: {},
+      destinations: {},
+      recent: [],
+      averages: { latency: null, throughput: 0 },
+      lastUpdated: new Date().toISOString()
+    };
+
+    try {
+      if (!this.engine?.dataStore?.getWebhookRecords) {
+        return emptySummary;
+      }
+
+      const runs = await this._fetchPipelineRuns({ limit });
+      if (!runs.length) {
+        return emptySummary;
+      }
+
+      const webhookArrays = await Promise.all(
+        runs.map(run => this.engine.dataStore.getWebhookRecords(run.id).catch(() => []))
+      );
+      const allRecords = webhookArrays.flat();
+      if (!allRecords.length) {
+        return emptySummary;
+      }
+
+      const summary = { ...emptySummary, totals: { ...emptySummary.totals }, sources: {}, destinations: {}, recent: [] };
+      const latencies = [];
+
+      allRecords.forEach(record => {
+        const source = record.source || 'unknown';
+        const destination = record.destination || 'unknown';
+        const statusCode = record.response?.status;
+        const hasResponse = typeof statusCode === 'number';
+        const outcome = hasResponse
+          ? (statusCode >= 400 ? 'failed' : 'processed')
+          : 'received';
+
+        summary.totals.received += 1;
+        if (outcome === 'processed') summary.totals.processed += 1;
+        if (outcome === 'failed') summary.totals.failed += 1;
+
+        if (!summary.sources[source]) {
+          summary.sources[source] = { received: 0, processed: 0, failed: 0 };
+        }
+        summary.sources[source][outcome] = (summary.sources[source][outcome] || 0) + 1;
+
+        summary.destinations[destination] = (summary.destinations[destination] || 0) + 1;
+
+        const sent = record.timing?.sent || record.timing?.received;
+        const processed = record.timing?.processed;
+        if (sent && processed) {
+          const latency = new Date(processed) - new Date(sent);
+          if (!Number.isNaN(latency)) {
+            latencies.push(latency);
+          }
+        }
+      });
+
+      summary.recent = allRecords
+        .sort((a, b) => new Date(b.timing?.processed || b.timing?.received || b.timing?.sent || 0) -
+                        new Date(a.timing?.processed || a.timing?.received || a.timing?.sent || 0))
+        .slice(0, limit)
+        .map(record => ({
+          id: record.id,
+          runId: record.runId,
+          source: record.source,
+          destination: record.destination,
+          status: record.response?.status,
+          outcome: record.response?.status >= 400 ? 'failed' : (record.response ? 'processed' : 'pending'),
+          timestamp: record.timing?.processed || record.timing?.received || record.timing?.sent
+        }));
+
+      if (latencies.length) {
+        summary.averages.latency = latencies.reduce((sum, value) => sum + value, 0) / latencies.length;
+      }
+
+      summary.averages.throughput = allRecords.length / runs.length;
+      summary.lastUpdated = new Date().toISOString();
+
+      return summary;
+    } catch (error) {
+      console.error('Failed to build webhook summary:', error);
+      return emptySummary;
+    }
+  }
+
+  async _buildPerformanceSnapshot(range = '3h', limit = 50) {
+    const metricKeys = ['webhookLatency', 'buildTime', 'deploymentTime', 'siteResponseTime'];
+    try {
+      const metricsMap = await this._fetchMetrics();
+      const entries = Object.entries(metricsMap || {}).map(([runId, metrics]) => ({
+        runId,
+        timestamp: metrics.timestamp || metrics.updatedAt || metrics.recordedAt || new Date().toISOString(),
+        metrics
+      }));
+
+      entries.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+
+      const rangeMs = this._parseRange(range);
+      const now = Date.now();
+      let filtered = entries;
+      if (rangeMs) {
+        filtered = entries.filter(point => now - new Date(point.timestamp).getTime() <= rangeMs);
+      }
+
+      if (limit && filtered.length > limit) {
+        filtered = filtered.slice(filtered.length - limit);
+      }
+
+      const averages = {};
+      metricKeys.forEach(key => {
+        const values = filtered
+          .map(point => Number(point.metrics?.[key]))
+          .filter(value => !Number.isNaN(value));
+        averages[key] = values.length ? values.reduce((sum, value) => sum + value, 0) / values.length : null;
+      });
+
+      const latest = filtered[filtered.length - 1] || null;
+
+      return {
+        range,
+        points: filtered,
+        totalPoints: filtered.length,
+        averages,
+        latest,
+        generatedAt: new Date().toISOString()
+      };
+    } catch (error) {
+      console.error('Failed to build performance snapshot:', error);
+      return {
+        range,
+        points: [],
+        totalPoints: 0,
+        averages: {
+          webhookLatency: null,
+          buildTime: null,
+          deploymentTime: null,
+          siteResponseTime: null
+        },
+        latest: null,
+        generatedAt: new Date().toISOString()
+      };
+    }
+  }
+
+  async _fetchPipelineRuns(filters = {}) {
+    if (typeof this.engine.getPipelineRuns === 'function') {
+      return await this.engine.getPipelineRuns(filters);
+    }
+
+    if (this.engine?.dataStore?.getPipelineRuns) {
+      return await this.engine.dataStore.getPipelineRuns(filters);
+    }
+
+    return [];
+  }
+
+  async _fetchMetrics() {
+    if (typeof this.engine.getMetrics === 'function') {
+      const metrics = await this.engine.getMetrics();
+      if (metrics) {
+        return metrics;
+      }
+    }
+
+    if (this.engine?.dataStore?.getMetrics) {
+      return await this.engine.dataStore.getMetrics();
+    }
+
+    return {};
+  }
+
+  _parseRange(range) {
+    if (typeof range !== 'string') return null;
+    const match = range.trim().match(/^(\d+)([smhd])$/i);
+    if (!match) return null;
+
+    const value = parseInt(match[1]);
+    const unit = match[2].toLowerCase();
+    const multipliers = { s: 1000, m: 60000, h: 3600000, d: 86400000 };
+    return value * (multipliers[unit] || 0);
   }
 
   // WebSocket Broadcasting
