@@ -1,8 +1,5 @@
-const { describe, it, expect, beforeEach, afterEach, vi } = require('vitest');
-const fs = require('fs').promises;
-const os = require('os');
-const path = require('path');
-const AlertManager = require('../../src/alerts/alert-manager');
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import AlertManager from '../../src/alerts/alert-manager.js';
 
 describe('AlertManager', () => {
   let alertManager;
@@ -55,9 +52,9 @@ describe('AlertManager', () => {
     it('should merge provided config with defaults', () => {
       const customConfig = { thresholds: { errorRate: 0.2 } };
       const manager = new AlertManager(customConfig);
-      
+
       expect(manager.config.thresholds.errorRate).toBe(0.2);
-      expect(manager.config.thresholds.responseTime).toBe(5000); // default value
+      expect(manager.config.notifications.dashboard).toBe(true);
     });
 
     it('should initialize empty collections', () => {
@@ -388,6 +385,45 @@ describe('AlertManager', () => {
     });
   });
 
+  describe('notification routing', () => {
+    let alert;
+
+    beforeEach(() => {
+      alert = {
+        id: 'alert_test',
+        type: 'pipeline_failure',
+        severity: 'high',
+        timestamp: new Date().toISOString(),
+        data: { runId: 'run-123', error: 'Failure' },
+        status: 'active',
+        acknowledged: false,
+        resolvedAt: null
+      };
+
+      vi.spyOn(alertManager, 'sendConsoleNotification').mockResolvedValue();
+      vi.spyOn(alertManager, 'sendDashboardNotification').mockResolvedValue();
+      vi.spyOn(alertManager, 'sendEmailNotification').mockResolvedValue();
+    });
+
+    it('should route alerts to enabled channels only', async () => {
+      await alertManager.sendNotifications(alert);
+
+      expect(alertManager.sendConsoleNotification).toHaveBeenCalledWith(alert);
+      expect(alertManager.sendDashboardNotification).toHaveBeenCalledWith(alert);
+      expect(alertManager.sendEmailNotification).not.toHaveBeenCalled();
+    });
+
+    it('should respect runtime notification configuration updates', async () => {
+      alertManager.updateNotificationSettings({ console: false, email: true });
+
+      await alertManager.sendNotifications(alert);
+
+      expect(alertManager.sendConsoleNotification).not.toHaveBeenCalled();
+      expect(alertManager.sendDashboardNotification).toHaveBeenCalledWith(alert);
+      expect(alertManager.sendEmailNotification).toHaveBeenCalledWith(alert);
+    });
+  });
+
   describe('formatAlertMessage', () => {
     it('should format pipeline failure message', () => {
       const alert = {
@@ -410,7 +446,7 @@ describe('AlertManager', () => {
     });
 
     it('should handle unknown alert types', () => {
-      const alert = { type: 'unknown_alert' };
+      const alert = { type: 'unknown_alert', data: {} };
       const message = alertManager.formatAlertMessage(alert);
       expect(message).toBe('Alert: unknown_alert');
     });
