@@ -1,10 +1,11 @@
 # Test Fixtures
 
-This directory collects reusable data fixtures for the monitoring system test suites. Keep the files lightweight and
-focused on realistic pipeline, workflow, and metrics payloads so the analytics and reporting tests exercise meaningful
-scenarios.
+This directory stores reusable fixtures for analytics and reporting tests. Keep the following guidelines in mind when adding or updating fixture data:
 
-## Guidelines
-- Prefer exporting factory helpers from `sample-data.js` so tests can create fresh copies without mutating shared state.
-- Keep timestamps in ISO 8601 format and durations in milliseconds to match the production data model.
-- Update this directory when new analytics or reporting behaviours require additional structured fixtures.
+- **Scope**: Fixtures should be scoped to automated tests only. Do not reference production data or secrets.
+- **Structure**: Prefer exported factory functions that allow callers to tweak specific fields without mutating shared objects.
+- **Timestamps**: Use deterministic timestamps where possible. When relying on `Date.now()`, document the expectation in the test to avoid flaky assertions.
+- **Cleanup**: Integration tests that create files should place them under the `test-data` directory so that the global test setup can remove them safely.
+- **Documentation**: Update this README when new fixture patterns or constraints are introduced.
+
+Following these notes helps maintain consistent, predictable analytics tests as the monitoring system evolves.
