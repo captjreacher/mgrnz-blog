@@ -5,45 +5,27 @@
 ✅ **Local Hugo Site**: Running perfectly on http://localhost:1313  
 ✅ **Admin System**: Fully functional with dark theme  
 ✅ **Code Repository**: All changes committed and pushed  
-❌ **Live Deployment**: Cloudflare Pages not auto-rebuilding  
+✅ **Live Deployment**: GitHub Pages workflow online (deploys from `main`)
 
 ## IMMEDIATE SOLUTIONS
 
-### **Option A: Manual Cloudflare Deployment (Quick Fix)**
+### **Deployment Pipeline Overview**
 
-1. **Go to Cloudflare Pages Dashboard**
-   - Visit: https://dash.cloudflare.com/
-   - Navigate to: Pages → mgrnz-blog → Deployments
+GitHub Pages now owns production delivery. Every push to `main` triggers the
+**Deploy Hugo to GitHub Pages** workflow (defined in
+`.github/workflows/deploy-gh-pages.yml`). The job builds the Hugo site and
+publishes the generated `public/` folder to the `gh-pages` branch. DNS already
+points `mgrnz.com` to GitHub Pages, so no extra manual step is required after
+the workflow succeeds.
 
-2. **Create Manual Deployment**
-   - Click: "Create deployment"
-   - Select: Latest commit `2e06cb7`
-   - Click: "Deploy"
+### **Manual Redeploy (if you need to re-run a build)**
 
-3. **Expected Result**
-   - Build time: 2-3 minutes
-   - All admin features will be live
-   - Test post will appear
+1. **Open GitHub Repository → Actions → Deploy Hugo to GitHub Pages**
+2. Pick the latest workflow run and click **"Re-run all jobs"**
+3. Wait ~2 minutes for the Hugo build and artifact upload to finish
 
-### **Option B: GitHub Actions Deployment (Permanent Fix)**
-
-**Requirements:**
-- Add Cloudflare API Token to GitHub Secrets
-- Add Cloudflare Account ID to GitHub Secrets
-
-**Steps:**
-1. **Get Cloudflare API Token**
-   - Go to: https://dash.cloudflare.com/profile/api-tokens
-   - Create token with "Cloudflare Pages:Edit" permissions
-
-2. **Add GitHub Secrets**
-   - Go to: GitHub repo → Settings → Secrets and variables → Actions
-   - Add: `CLOUDFLARE_API_TOKEN` (your API token)
-   - Add: `CLOUDFLARE_ACCOUNT_ID` (your account ID)
-
-3. **Trigger Deployment**
-   - Push any commit to `main` branch
-   - GitHub Actions will automatically deploy
+This is only necessary if a deployment needs to be retried without pushing a
+new commit.
 
 ## WHAT'S READY TO DEPLOY
 
@@ -66,25 +48,23 @@ Your local site includes:
 
 ### **Test Content:**
 - ✅ Deployment test post
-- ✅ Cloudflare config test post
+- ✅ Build metadata (`static/build-info.txt`, deployment timestamp)
 - ✅ Updated tracking files
 
 ## RECOMMENDED ACTION
 
-**Choose Option A (Manual Deployment)** for immediate results:
-1. Takes 5 minutes
-2. Gets everything live immediately
-3. Can set up GitHub Actions later
-
-**Then implement Option B** for future automatic deployments.
+1. Push changes to `main`
+2. Confirm the **Deploy Hugo to GitHub Pages** workflow finishes successfully
+3. Visit https://mgrnz.com/admin/ to verify the admin experience is live
 
 ## SUCCESS VERIFICATION
 
 Once deployed, check:
 1. **Admin Dashboard**: https://mgrnz.com/admin/
 2. **Test Posts**: Should show new posts from today
-3. **Build Info**: https://mgrnz.com/build-info.txt (should show commit `2e06cb7`)
+3. **Build Info**: https://mgrnz.com/build-info.txt (should show latest commit hash)
 
 ---
 
-**BOTTOM LINE**: Your admin system is complete and ready. Just needs manual deployment trigger in Cloudflare dashboard.
+**BOTTOM LINE**: Your admin system is complete and live—GitHub Pages builds the
+site automatically from `main`.

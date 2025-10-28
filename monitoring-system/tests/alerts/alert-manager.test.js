@@ -1,11 +1,14 @@
-const { describe, it, expect, beforeEach, afterEach, vi } = require('vitest');
-const AlertManager = require('../../src/alerts/alert-manager');
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import AlertManager from '../../src/alerts/alert-manager.js';
 
 describe('AlertManager', () => {
   let alertManager;
   let mockConfig;
+  let tempDir;
 
-  beforeEach(() => {
+  beforeEach(async () => {
+    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'alert-manager-test-'));
+
     mockConfig = {
       thresholds: {
         errorRate: 0.1,
@@ -19,17 +22,23 @@ describe('AlertManager', () => {
         dashboard: true,
         email: false
       },
-      cooldown: 300000
+      cooldown: 300000,
+      configDir: tempDir
     };
 
     alertManager = new AlertManager(mockConfig);
-    
+    await alertManager.persistenceReady;
+
     // Mock console.log to avoid test output noise
     vi.spyOn(console, 'log').mockImplementation(() => {});
   });
 
-  afterEach(() => {
+  afterEach(async () => {
     vi.restoreAllMocks();
+    if (tempDir) {
+      await fs.rm(tempDir, { recursive: true, force: true });
+      tempDir = null;
+    }
   });
 
   describe('constructor', () => {
@@ -43,9 +52,9 @@ describe('AlertManager', () => {
     it('should merge provided config with defaults', () => {
       const customConfig = { thresholds: { errorRate: 0.2 } };
       const manager = new AlertManager(customConfig);
-      
+
       expect(manager.config.thresholds.errorRate).toBe(0.2);
-      expect(manager.config.thresholds.responseTime).toBe(5000); // default value
+      expect(manager.config.notifications.dashboard).toBe(true);
     });
 
     it('should initialize empty collections', () => {
@@ -376,6 +385,45 @@ describe('AlertManager', () => {
     });
   });
 
+  describe('notification routing', () => {
+    let alert;
+
+    beforeEach(() => {
+      alert = {
+        id: 'alert_test',
+        type: 'pipeline_failure',
+        severity: 'high',
+        timestamp: new Date().toISOString(),
+        data: { runId: 'run-123', error: 'Failure' },
+        status: 'active',
+        acknowledged: false,
+        resolvedAt: null
+      };
+
+      vi.spyOn(alertManager, 'sendConsoleNotification').mockResolvedValue();
+      vi.spyOn(alertManager, 'sendDashboardNotification').mockResolvedValue();
+      vi.spyOn(alertManager, 'sendEmailNotification').mockResolvedValue();
+    });
+
+    it('should route alerts to enabled channels only', async () => {
+      await alertManager.sendNotifications(alert);
+
+      expect(alertManager.sendConsoleNotification).toHaveBeenCalledWith(alert);
+      expect(alertManager.sendDashboardNotification).toHaveBeenCalledWith(alert);
+      expect(alertManager.sendEmailNotification).not.toHaveBeenCalled();
+    });
+
+    it('should respect runtime notification configuration updates', async () => {
+      alertManager.updateNotificationSettings({ console: false, email: true });
+
+      await alertManager.sendNotifications(alert);
+
+      expect(alertManager.sendConsoleNotification).not.toHaveBeenCalled();
+      expect(alertManager.sendDashboardNotification).toHaveBeenCalledWith(alert);
+      expect(alertManager.sendEmailNotification).toHaveBeenCalledWith(alert);
+    });
+  });
+
   describe('formatAlertMessage', () => {
     it('should format pipeline failure message', () => {
       const alert = {
@@ -398,9 +446,76 @@ describe('AlertManager', () => {
     });
 
     it('should handle unknown alert types', () => {
-      const alert = { type: 'unknown_alert' };
+      const alert = { type: 'unknown_alert', data: {} };
       const message = alertManager.formatAlertMessage(alert);
       expect(message).toBe('Alert: unknown_alert');
+    });
+  });
+
+  describe('deduplication and cooldowns', () => {
+    it('should deduplicate repeated alerts while tracking occurrences', async () => {
+      const pipelineRun = {
+        id: 'run-1',
+        success: false,
+        duration: 1000,
+        trigger: { type: 'webhook', source: 'mailerlite' },
+        errors: ['Build failed'],
+        stages: []
+      };
+
+      await alertManager.checkAlerts(pipelineRun);
+
+      const firstActive = alertManager.getActiveAlerts();
+      expect(firstActive).toHaveLength(1);
+      expect(firstActive[0].occurrences).toBe(1);
+
+      await alertManager.checkAlerts(pipelineRun);
+
+      const metrics = alertManager.getMetrics();
+      expect(metrics.deduplicatedAlerts).toBe(1);
+
+      const active = alertManager.getActiveAlerts();
+      expect(active).toHaveLength(1);
+      expect(active[0].occurrences).toBe(2);
+    });
+  });
+
+  describe('acknowledgement and resolution', () => {
+    it('should persist acknowledgement and resolution metadata', async () => {
+      const pipelineRun = {
+        id: 'run-ack',
+        success: false,
+        duration: 1000,
+        trigger: { type: 'manual' },
+        errors: ['Failed'],
+        stages: []
+      };
+
+      const [alert] = await alertManager.checkAlerts(pipelineRun);
+
+      const acknowledged = await alertManager.acknowledgeAlert(alert.id, 'tester');
+      expect(acknowledged.acknowledged).toBe(true);
+      expect(acknowledged.acknowledgedBy).toBe('tester');
+
+      const resolved = await alertManager.resolveAlert(alert.id, 'tester');
+      expect(resolved.status).toBe('resolved');
+      expect(resolved.resolvedBy).toBe('tester');
+
+      const activeAlerts = alertManager.getActiveAlerts();
+      expect(activeAlerts).toHaveLength(0);
+
+      const persistedState = JSON.parse(await fs.readFile(path.join(tempDir, 'alert-state.json'), 'utf8'));
+      expect(persistedState.acknowledged[alert.id].acknowledgedBy).toBe('tester');
+      expect(persistedState.resolved[alert.id].resolvedBy).toBe('tester');
+    });
+  });
+
+  describe('persistent thresholds', () => {
+    it('should save updated thresholds to disk', async () => {
+      await alertManager.updateThresholds({ responseTime: 7500 });
+
+      const persistedConfig = JSON.parse(await fs.readFile(path.join(tempDir, 'alert-thresholds.json'), 'utf8'));
+      expect(persistedConfig.thresholds.responseTime).toBe(7500);
     });
   });
 });

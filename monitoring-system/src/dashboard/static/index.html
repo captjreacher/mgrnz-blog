@@ -24,23 +24,60 @@
         <main class="dashboard-main">
             <!-- System Status Overview -->
             <section class="status-overview">
-                <h2>System Status</h2>
-                <div class="status-cards">
-                    <div class="status-card">
-                        <h3>Pipeline Status</h3>
-                        <div id="pipeline-status" class="status-value">Loading...</div>
+                <div class="status-layout">
+                    <div class="status-cards">
+                        <div class="status-card">
+                            <h3>Pipeline Status</h3>
+                            <div id="pipeline-status" class="status-value">Loading...</div>
+                        </div>
+                        <div class="status-card">
+                            <h3>Active Runs</h3>
+                            <div id="active-runs" class="status-value">0</div>
+                        </div>
+                        <div class="status-card">
+                            <h3>Success Rate</h3>
+                            <div id="success-rate" class="status-value">0%</div>
+                        </div>
+                        <div class="status-card">
+                            <h3>Avg Duration</h3>
+                            <div id="avg-duration" class="status-value">0s</div>
+                        </div>
                     </div>
-                    <div class="status-card">
-                        <h3>Active Runs</h3>
-                        <div id="active-runs" class="status-value">0</div>
+                    <div class="status-visualization">
+                        <div class="visual-card">
+                            <div class="visual-card-header">
+                                <h3>Run Distribution</h3>
+                                <span class="visual-caption">Last 25 runs</span>
+                            </div>
+                            <div class="chart-wrapper">
+                                <canvas id="pipeline-status-chart"></canvas>
+                                <div class="chart-center">
+                                    <span id="pipeline-total" class="chart-total">0</span>
+                                    <span class="chart-subtitle">Total Runs</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="status-card">
-                        <h3>Success Rate</h3>
-                        <div id="success-rate" class="status-value">0%</div>
+                </div>
+            </section>
+
+            <section class="visual-grid">
+                <div class="visual-card">
+                    <div class="visual-card-header">
+                        <h2>Webhook Flow Health</h2>
+                        <span class="visual-caption">Source to destination throughput</span>
                     </div>
-                    <div class="status-card">
-                        <h3>Avg Duration</h3>
-                        <div id="avg-duration" class="status-value">0s</div>
+                    <div class="chart-wrapper large">
+                        <canvas id="webhook-flow-chart"></canvas>
+                    </div>
+                </div>
+                <div class="visual-card">
+                    <div class="visual-card-header">
+                        <h2>Performance Trends</h2>
+                        <span class="visual-caption">Key metrics over time</span>
+                    </div>
+                    <div class="chart-wrapper large">
+                        <canvas id="performance-chart"></canvas>
                     </div>
                 </div>
             </section>
@@ -126,6 +163,7 @@
     </div>
 
     <!-- Scripts -->
-    <script src="/static/dashboard.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js" integrity="sha384-W4aNFYntE5Vmmyr3ZreMw7kmr+H4lWlHUNZPam53ALDH3AEst9Lh+dYt1bAO+CWr" crossorigin="anonymous"></script>
+    <script type="module" src="/static/dashboard.js"></script>
 </body>
 </html>

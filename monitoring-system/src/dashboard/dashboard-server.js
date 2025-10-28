@@ -9,6 +9,8 @@ import { WebSocketServer } from 'ws';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
+import { ReportGenerator } from '../analytics/report-generator.js';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -25,6 +27,7 @@ export class DashboardServer {
     this.server = createServer(this.app);
     this.wss = new WebSocketServer({ server: this.server });
     this.clients = new Set();
+    this.reportGenerator = new ReportGenerator(config.reports || {});
     
     this.setupMiddleware();
     this.setupRoutes();
@@ -59,6 +62,8 @@ export class DashboardServer {
     this.app.get('/api/pipeline-runs/:id', this.getPipelineRun.bind(this));
     this.app.get('/api/metrics', this.getMetrics.bind(this));
     this.app.get('/api/alerts', this.getAlerts.bind(this));
+    this.app.get('/api/pipeline-runs/:id/export/:format', this.exportPipelineReport.bind(this));
+    this.app.get('/api/reports/export/:format', this.exportAggregatedReports.bind(this));
     
     // Health check endpoint
     this.app.get('/health', (req, res) => {
@@ -197,6 +202,86 @@ export class DashboardServer {
     } catch (error) {
       console.error('Error getting alerts:', error);
       res.status(500).json({ error: 'Failed to get alerts' });
+    }
+  }
+
+  async exportPipelineReport(req, res) {
+    try {
+      const { id, format } = req.params;
+      const inline = req.query.inline === 'true';
+
+      const reportData = await this.engine.generateReport(id);
+      if (!reportData) {
+        return res.status(404).json({ error: 'Pipeline run not found' });
+      }
+
+      reportData.metadata = { ...(reportData.metadata || {}), runId: id };
+
+      const { content } = await this.reportGenerator.generate(reportData, format, {
+        outputDir: null,
+        fileNamePrefix: 'pipeline-run'
+      });
+
+      this.sendExportResponse(res, content, format, `pipeline-run-${id}`, inline);
+    } catch (error) {
+      console.error('Error exporting pipeline report:', error);
+      res.status(500).json({ error: 'Failed to export pipeline report' });
+    }
+  }
+
+  async exportAggregatedReports(req, res) {
+    try {
+      const { format } = req.params;
+      const limit = parseInt(req.query.limit || '20', 10);
+      const inline = req.query.inline === 'true';
+
+      const runs = await this.engine.getRecentPipelineRuns(limit);
+      const reports = await Promise.all(runs.map(run => this.engine.generateReport(run.id)));
+
+      const reportData = {
+        metadata: { type: 'aggregate', generatedAt: new Date().toISOString() },
+        reports,
+        summary: {
+          totalRuns: reports.length,
+          successfulRuns: reports.filter(report => report.summary?.success).length,
+          failedRuns: reports.filter(report => report.summary && report.summary.success === false).length
+        }
+      };
+
+      const { content } = await this.reportGenerator.generate(reportData, format, {
+        outputDir: null,
+        fileNamePrefix: 'aggregate-report'
+      });
+
+      this.sendExportResponse(res, content, format, `reports-${Date.now()}`, inline);
+    } catch (error) {
+      console.error('Error exporting aggregated reports:', error);
+      res.status(500).json({ error: 'Failed to export reports' });
+    }
+  }
+
+  sendExportResponse(res, content, format, baseName, inline = false) {
+    const normalizedFormat = (format || 'json').toLowerCase();
+    const contentType = this.getContentType(normalizedFormat);
+    const disposition = inline ? 'inline' : 'attachment';
+    const fileName = `${baseName}.${normalizedFormat}`;
+
+    res.setHeader('Content-Type', contentType);
+    res.setHeader('Content-Disposition', `${disposition}; filename="${fileName}"`);
+
+    res.send(content);
+  }
+
+  getContentType(format) {
+    switch (format) {
+      case 'html':
+        return 'text/html; charset=utf-8';
+      case 'csv':
+        return 'text/csv; charset=utf-8';
+      case 'json':
+        return 'application/json; charset=utf-8';
+      default:
+        return 'application/octet-stream';
     }
   }
 
