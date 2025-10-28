@@ -4,6 +4,11 @@ languageCode: en-nz
 enableRobotsTXT: true
 theme: "congo"  # Re-enabled - public folder conflict resolved
 
+# Build configuration
+buildFuture: true
+buildExpired: true
+buildDrafts: false
+
 # Site-wide taxonomies
 taxonomies:
   tag: tags
