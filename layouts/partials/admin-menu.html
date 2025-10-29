@@ -73,6 +73,125 @@
 
 <script>
 const ADMIN_SESSION_DURATION = 24 * 60 * 60 * 1000; // 24 hours
+const ADMIN_VALID_ACCESS_CODES = [
+  'admin2025',
+  'mgrnz-admin',
+  'blog-secure',
+  'admin',
+  'mgrnz2025'
+];
+
+function openAdminAuthModal() {
+  const modal = document.getElementById('adminAuthModal');
+  const input = document.getElementById('adminAccessCode');
+  const error = document.getElementById('adminAuthError');
+
+  if (!modal) {
+    return;
+  }
+
+  modal.classList.remove('hidden');
+  document.body.classList.add('overflow-hidden');
+
+  if (error) {
+    error.classList.add('hidden');
+  }
+
+  if (input) {
+    input.value = '';
+    window.setTimeout(() => input.focus(), 0);
+  }
+}
+
+function closeAdminAuthModal() {
+  const modal = document.getElementById('adminAuthModal');
+  const error = document.getElementById('adminAuthError');
+
+  if (!modal) {
+    return;
+  }
+
+  modal.classList.add('hidden');
+  document.body.classList.remove('overflow-hidden');
+
+  if (error) {
+    error.classList.add('hidden');
+  }
+
+  setAdminAuthLoading(false);
+}
+
+function setAdminAuthLoading(isLoading) {
+  const submitButton = document.getElementById('adminAuthSubmit');
+  const actionLabel = submitButton ? submitButton.querySelector('.auth-action-label') : null;
+
+  if (!submitButton || !actionLabel) {
+    return;
+  }
+
+  submitButton.disabled = isLoading;
+  actionLabel.textContent = isLoading ? '⏳ Verifying…' : '🔐 Access Admin';
+}
+
+function generateAdminAuthToken() {
+  const timestamp = Date.now();
+  const random = Math.random().toString(36).substring(2);
+  return btoa(`${timestamp}-${random}`);
+}
+
+function authenticateAdmin(event) {
+  if (event) {
+    event.preventDefault();
+  }
+
+  const input = document.getElementById('adminAccessCode');
+  const error = document.getElementById('adminAuthError');
+
+  if (!input) {
+    window.location.href = '/admin/';
+    return;
+  }
+
+  const accessCode = input.value.trim();
+
+  if (!accessCode) {
+    if (error) {
+      error.textContent = 'Please enter your access code.';
+      error.classList.remove('hidden');
+    }
+    input.focus();
+    return;
+  }
+
+  setAdminAuthLoading(true);
+
+  window.setTimeout(() => {
+    const isValidCode = ADMIN_VALID_ACCESS_CODES.includes(accessCode);
+
+    if (isValidCode) {
+      const authToken = generateAdminAuthToken();
+      localStorage.setItem('admin_auth_token', authToken);
+      localStorage.setItem('admin_auth_time', Date.now().toString());
+
+      if (error) {
+        error.classList.add('hidden');
+      }
+
+      closeAdminAuthModal();
+      toggleAdminMenu(true);
+      window.location.href = '/admin/';
+    } else {
+      if (error) {
+        error.textContent = 'Invalid access code. Please try again.';
+        error.classList.remove('hidden');
+      }
+
+      input.focus();
+    }
+
+    setAdminAuthLoading(false);
+  }, 400);
+}
 
 function hasValidAdminSession() {
   const authToken = localStorage.getItem('admin_auth_token');
@@ -94,7 +213,7 @@ function checkAdminAccess() {
   }
 
   clearAdminSession();
-  window.location.href = '/admin/';
+  openAdminAuthModal();
 }
 
 function toggleAdminMenu(forceHide = false) {
@@ -133,15 +252,26 @@ function clearAdminSession() {
 document.addEventListener('click', function(event) {
   const dropdown = document.getElementById('adminDropdown');
   const button = event.target.closest('button[onclick="checkAdminAccess()"]');
+  const modal = document.getElementById('adminAuthModal');
 
   if (dropdown && !button && !dropdown.contains(event.target)) {
     dropdown.classList.add('hidden');
+  }
+
+  if (modal && !modal.classList.contains('hidden') && event.target === modal) {
+    closeAdminAuthModal();
   }
 });
 
 document.addEventListener('keydown', function(event) {
   if (event.key === 'Escape') {
-    toggleAdminMenu(true);
+    const modal = document.getElementById('adminAuthModal');
+
+    if (modal && !modal.classList.contains('hidden')) {
+      closeAdminAuthModal();
+    } else {
+      toggleAdminMenu(true);
+    }
   }
 });
 </script>
