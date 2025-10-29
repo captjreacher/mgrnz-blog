@@ -5,7 +5,7 @@
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
     </svg>
   </button>
-  
+
   <div id="adminDropdown" class="hidden absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-neutral-800 border border-neutral-700 z-50">
     <div class="py-2">
       <div class="px-4 py-2 text-xs text-neutral-400 border-b border-neutral-700">
@@ -27,7 +27,7 @@
         <a href="/admin-simple.html" class="block px-4 py-2 text-sm text-green-400 hover:bg-green-900/20 transition-colors">
           🚀 Quick Access
         </a>
-        <button onclick="logoutAdmin()" class="block w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-red-900/20 transition-colors">
+        <button onclick="logoutAdmin(event)" class="block w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-red-900/20 transition-colors">
           🚪 Logout
         </button>
       </div>
@@ -35,54 +35,204 @@
   </div>
 </div>
 
+<!-- Admin Authentication Modal -->
+<div id="adminAuthModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+  <div class="bg-neutral-900 border border-neutral-700 rounded-2xl shadow-2xl w-full max-w-md mx-4">
+    <div class="px-6 py-4 border-b border-neutral-800 flex items-center justify-between">
+      <div>
+        <p class="text-xs uppercase tracking-widest text-orange-400">Secure Access</p>
+        <h3 class="text-xl font-semibold text-white">Admin Authentication</h3>
+      </div>
+      <button onclick="closeAdminAuthModal()" class="text-neutral-400 hover:text-white transition-colors" aria-label="Close admin authentication modal">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    <form onsubmit="authenticateAdmin(event)" class="px-6 py-5 space-y-5">
+      <div class="space-y-2">
+        <label for="adminAccessCode" class="block text-sm font-medium text-neutral-300">Access Code</label>
+        <input id="adminAccessCode" type="password" required autocomplete="current-password" placeholder="Enter access code"
+               class="w-full rounded-lg border border-neutral-700 bg-neutral-800 px-4 py-3 text-white placeholder-neutral-500 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/30 transition">
+      </div>
+
+      <div id="adminAuthError" class="hidden rounded-lg border border-red-700 bg-red-900/40 px-4 py-3 text-sm text-red-200">
+        Invalid access code. Please try again.
+      </div>
+
+      <div class="flex items-center justify-between">
+        <p class="text-xs text-neutral-500">Session lasts for 24 hours.</p>
+        <button type="submit" id="adminAuthSubmit" class="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-orange-500 to-red-500 px-4 py-2 text-sm font-semibold text-white hover:from-orange-600 hover:to-red-600 transition">
+          <span class="auth-action-label">🔐 Access Admin</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <script>
+const ADMIN_SESSION_DURATION = 24 * 60 * 60 * 1000; // 24 hours
+const ADMIN_VALID_CODES = ['admin2025', 'mgrnz-admin', 'blog-secure', 'admin', 'mgrnz2025'];
+
 function checkAdminAccess() {
   const authToken = localStorage.getItem('admin_auth_token');
   const authTime = localStorage.getItem('admin_auth_time');
-  
+
   if (authToken && authTime) {
-    const now = new Date().getTime();
-    const authAge = now - parseInt(authTime);
-    const twentyFourHours = 24 * 60 * 60 * 1000;
-    
-    if (authAge < twentyFourHours) {
-      // User is authenticated, show menu
+    const now = Date.now();
+    const authAge = now - parseInt(authTime, 10);
+
+    if (authAge < ADMIN_SESSION_DURATION) {
       toggleAdminMenu();
       return;
-    } else {
-      // Session expired, clear tokens
-      localStorage.removeItem('admin_auth_token');
-      localStorage.removeItem('admin_auth_time');
     }
+
+    clearAdminSession();
   }
-  
-  // User not authenticated, redirect to admin login
-  window.location.href = '/admin/';
+
+  openAdminAuthModal();
 }
 
-function toggleAdminMenu() {
+function toggleAdminMenu(forceHide = false) {
   const dropdown = document.getElementById('adminDropdown');
+
+  if (!dropdown) {
+    return;
+  }
+
+  if (forceHide) {
+    dropdown.classList.add('hidden');
+    return;
+  }
+
   dropdown.classList.toggle('hidden');
 }
 
-function logoutAdmin() {
+function logoutAdmin(event) {
+  if (event) {
+    event.preventDefault();
+  }
+
   if (confirm('Are you sure you want to logout?')) {
-    localStorage.removeItem('admin_auth_token');
-    localStorage.removeItem('admin_auth_time');
-    // Hide the dropdown
-    document.getElementById('adminDropdown').classList.add('hidden');
-    // Show confirmation
+    clearAdminSession();
+    toggleAdminMenu(true);
     alert('✅ Logged out successfully');
   }
+}
+
+function openAdminAuthModal() {
+  const modal = document.getElementById('adminAuthModal');
+  if (!modal) return;
+
+  toggleAdminMenu(true);
+  modal.classList.remove('hidden');
+  const input = document.getElementById('adminAccessCode');
+  if (input) {
+    setTimeout(() => input.focus(), 0);
+  }
+}
+
+function closeAdminAuthModal() {
+  const modal = document.getElementById('adminAuthModal');
+  if (!modal) return;
+
+  modal.classList.add('hidden');
+  const form = modal.querySelector('form');
+  if (form) {
+    form.reset();
+  }
+  const errorBanner = document.getElementById('adminAuthError');
+  if (errorBanner) {
+    errorBanner.classList.add('hidden');
+  }
+  resetAdminAuthButton();
+}
+
+function authenticateAdmin(event) {
+  event.preventDefault();
+
+  const accessCodeInput = document.getElementById('adminAccessCode');
+  const submitButton = document.getElementById('adminAuthSubmit');
+  const errorBanner = document.getElementById('adminAuthError');
+
+  if (!accessCodeInput || !submitButton) {
+    return;
+  }
+
+  const accessCode = accessCodeInput.value.trim();
+  errorBanner.classList.add('hidden');
+  submitButton.disabled = true;
+  submitButton.querySelector('.auth-action-label').textContent = '⏳ Verifying...';
+
+  setTimeout(() => {
+    const isValid = ADMIN_VALID_CODES.includes(accessCode);
+
+    if (isValid) {
+      const authToken = generateAdminToken();
+      localStorage.setItem('admin_auth_token', authToken);
+      localStorage.setItem('admin_auth_time', Date.now().toString());
+
+      closeAdminAuthModal();
+      toggleAdminMenu(false);
+      window.location.href = '/admin/';
+    } else {
+      errorBanner.classList.remove('hidden');
+      submitButton.disabled = false;
+      submitButton.querySelector('.auth-action-label').textContent = '🔐 Access Admin';
+      accessCodeInput.focus();
+      accessCodeInput.select();
+    }
+  }, 400);
+}
+
+function resetAdminAuthButton() {
+  const submitButton = document.getElementById('adminAuthSubmit');
+  if (!submitButton) return;
+
+  submitButton.disabled = false;
+  submitButton.querySelector('.auth-action-label').textContent = '🔐 Access Admin';
+}
+
+function generateAdminToken() {
+  return btoa(`${Date.now()}-${Math.random().toString(36).slice(2)}`);
+}
+
+function clearAdminSession() {
+  localStorage.removeItem('admin_auth_token');
+  localStorage.removeItem('admin_auth_time');
 }
 
 // Close dropdown when clicking outside
 document.addEventListener('click', function(event) {
   const dropdown = document.getElementById('adminDropdown');
   const button = event.target.closest('button[onclick="checkAdminAccess()"]');
-  
-  if (!button && !dropdown.contains(event.target)) {
+  const modal = document.getElementById('adminAuthModal');
+
+  if (modal && !modal.classList.contains('hidden')) {
+    const form = modal.querySelector('form');
+    const modalCard = form ? form.parentElement : null;
+
+    if (event.target === modal) {
+      closeAdminAuthModal();
+      return;
+    }
+
+    if (modalCard && !modalCard.contains(event.target)) {
+      closeAdminAuthModal();
+      return;
+    }
+  }
+
+  if (dropdown && !button && !dropdown.contains(event.target)) {
     dropdown.classList.add('hidden');
+  }
+});
+
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'Escape') {
+    closeAdminAuthModal();
+    toggleAdminMenu(true);
   }
 });
 </script>
