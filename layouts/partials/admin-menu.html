@@ -35,6 +35,42 @@
   </div>
 </div>
 
+<!-- Admin Authentication Modal -->
+<div id="adminAuthModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+  <div class="bg-neutral-900 border border-neutral-700 rounded-2xl shadow-2xl w-full max-w-md mx-4">
+    <div class="px-6 py-4 border-b border-neutral-800 flex items-center justify-between">
+      <div>
+        <p class="text-xs uppercase tracking-widest text-orange-400">Secure Access</p>
+        <h3 class="text-xl font-semibold text-white">Admin Authentication</h3>
+      </div>
+      <button onclick="closeAdminAuthModal()" class="text-neutral-400 hover:text-white transition-colors" aria-label="Close admin authentication modal">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    <form onsubmit="authenticateAdmin(event)" class="px-6 py-5 space-y-5">
+      <div class="space-y-2">
+        <label for="adminAccessCode" class="block text-sm font-medium text-neutral-300">Access Code</label>
+        <input id="adminAccessCode" type="password" required autocomplete="current-password" placeholder="Enter access code"
+               class="w-full rounded-lg border border-neutral-700 bg-neutral-800 px-4 py-3 text-white placeholder-neutral-500 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/30 transition">
+      </div>
+
+      <div id="adminAuthError" class="hidden rounded-lg border border-red-700 bg-red-900/40 px-4 py-3 text-sm text-red-200">
+        Invalid access code. Please try again.
+      </div>
+
+      <div class="flex items-center justify-between">
+        <p class="text-xs text-neutral-500">Session lasts for 24 hours.</p>
+        <button type="submit" id="adminAuthSubmit" class="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-orange-500 to-red-500 px-4 py-2 text-sm font-semibold text-white hover:from-orange-600 hover:to-red-600 transition">
+          <span class="auth-action-label">🔐 Access Admin</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <script>
 const ADMIN_SESSION_DURATION = 24 * 60 * 60 * 1000; // 24 hours
 
