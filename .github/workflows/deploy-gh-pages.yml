@@ -35,7 +35,7 @@ jobs:
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
         with:
-          hugo-version: '0.120.4' # Specify a recent, stable version
+          hugo-version: '0.150.1' # Match the local development version
           extended: true
 
       - name: Build Hugo site
@@ -56,4 +56,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
