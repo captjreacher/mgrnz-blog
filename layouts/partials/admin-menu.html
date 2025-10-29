@@ -5,7 +5,7 @@
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
     </svg>
   </button>
-  
+
   <div id="adminDropdown" class="hidden absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-neutral-800 border border-neutral-700 z-50">
     <div class="py-2">
       <div class="px-4 py-2 text-xs text-neutral-400 border-b border-neutral-700">
@@ -27,7 +27,7 @@
         <a href="/admin-simple.html" class="block px-4 py-2 text-sm text-green-400 hover:bg-green-900/20 transition-colors">
           🚀 Quick Access
         </a>
-        <button onclick="logoutAdmin()" class="block w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-red-900/20 transition-colors">
+        <button onclick="logoutAdmin(event)" class="block w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-red-900/20 transition-colors">
           🚪 Logout
         </button>
       </div>
@@ -36,53 +36,76 @@
 </div>
 
 <script>
-function checkAdminAccess() {
+const ADMIN_SESSION_DURATION = 24 * 60 * 60 * 1000; // 24 hours
+
+function hasValidAdminSession() {
   const authToken = localStorage.getItem('admin_auth_token');
   const authTime = localStorage.getItem('admin_auth_time');
-  
-  if (authToken && authTime) {
-    const now = new Date().getTime();
-    const authAge = now - parseInt(authTime);
-    const twentyFourHours = 24 * 60 * 60 * 1000;
-    
-    if (authAge < twentyFourHours) {
-      // User is authenticated, show menu
-      toggleAdminMenu();
-      return;
-    } else {
-      // Session expired, clear tokens
-      localStorage.removeItem('admin_auth_token');
-      localStorage.removeItem('admin_auth_time');
-    }
+
+  if (!authToken || !authTime) {
+    return false;
   }
-  
-  // User not authenticated, redirect to admin login
+
+  const now = Date.now();
+  const authAge = now - parseInt(authTime, 10);
+  return authAge < ADMIN_SESSION_DURATION;
+}
+
+function checkAdminAccess() {
+  if (hasValidAdminSession()) {
+    toggleAdminMenu();
+    return;
+  }
+
+  clearAdminSession();
   window.location.href = '/admin/';
 }
 
-function toggleAdminMenu() {
+function toggleAdminMenu(forceHide = false) {
   const dropdown = document.getElementById('adminDropdown');
+
+  if (!dropdown) {
+    return;
+  }
+
+  if (forceHide) {
+    dropdown.classList.add('hidden');
+    return;
+  }
+
   dropdown.classList.toggle('hidden');
 }
 
-function logoutAdmin() {
+function logoutAdmin(event) {
+  if (event) {
+    event.preventDefault();
+  }
+
   if (confirm('Are you sure you want to logout?')) {
-    localStorage.removeItem('admin_auth_token');
-    localStorage.removeItem('admin_auth_time');
-    // Hide the dropdown
-    document.getElementById('adminDropdown').classList.add('hidden');
-    // Show confirmation
+    clearAdminSession();
+    toggleAdminMenu(true);
     alert('✅ Logged out successfully');
   }
+}
+
+function clearAdminSession() {
+  localStorage.removeItem('admin_auth_token');
+  localStorage.removeItem('admin_auth_time');
 }
 
 // Close dropdown when clicking outside
 document.addEventListener('click', function(event) {
   const dropdown = document.getElementById('adminDropdown');
   const button = event.target.closest('button[onclick="checkAdminAccess()"]');
-  
-  if (!button && !dropdown.contains(event.target)) {
+
+  if (dropdown && !button && !dropdown.contains(event.target)) {
     dropdown.classList.add('hidden');
+  }
+});
+
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'Escape') {
+    toggleAdminMenu(true);
   }
 });
 </script>
