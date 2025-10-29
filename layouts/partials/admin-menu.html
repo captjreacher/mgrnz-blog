@@ -73,6 +73,7 @@
 
 <script>
 const ADMIN_SESSION_DURATION = 24 * 60 * 60 * 1000; // 24 hours
+const ADMIN_DASHBOARD_URL = 'https://mgrnz.com/admin/';
 const ADMIN_VALID_ACCESS_CODES = [
   'admin2025',
   'mgrnz-admin',
@@ -179,7 +180,7 @@ function authenticateAdmin(event) {
 
       closeAdminAuthModal();
       toggleAdminMenu(true);
-      window.location.href = '/admin/';
+      window.location.href = ADMIN_DASHBOARD_URL;
     } else {
       if (error) {
         error.textContent = 'Invalid access code. Please try again.';
@@ -208,7 +209,7 @@ function hasValidAdminSession() {
 
 function checkAdminAccess() {
   if (hasValidAdminSession()) {
-    toggleAdminMenu();
+    window.location.href = ADMIN_DASHBOARD_URL;
     return;
   }
 
