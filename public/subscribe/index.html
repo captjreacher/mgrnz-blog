@@ -256,7 +256,7 @@ function checkAdminAccess() {
   }
 
   clearAdminSession();
-  window.location.href = '/admin/';
+  openAdminAuthModal();
 }
 
 function toggleAdminMenu(forceHide = false) {
