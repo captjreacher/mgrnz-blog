@@ -140,6 +140,70 @@
                               class="w-full orange-border rounded-lg px-4 py-2 text-white bg-neutral-700 font-mono text-sm"></textarea>
                 </div>
 
+                <!-- Social Post Options -->
+                <div class="bg-neutral-700 rounded-lg p-4 border-2 border-blue-500">
+                    <h3 class="text-lg font-semibold text-blue-400 mb-3">📣 Social Media Post</h3>
+                    <div class="grid gap-6 md:grid-cols-2">
+                        <div>
+                            <label class="block text-sm font-medium text-neutral-300 mb-2">Social Caption</label>
+                            <textarea name="social_caption" rows="4" placeholder="Short caption for social media..." 
+                                      class="w-full orange-border rounded-lg px-4 py-2 text-white bg-neutral-800"></textarea>
+                            <p class="text-xs text-neutral-400 mt-1">Tip: Keep under typical limits (e.g., 280 chars for X).</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-neutral-300 mb-2">Link URL</label>
+                            <input name="social_link" placeholder="https://mgrnz.com/posts/your-post/" 
+                                   class="w-full orange-border rounded-lg px-4 py-2 text-white bg-neutral-800">
+                            <label class="block text-sm font-medium text-neutral-300 mt-4 mb-2">Hashtags</label>
+                            <input name="social_hashtags" placeholder="#AI, #Automation" 
+                                   class="w-full orange-border rounded-lg px-4 py-2 text-white bg-neutral-800">
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <label class="block text-sm font-medium text-neutral-300 mb-2">Platforms</label>
+                        <select name="social_platforms" id="socialPlatforms" multiple 
+                                class="w-full orange-border rounded-lg px-4 py-2 text-white bg-neutral-800">
+                            <option value="x">X / Twitter</option>
+                            <option value="facebook_page">Facebook Page</option>
+                            <option value="linkedin_page">LinkedIn Page</option>
+                            <option value="instagram">Instagram</option>
+                            <option value="threads">Threads</option>
+                            <option value="youtube_community">YouTube Community</option>
+                        </select>
+                        <p class="text-xs text-neutral-400 mt-1">Hold Ctrl/Cmd to select multiple platforms.</p>
+                    </div>
+                </div>
+
+                <!-- Scheduling -->
+                <div class="bg-neutral-700 rounded-lg p-4 border-2 border-teal-500">
+                    <h3 class="text-lg font-semibold text-teal-300 mb-3">🗓️ Scheduling</h3>
+                    <label class="inline-flex items-center gap-2">
+                        <input id="scheduleEnabled" type="checkbox" class="rounded border-neutral-500"> 
+                        <span class="text-neutral-200 text-sm">Schedule this post (blog + selected social)</span>
+                    </label>
+                    <div id="scheduleFields" class="grid gap-6 md:grid-cols-3 mt-4 hidden">
+                        <div>
+                            <label class="block text-sm font-medium text-neutral-300 mb-2">Date</label>
+                            <input name="schedule_date" type="date" class="w-full orange-border rounded-lg px-4 py-2 text-white bg-neutral-800">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-neutral-300 mb-2">Time</label>
+                            <input name="schedule_time" type="time" class="w-full orange-border rounded-lg px-4 py-2 text-white bg-neutral-800">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-neutral-300 mb-2">Timezone</label>
+                            <select name="schedule_tz" class="w-full orange-border rounded-lg px-4 py-2 text-white bg-neutral-800">
+                                <option value="Pacific/Auckland">Pacific/Auckland (NZ)</option>
+                                <option value="UTC">UTC</option>
+                                <option value="Pacific/Australia">Australia/Sydney</option>
+                                <option value="America/Los_Angeles">America/Los_Angeles</option>
+                                <option value="America/New_York">America/New_York</option>
+                                <option value="Europe/London">Europe/London</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- GitHub Token Section -->
                 <div id="tokenSection" class="bg-neutral-700 rounded-lg p-4 border-2 border-yellow-500">
                     <h3 class="text-lg font-semibold text-yellow-400 mb-3">🔑 GitHub Authentication</h3>
@@ -181,6 +245,19 @@
         document.querySelector('input[name="date"]').value = today.toISOString().slice(0,10);
         updateSlugPrefix();
         
+        // Toggle schedule fields
+        const scheduleEnabledEl = document.getElementById('scheduleEnabled');
+        const scheduleFieldsEl = document.getElementById('scheduleFields');
+        if (scheduleEnabledEl && scheduleFieldsEl) {
+            scheduleEnabledEl.addEventListener('change', () => {
+                if (scheduleEnabledEl.checked) {
+                    scheduleFieldsEl.classList.remove('hidden');
+                } else {
+                    scheduleFieldsEl.classList.add('hidden');
+                }
+            });
+        }
+
         // Check for saved GitHub token on page load
         checkGitHubToken();
 
@@ -252,6 +329,21 @@
                 const month = String(dateObj.getMonth() + 1).padStart(2, '0');
                 const folderName = `${slug}`;
                 
+                // Gather social + scheduling
+                const socialCaption = formData.get('social_caption') || '';
+                const socialLink = formData.get('social_link') || '';
+                const socialHashtags = formData.get('social_hashtags') || '';
+                const selectedPlatforms = Array.from(document.getElementById('socialPlatforms')?.selectedOptions || []).map(o => o.value);
+
+                const scheduleEnabled = document.getElementById('scheduleEnabled')?.checked || false;
+                const scheduleDate = formData.get('schedule_date') || '';
+                const scheduleTime = formData.get('schedule_time') || '';
+                const scheduleTz = formData.get('schedule_tz') || '';
+
+                if (scheduleEnabled && (!scheduleDate || !scheduleTime)) {
+                    throw new Error('Scheduling is enabled but date/time are missing.');
+                }
+
                 // Generate markdown content
                 let markdown = '---\n';
                 markdown += `title: "${title.replace(/"/g, '\\"')}"\n`;
@@ -276,6 +368,26 @@
                     markdown += `summary: "${excerpt.replace(/"/g, '\\"')}"\n`;
                 }
                 
+                // Social metadata
+                if (selectedPlatforms.length > 0 || socialCaption || socialLink || socialHashtags) {
+                    markdown += 'social:\n';
+                    if (selectedPlatforms.length > 0) {
+                        markdown += `  platforms: [${selectedPlatforms.map(p => `"${p}"`).join(', ')}]\n`;
+                    }
+                    if (socialCaption) markdown += `  caption: "${socialCaption.replace(/"/g, '\\"')}"\n`;
+                    if (socialLink) markdown += `  link: "${socialLink.replace(/"/g, '\\"')}"\n`;
+                    if (socialHashtags) markdown += `  hashtags: "${socialHashtags.replace(/"/g, '\\"')}"\n`;
+                }
+
+                // Scheduling metadata
+                if (scheduleEnabled) {
+                    const iso = new Date(`${scheduleDate}T${scheduleTime}:00`).toISOString();
+                    markdown += 'schedule:\n';
+                    markdown += `  enabled: true\n`;
+                    markdown += `  at: "${iso}"\n`;
+                    if (scheduleTz) markdown += `  timezone: "${scheduleTz}"\n`;
+                }
+
                 markdown += '---\n\n';
                 markdown += content || '# ' + title + '\n\nYour post content goes here.\n\n---\n\n<div style="text-align: center; margin: 30px 0;">\n<' + 'script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="mgrnz" data-color="#ff6905" data-emoji=""  data-font="Cookie" data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#FFDD00" ></' + 'script>\n</div>';
                 

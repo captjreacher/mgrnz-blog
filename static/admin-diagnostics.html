@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin • Pipeline Diagnostics</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>body{background-color:#0f172a!important}</style>
+</head>
+<body class="min-h-screen bg-neutral-900 text-white">
+  <header class="sticky top-0 z-20 border-b border-neutral-700 bg-neutral-800">
+    <div class="flex items-center justify-between px-6 py-4">
+      <div class="flex items-center gap-4">
+        <a href="/admin/" class="text-orange-500 hover:text-orange-400 transition-colors">← Dashboard</a>
+        <h1 class="text-xl font-bold text-white">Pipeline Diagnostics</h1>
+        <span class="px-2 py-1 bg-blue-900 text-blue-300 text-xs rounded-full">Tools</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-4xl px-6 py-8 space-y-6">
+    <section class="rounded-lg bg-neutral-800 border border-neutral-700 p-6">
+      <h2 class="text-lg font-semibold mb-4">Quick Checks</h2>
+      <div class="grid gap-3 md:grid-cols-2">
+        <a href="/deploy-test-static.html" class="block rounded-lg p-4 bg-neutral-700 hover:bg-neutral-600 transition-colors">🔎 Static Deploy Test</a>
+        <a href="/test-deploy.html" class="block rounded-lg p-4 bg-neutral-700 hover:bg-neutral-600 transition-colors">🚀 HTML Deploy Test</a>
+        <a href="/deployment-timestamp.txt" class="block rounded-lg p-4 bg-neutral-700 hover:bg-neutral-600 transition-colors">⏱️ Deployment Timestamp</a>
+        <a href="/build-info.txt" class="block rounded-lg p-4 bg-neutral-700 hover:bg-neutral-600 transition-colors">📄 Build Info</a>
+      </div>
+    </section>
+
+    <section class="rounded-lg bg-neutral-800 border border-neutral-700 p-6">
+      <h2 class="text-lg font-semibold mb-4">Workflow & Reports</h2>
+      <ul class="space-y-2 text-sm text-neutral-300">
+        <li><a class="text-blue-400 hover:text-blue-300" target="_blank" href="https://github.com/captjreacher/mgrnz-blog/actions">GitHub Actions</a> – view build logs and Pages deploys</li>
+        <li><a class="text-blue-400 hover:text-blue-300" href="/admin-dashboard.html">Admin Dashboard</a> – quick status and test button</li>
+      </ul>
+    </section>
+
+    <section class="rounded-lg bg-neutral-800 border border-neutral-700 p-6">
+      <h2 class="text-lg font-semibold mb-4">Advanced Diagnostics</h2>
+      <p class="text-neutral-300 text-sm mb-3">Use the monitoring system for deep pipeline insights. Start the dashboard server locally, then open the link below.</p>
+      <ol class="list-decimal list-inside text-sm text-neutral-300 space-y-1">
+        <li>In repo root: <code class="bg-neutral-700 px-2 py-1 rounded">cd monitoring-system && npm i && npm run start</code></li>
+        <li>Open local dashboard: <span class="text-neutral-400">http://localhost:8789</span></li>
+      </ol>
+      <div class="mt-4 text-sm text-neutral-400">The dashboard provides real-time pipeline runs, alerts, and performance charts.</div>
+    </section>
+  </main>
+</body>
+</html>
+
+

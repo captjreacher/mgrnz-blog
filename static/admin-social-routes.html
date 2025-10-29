@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin • Social Media Routes</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>body{background-color:#0f172a!important}</style>
+</head>
+<body class="min-h-screen bg-neutral-900 text-white">
+  <header class="sticky top-0 z-20 border-b border-neutral-700 bg-neutral-800">
+    <div class="flex items-center justify-between px-6 py-4">
+      <div class="flex items-center gap-4">
+        <a href="/admin/" class="text-orange-500 hover:text-orange-400 transition-colors">← Dashboard</a>
+        <h1 class="text-xl font-bold text-white">Social Media Routes</h1>
+        <span class="px-2 py-1 bg-purple-900 text-purple-300 text-xs rounded-full">Manage</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-5xl px-6 py-8 space-y-6">
+    <section class="rounded-lg bg-neutral-800 border border-neutral-700 p-6">
+      <h2 class="text-lg font-semibold mb-4">Connected Accounts / Pages</h2>
+      <div class="mb-4 text-sm text-neutral-300">Create routes to target social accounts/pages for auto-posting.</div>
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-sm">
+          <thead>
+            <tr class="text-left text-neutral-300 border-b border-neutral-700">
+              <th class="py-2 pr-4">Platform</th>
+              <th class="py-2 pr-4">Account/Page</th>
+              <th class="py-2 pr-4">Auth</th>
+              <th class="py-2 pr-4">Status</th>
+              <th class="py-2">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="routesTable">
+            <!-- Populated client-side from localStorage as a lightweight placeholder -->
+          </tbody>
+        </table>
+      </div>
+      <div class="mt-4 flex gap-2">
+        <button id="addRouteBtn" class="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded text-sm">➕ Add Route</button>
+        <button id="importRoutesBtn" class="bg-neutral-700 hover:bg-neutral-600 px-4 py-2 rounded text-sm">⬆️ Import JSON</button>
+        <button id="exportRoutesBtn" class="bg-neutral-700 hover:bg-neutral-600 px-4 py-2 rounded text-sm">⬇️ Export JSON</button>
+      </div>
+    </section>
+
+    <section class="rounded-lg bg-neutral-800 border border-neutral-700 p-6">
+      <h2 class="text-lg font-semibold mb-4">How to connect (recommended)</h2>
+      <ol class="list-decimal list-inside text-sm text-neutral-300 space-y-1">
+        <li>Use Buffer or native APIs; store tokens in Supabase secrets.</li>
+        <li>Edge Function reads routes and posts content; never store tokens in repo.</li>
+        <li>Test each route with a dry-run before enabling live posting.</li>
+      </ol>
+    </section>
+  </main>
+
+  <script>
+    const STORAGE_KEY = 'admin_social_routes';
+    function loadRoutes(){
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch { return []; }
+    }
+    function saveRoutes(routes){ localStorage.setItem(STORAGE_KEY, JSON.stringify(routes)); }
+    function render(){
+      const tbody = document.getElementById('routesTable');
+      const routes = loadRoutes();
+      tbody.innerHTML = '';
+      if(routes.length === 0){
+        const tr = document.createElement('tr');
+        tr.innerHTML = '<td colspan="5" class="py-4 text-neutral-400">No routes configured yet.</td>';
+        tbody.appendChild(tr);
+        return;
+      }
+      routes.forEach((r, idx) => {
+        const tr = document.createElement('tr');
+        tr.className = 'border-b border-neutral-800';
+        tr.innerHTML = `
+          <td class="py-2 pr-4">${r.platform || ''}</td>
+          <td class="py-2 pr-4">${r.display || ''}</td>
+          <td class="py-2 pr-4">${r.auth || 'token'}</td>
+          <td class="py-2 pr-4"><span class="px-2 py-1 text-xs ${r.enabled ? 'bg-green-900 text-green-300' : 'bg-neutral-700 text-neutral-300'} rounded">${r.enabled ? 'Enabled' : 'Disabled'}</span></td>
+          <td class="py-2">
+            <button data-idx="${idx}" class="editRoute text-blue-400 hover:text-blue-300 mr-3">Edit</button>
+            <button data-idx="${idx}" class="toggleRoute text-orange-400 hover:text-orange-300 mr-3">${r.enabled ? 'Disable' : 'Enable'}</button>
+            <button data-idx="${idx}" class="deleteRoute text-red-400 hover:text-red-300">Delete</button>
+          </td>`;
+        tbody.appendChild(tr);
+      });
+    }
+    function addRoute(){
+      const platform = prompt('Platform (x, facebook_page, linkedin_page, instagram, threads, youtube_community):');
+      if(!platform) return;
+      const display = prompt('Account/Page display name:');
+      const auth = 'token';
+      const enabled = true;
+      const routes = loadRoutes();
+      routes.push({ platform, display, auth, enabled });
+      saveRoutes(routes); render();
+    }
+    function onTableClick(e){
+      const idx = e.target.getAttribute('data-idx');
+      if(idx == null) return;
+      const routes = loadRoutes();
+      const r = routes[+idx];
+      if(e.target.classList.contains('editRoute')){
+        const newDisplay = prompt('Edit display name:', r.display || '');
+        if(newDisplay != null){ r.display = newDisplay; saveRoutes(routes); render(); }
+      } else if(e.target.classList.contains('toggleRoute')){
+        r.enabled = !r.enabled; saveRoutes(routes); render();
+      } else if(e.target.classList.contains('deleteRoute')){
+        if(confirm('Delete this route?')){ routes.splice(+idx,1); saveRoutes(routes); render(); }
+      }
+    }
+    function exportRoutes(){
+      const blob = new Blob([localStorage.getItem(STORAGE_KEY) || '[]'], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'social-routes.json';
+      a.click();
+    }
+    function importRoutes(){
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'application/json';
+      input.onchange = () => {
+        const file = input.files[0];
+        if(!file) return;
+        const reader = new FileReader();
+        reader.onload = () => { try { saveRoutes(JSON.parse(reader.result)); render(); } catch { alert('Invalid JSON'); } };
+        reader.readAsText(file);
+      };
+      input.click();
+    }
+    document.getElementById('addRouteBtn').addEventListener('click', addRoute);
+    document.getElementById('exportRoutesBtn').addEventListener('click', exportRoutes);
+    document.getElementById('importRoutesBtn').addEventListener('click', importRoutes);
+    document.getElementById('routesTable').addEventListener('click', onTableClick);
+    render();
+  </script>
+</body>
+</html>
+
+

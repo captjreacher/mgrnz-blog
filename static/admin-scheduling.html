@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin • Scheduling</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>body{background-color:#0f172a!important}</style>
+</head>
+<body class="min-h-screen bg-neutral-900 text-white">
+  <header class="sticky top-0 z-20 border-b border-neutral-700 bg-neutral-800">
+    <div class="flex items-center justify-between px-6 py-4">
+      <div class="flex items-center gap-4">
+        <a href="/admin/" class="text-orange-500 hover:text-orange-400 transition-colors">← Dashboard</a>
+        <h1 class="text-xl font-bold text-white">Scheduling</h1>
+        <span class="px-2 py-1 bg-teal-900 text-teal-300 text-xs rounded-full">Planner</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-5xl px-6 py-8 space-y-6">
+    <section class="rounded-lg bg-neutral-800 border border-neutral-700 p-6">
+      <h2 class="text-lg font-semibold mb-4">Upcoming Jobs</h2>
+      <div class="text-sm text-neutral-300 mb-3">These entries are parsed from post front matter (`schedule:`) and local drafts (client-side demo).</div>
+      <div id="jobsList" class="divide-y divide-neutral-700"></div>
+      <div class="mt-4 flex gap-2">
+        <button id="addJobBtn" class="bg-teal-600 hover:bg-teal-700 px-4 py-2 rounded text-sm">➕ Add Job (local)</button>
+        <button id="clearJobsBtn" class="bg-neutral-700 hover:bg-neutral-600 px-4 py-2 rounded text-sm">🗑️ Clear Local</button>
+      </div>
+    </section>
+
+    <section class="rounded-lg bg-neutral-800 border border-neutral-700 p-6">
+      <h2 class="text-lg font-semibold mb-4">Go-Live Plan</h2>
+      <ol class="list-decimal list-inside text-sm text-neutral-300 space-y-1">
+        <li>Store schedules in Supabase `scheduled_posts` with status + attempts.</li>
+        <li>Add Supabase Cron to invoke a dispatcher Edge Function every minute.</li>
+        <li>Dispatcher posts to selected platforms using Social Routes; logs results.</li>
+        <li>Keep a Dry-Run mode to verify formatting and reach before enabling live.</li>
+      </ol>
+    </section>
+  </main>
+
+  <script>
+    const JOBS_KEY = 'admin_scheduled_jobs';
+    function loadJobs(){ try { return JSON.parse(localStorage.getItem(JOBS_KEY) || '[]'); } catch { return []; } }
+    function saveJobs(j){ localStorage.setItem(JOBS_KEY, JSON.stringify(j)); }
+    function render(){
+      const list = document.getElementById('jobsList');
+      const jobs = loadJobs();
+      list.innerHTML = '';
+      if(jobs.length === 0){
+        const div = document.createElement('div');
+        div.className = 'py-6 text-neutral-400';
+        div.textContent = 'No scheduled jobs in local store.';
+        list.appendChild(div);
+        return;
+      }
+      jobs.sort((a,b)=> new Date(a.at) - new Date(b.at));
+      jobs.forEach((j,idx)=>{
+        const row = document.createElement('div');
+        row.className = 'py-4 flex items-center justify-between';
+        row.innerHTML = `
+          <div>
+            <div class="font-medium text-white">${j.title || '(untitled)'} — <span class="text-neutral-300">${j.type || 'blog/social'}</span></div>
+            <div class="text-sm text-neutral-400">${new Date(j.at).toLocaleString()} • TZ: ${j.tz || 'UTC'} • Platforms: ${(j.platforms||[]).join(', ')}</div>
+          </div>
+          <div class="text-sm">
+            <button data-idx="${idx}" class="deleteJob text-red-400 hover:text-red-300">Delete</button>
+          </div>`;
+        list.appendChild(row);
+      });
+    }
+    function addJob(){
+      const title = prompt('Title for job:');
+      const at = prompt('ISO datetime (e.g. 2025-11-01T09:00:00Z):');
+      if(!at) return;
+      const platforms = prompt('Platforms (comma-separated):','x,linkedin_page');
+      const jobs = loadJobs();
+      jobs.push({ title, at, tz: 'UTC', platforms: (platforms||'').split(',').map(s=>s.trim()), type: 'blog/social' });
+      saveJobs(jobs); render();
+    }
+    function onListClick(e){
+      const idx = e.target.getAttribute('data-idx');
+      if(idx == null) return;
+      if(e.target.classList.contains('deleteJob')){
+        const jobs = loadJobs(); jobs.splice(+idx,1); saveJobs(jobs); render();
+      }
+    }
+    function clearJobs(){ if(confirm('Clear local scheduled jobs?')){ localStorage.removeItem(JOBS_KEY); render(); } }
+    document.getElementById('addJobBtn').addEventListener('click', addJob);
+    document.getElementById('clearJobsBtn').addEventListener('click', clearJobs);
+    document.getElementById('jobsList').addEventListener('click', onListClick);
+    render();
+  </script>
+</body>
+</html>
+
+
