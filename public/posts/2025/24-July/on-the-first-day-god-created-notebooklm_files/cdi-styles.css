@@ -1,0 +1,122 @@
+/**
+ * All of the CSS for your public-facing functionality should be
+ * included in this file.
+ */
+.ai-body .ai-header {
+  display: none;
+}
+.importer-notice {
+  border-left: 3px solid #0c50ff;
+  padding-left: 20px;
+  color: #5566ca;
+}
+.ai-body .ai-filter-tabs {
+  box-shadow: none;
+  background: #e0e2ed;
+  /* color: #fff; */
+  border: 0;
+  border-radius: 5px;
+}
+.ai-body .ai-actions.ai-sidebar {
+  box-shadow: none;
+  background: #e0e2ed;
+  border: 0;
+}
+.ai-filter-tabs ul li.ai-filter-btn-active {
+  background: #f8fffe;
+  border-radius: 50px;
+  color: #0c50ff;
+}
+.ai-filter-tabs ul li .ai-count,
+.ai-body .ai-actions.ai-sidebar .ai-count {
+  background: #0c50ff;
+  color: #fff;
+}
+.ai-import-available-categories
+  ul.ai-import-fp-lists
+  li.ai-fp-filter.ai-filter-btn-active {
+  border: 0;
+  background: #0c50ff;
+  color: #fff;
+  border-radius: 40px;
+}
+.ai-import-available-categories ul.ai-import-fp-lists {
+  border-bottom: 0;
+  margin: 0;
+}
+.ai-item-preview {
+  border: 0;
+  overflow: hidden;
+  border-radius: 0;
+}
+.ai-item {
+  box-shadow: 0 0 14px rgba(0, 0, 0, 0.13);
+  overflow: hidden;
+  border-radius: 4px;
+}
+.ai-item-preview .ai-premium-label {
+  background: #f21544;
+  padding: 5px 30px;
+  transform: rotate(43deg);
+  right: -30px;
+  top: 16px;
+  font-size: 12px;
+}
+.ai-item-preview .ai-premium-label:before,
+.ai-item-preview .ai-premium-label:after,
+.ai-item-preview .ai-author-info,
+.ai-item-preview .ai-details {
+  display: none;
+}
+.ai-item-preview .ai-item-screenshot {
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+  overflow: hidden;
+}
+.ai-item-footer {
+  border-radius: 0;
+  padding: 10px;
+}
+.ai-item-footer-actions .button {
+  line-height: 28px;
+  height: 30px;
+  /* border-color: #0c50ff; */
+  /* color: #0c50ff; */
+}
+.ai-item-footer-actions .button.button-primary {
+  background-color: #fff;
+  border-color: transparent;
+  color: #0c50ff;
+}
+.ai-item-footer-actions .button:hover,
+.ai-item-footer-actions .button.button-primary:hover {
+  background: #5566ca;
+  color: #fff;
+  border-color: #5566ca;
+}
+.ai-item-footer-actions {
+  width: 100%;
+  left: 0;
+  top: -63px;
+  background: transparent;
+  box-sizing: border-box;
+}
+.ai-item-footer .theme-name {
+  text-align: center;
+  font-size: 14px;
+}
+.ai-search-control .ai-search-filter {
+  border: 0;
+}
+.ai-import-available-categories ul li:after,
+.ai-filter-content-wrapper {
+  background-color: #fff;
+}
+.ai-import-available-categories ul.ai-import-fp-lists li.ai-fp-filter {
+  border-radius: 40px;
+}
+
+/* Removing preview btn */
+.ai-item-footer-actions .button.ai-item-demo-link {
+  display: none !important;
+}

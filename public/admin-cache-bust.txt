@@ -1,0 +1,4 @@
+Cache bust timestamp: {{ now.Unix }}
+Admin system update: {{ now.Format "2006-01-02 15:04:05" }}
+
+This file forces a fresh deployment to ensure admin changes are live.

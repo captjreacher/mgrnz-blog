@@ -1,0 +1,1 @@
+(()=>{"use strict";const{isPremium:o,imageDir:s,googleFonts:e,icons:i,socialIcons:t,shapeDividerIcons:c,megaMenuCPT:r,portfolioCPT:a,portfolioTerms:l,productReviews:n,totalReviews:g,avgReviews:m}=cozyBlockAssets})();

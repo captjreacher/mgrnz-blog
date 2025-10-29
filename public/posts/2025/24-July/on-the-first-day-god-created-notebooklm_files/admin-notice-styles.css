@@ -1,0 +1,77 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900");
+
+:root {
+	--cozy-addons--primary-color: #5145ff;
+	--cozy-addons--secondary-color: #2b3337;
+}
+
+/* Admin Menu */
+#adminmenu li#toplevel_page__cozy_companions .wp-menu-image img {
+	opacity: 1;
+	width: 19px;
+	margin-top: -3px;
+	margin-left: 3px;
+}
+#adminmenu
+	li.wp-has-current-submenu#toplevel_page__cozy_companions
+	a.wp-has-current-submenu {
+	background-color: var(--cozy-addons--primary-color);
+	color: #ffffff;
+}
+
+/* Admin */
+.cozy-addons-admin-notice {
+	display: flex;
+	padding: 0 20px 0 0;
+	margin-top: 16px;
+	margin-bottom: 16px;
+	justify-content: space-between;
+	align-items: center;
+	border-left-color: #4b7cb3;
+	font-family: Inter;
+	font-size: 16px;
+}
+.cozy-addons-admin-notice .notice-content {
+	padding: 20px 5% 20px 20px;
+	width: 60%;
+	display: flex;
+	align-items: center;
+}
+.cozy-addons-admin-notice .notice-holder h4 {
+	font-weight: 600;
+	font-size: 28px;
+	line-height: 1.3;
+	margin: 16px 0 12px;
+}
+.cozy-addons-admin-notice .notice-content p {
+	font-size: 16px;
+	margin: 0;
+}
+.cozy-addons-admin-notice .ca__admin-notice-btn {
+	background-color: #4b7cb3;
+	color: #fff;
+	padding: 12px 26px;
+	text-decoration: none;
+	margin: 26px 0 10px;
+	display: inline-block;
+	transition: all 0.3s ease;
+}
+.cozy-addons-admin-notice .ca__admin-notice-btn:hover {
+	background-color: var(--cozy-addons--secondary-color);
+}
+.cozy-addons-admin-notice .ca__admin-notice-btn::after {
+	content: "\2192"; /* → */
+	display: inline-block;
+	transform: scale(0);
+	transform-origin: left;
+	transition: transform 0.4s ease;
+	width: 0;
+}
+.cozy-addons-admin-notice .ca__admin-notice-btn:hover::after {
+	margin-left: 5px;
+	width: auto;
+	transform: scale(1);
+}
+.cozy-addons-admin-notice .plugin-screen img {
+	max-height: 214px;
+}

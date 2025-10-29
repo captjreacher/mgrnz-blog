@@ -1,0 +1,35 @@
+/* Force white text on all admin form elements */
+input, textarea, select {
+    color: white !important;
+    background-color: #374151 !important;
+    border: 2px solid #ff4f00 !important;
+}
+
+input:focus, textarea:focus, select:focus {
+    color: white !important;
+    background-color: #374151 !important;
+    border-color: #ff6600 !important;
+    box-shadow: 0 0 0 3px rgba(255, 79, 0, 0.2) !important;
+}
+
+label {
+    color: white !important;
+}
+
+/* Ensure placeholder text is visible */
+input::placeholder, textarea::placeholder {
+    color: #9CA3AF !important;
+}
+
+/* Fix any dark text */
+* {
+    color: white !important;
+}
+
+/* Override any conflicting styles */
+.admin-form input,
+.admin-form textarea,
+.admin-form select {
+    color: white !important;
+    background-color: #374151 !important;
+}

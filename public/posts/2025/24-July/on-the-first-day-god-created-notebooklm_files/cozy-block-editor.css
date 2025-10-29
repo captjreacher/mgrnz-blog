@@ -1,0 +1,111 @@
+/* Pro Label */
+.cozy-block-pro-label {
+	background-color: #fd1321;
+	color: #fff;
+	padding: 0 5px;
+	border-radius: 10px;
+	font-size: 10px;
+	max-height: 18px;
+}
+
+.cozy-block-styles__div-separator {
+	display: flex;
+	justify-content: space-between;
+	gap: 10px;
+
+	& > div {
+		width: 100%;
+	}
+}
+
+.has-light-border-top {
+	border-top: 1px solid #e0e0e0 !important;
+}
+
+.has-light-border-bottom {
+	border-bottom: 1px solid #e0e0e0 !important;
+}
+
+.cozy-box-control {
+	position: relative;
+
+	& .components-flex {
+		align-items: center;
+
+		& .components-base-control.components-input-control {
+			margin-bottom: 0;
+		}
+	}
+}
+
+.cozy-border-box-control > label {
+	padding-bottom: 10px;
+}
+.cozy-border-box-control .components-button.is-small.has-icon {
+	transform: translateY(-32px);
+}
+
+/* Cozy Blocks Navigator Styles */
+.cozy-block-styles__navigator {
+	& .components-button.components-navigator-button {
+		margin: 4px;
+		background-color: #0c50ff;
+	}
+
+	& .components-button.components-navigator-back-button {
+		margin: 10px 4px;
+		background-color: rgb(21, 22, 26);
+	}
+
+	& .components-button.components-navigator-button,
+	& .components-button.components-navigator-back-button {
+		border-radius: 5px;
+		color: #fff;
+
+		&:hover {
+			background-color: #f90;
+		}
+	}
+}
+
+/* Custom Inspector Tab Control */
+.cozy-block__tab-control {
+	width: 100%;
+}
+.components-color-picker {
+	margin: 0 auto;
+}
+
+.components-panel__body.block-editor-block-inspector__advanced {
+	border-top: 1px solid #cacaca;
+	margin-top: 0;
+}
+
+.components-panel.has-light-border-bottom {
+	border-bottom: 1px solid #cacaca;
+}
+
+.cozy-block__trash-icon svg {
+	fill: #cf2e2e;
+}
+
+.cozy-block-setting__list-item-wrapper {
+	padding: "6px";
+	display: flex;
+	justify-content: space-between;
+	margin: 10px 0;
+	border: 1px solid #cacaca;
+
+	& div {
+		margin: 0 !important;
+	}
+
+	& > .components-base-control {
+		width: 100%;
+	}
+}
+
+/* Color Panel Settings */
+.cozy-color-control.border-none {
+	border: none;
+}
