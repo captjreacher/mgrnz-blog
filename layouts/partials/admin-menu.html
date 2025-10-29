@@ -73,25 +73,28 @@
 
 <script>
 const ADMIN_SESSION_DURATION = 24 * 60 * 60 * 1000; // 24 hours
-const ADMIN_VALID_CODES = ['admin2025', 'mgrnz-admin', 'blog-secure', 'admin', 'mgrnz2025'];
 
-function checkAdminAccess() {
+function hasValidAdminSession() {
   const authToken = localStorage.getItem('admin_auth_token');
   const authTime = localStorage.getItem('admin_auth_time');
 
-  if (authToken && authTime) {
-    const now = Date.now();
-    const authAge = now - parseInt(authTime, 10);
-
-    if (authAge < ADMIN_SESSION_DURATION) {
-      toggleAdminMenu();
-      return;
-    }
-
-    clearAdminSession();
+  if (!authToken || !authTime) {
+    return false;
   }
 
-  openAdminAuthModal();
+  const now = Date.now();
+  const authAge = now - parseInt(authTime, 10);
+  return authAge < ADMIN_SESSION_DURATION;
+}
+
+function checkAdminAccess() {
+  if (hasValidAdminSession()) {
+    toggleAdminMenu();
+    return;
+  }
+
+  clearAdminSession();
+  window.location.href = '/admin/';
 }
 
 function toggleAdminMenu(forceHide = false) {
@@ -121,83 +124,6 @@ function logoutAdmin(event) {
   }
 }
 
-function openAdminAuthModal() {
-  const modal = document.getElementById('adminAuthModal');
-  if (!modal) return;
-
-  toggleAdminMenu(true);
-  modal.classList.remove('hidden');
-  const input = document.getElementById('adminAccessCode');
-  if (input) {
-    setTimeout(() => input.focus(), 0);
-  }
-}
-
-function closeAdminAuthModal() {
-  const modal = document.getElementById('adminAuthModal');
-  if (!modal) return;
-
-  modal.classList.add('hidden');
-  const form = modal.querySelector('form');
-  if (form) {
-    form.reset();
-  }
-  const errorBanner = document.getElementById('adminAuthError');
-  if (errorBanner) {
-    errorBanner.classList.add('hidden');
-  }
-  resetAdminAuthButton();
-}
-
-function authenticateAdmin(event) {
-  event.preventDefault();
-
-  const accessCodeInput = document.getElementById('adminAccessCode');
-  const submitButton = document.getElementById('adminAuthSubmit');
-  const errorBanner = document.getElementById('adminAuthError');
-
-  if (!accessCodeInput || !submitButton) {
-    return;
-  }
-
-  const accessCode = accessCodeInput.value.trim();
-  errorBanner.classList.add('hidden');
-  submitButton.disabled = true;
-  submitButton.querySelector('.auth-action-label').textContent = '⏳ Verifying...';
-
-  setTimeout(() => {
-    const isValid = ADMIN_VALID_CODES.includes(accessCode);
-
-    if (isValid) {
-      const authToken = generateAdminToken();
-      localStorage.setItem('admin_auth_token', authToken);
-      localStorage.setItem('admin_auth_time', Date.now().toString());
-
-      closeAdminAuthModal();
-      toggleAdminMenu(false);
-      window.location.href = '/admin/';
-    } else {
-      errorBanner.classList.remove('hidden');
-      submitButton.disabled = false;
-      submitButton.querySelector('.auth-action-label').textContent = '🔐 Access Admin';
-      accessCodeInput.focus();
-      accessCodeInput.select();
-    }
-  }, 400);
-}
-
-function resetAdminAuthButton() {
-  const submitButton = document.getElementById('adminAuthSubmit');
-  if (!submitButton) return;
-
-  submitButton.disabled = false;
-  submitButton.querySelector('.auth-action-label').textContent = '🔐 Access Admin';
-}
-
-function generateAdminToken() {
-  return btoa(`${Date.now()}-${Math.random().toString(36).slice(2)}`);
-}
-
 function clearAdminSession() {
   localStorage.removeItem('admin_auth_token');
   localStorage.removeItem('admin_auth_time');
@@ -207,22 +133,6 @@ function clearAdminSession() {
 document.addEventListener('click', function(event) {
   const dropdown = document.getElementById('adminDropdown');
   const button = event.target.closest('button[onclick="checkAdminAccess()"]');
-  const modal = document.getElementById('adminAuthModal');
-
-  if (modal && !modal.classList.contains('hidden')) {
-    const form = modal.querySelector('form');
-    const modalCard = form ? form.parentElement : null;
-
-    if (event.target === modal) {
-      closeAdminAuthModal();
-      return;
-    }
-
-    if (modalCard && !modalCard.contains(event.target)) {
-      closeAdminAuthModal();
-      return;
-    }
-  }
 
   if (dropdown && !button && !dropdown.contains(event.target)) {
     dropdown.classList.add('hidden');
@@ -231,7 +141,6 @@ document.addEventListener('click', function(event) {
 
 document.addEventListener('keydown', function(event) {
   if (event.key === 'Escape') {
-    closeAdminAuthModal();
     toggleAdminMenu(true);
   }
 });
