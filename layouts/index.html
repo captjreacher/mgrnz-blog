@@ -66,3 +66,10 @@
   {{ end }}
 </div>
 {{ end }}
+
+{{ define "scripts" }}
+  <!-- Required JavaScript Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="/js/mobile-menu.js?v={{ now.Unix }}"></script>
+  <script src="/js/app.js?v={{ now.Unix }}"></script>
+{{ end }}
