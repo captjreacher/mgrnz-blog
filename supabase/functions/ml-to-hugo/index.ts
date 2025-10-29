@@ -14,6 +14,35 @@ function toBase64UTF8(s: string) {
   // btoa expects latin1; encode first so non-ASCII survives
   return btoa(unescape(encodeURIComponent(s)));
 }
+async function triggerGithubWorkflow({
+  owner,
+  repo,
+  token,
+  workflow,
+  ref,
+  inputs,
+}: {
+  owner: string;
+  repo: string;
+  token: string;
+  workflow: string;
+  ref: string;
+  inputs: Record<string, string>;
+}) {
+  const workflowUrl =
+    `https://api.github.com/repos/${owner}/${repo}/actions/workflows/${encodeURIComponent(workflow)}/dispatches`;
+  const res = await fetch(workflowUrl, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: "application/vnd.github+json",
+    },
+    body: JSON.stringify({ ref, inputs }),
+  });
+
+  const text = res.status === 204 ? "" : await res.text();
+  return { ok: res.ok, status: res.status, body: text.slice(0, 300) };
+}
 
 /* ------------------------ main ------------------------- */
 serve(async (req) => {
@@ -39,15 +68,45 @@ serve(async (req) => {
       body?.id ??
       "";
 
-    // Manual test path (no MailerLite / GitHub work; just ping CF)
+    // Manual test path (no MailerLite campaign; just dispatch workflow)
     if (!event && !campaignId && (body?.reason || body?.manual)) {
-      const hook = Deno.env.get("HUGO_WEBHOOK_URL");
-      if (!hook) return jsonResponse({ ok: false, error: "Missing HUGO_WEBHOOK_URL" }, 500);
-      const cf = await fetch(hook, { method: "POST" });
-      const t = await cf.text();
+      const ghToken = Deno.env.get("GITHUB_TOKEN");
+      const repoEnv = Deno.env.get("GITHUB_REPO") ?? "";
+      let owner = Deno.env.get("GITHUB_OWNER") ?? "";
+      let repo = repoEnv;
+      if (repo.includes("/")) {
+        const [maybeOwner, maybeRepo] = repo.split("/", 2);
+        if (!owner) owner = maybeOwner ?? "";
+        repo = maybeRepo ?? "";
+      }
+      const workflow = Deno.env.get("GITHUB_WORKFLOW") ?? "deploy-gh-pages.yml";
+      const workflowRef = Deno.env.get("GITHUB_WORKFLOW_REF") ?? "main";
+      if (!owner || !repo || !ghToken) {
+        return jsonResponse(
+          { ok: false, error: "Missing GITHUB_OWNER, GITHUB_REPO or GITHUB_TOKEN" },
+          500,
+        );
+      }
+      const dispatch = await triggerGithubWorkflow({
+        owner,
+        repo,
+        token: ghToken,
+        workflow,
+        ref: workflowRef,
+        inputs: {
+          triggered_by: "supabase-manual",
+          timestamp: new Date().toISOString(),
+          reason: String(body?.reason ?? "manual"),
+        },
+      });
       return jsonResponse(
-        { ok: cf.ok, status: cf.status, message: "Manual trigger → Cloudflare deploy hook", upstream: t.slice(0, 300) },
-        cf.ok ? 200 : 502,
+        {
+          ok: dispatch.ok,
+          status: dispatch.status,
+          message: dispatch.ok ? "Manual trigger → GitHub Pages workflow" : "GitHub workflow dispatch failed",
+          upstream: dispatch.body,
+        },
+        dispatch.ok ? 200 : 502,
       );
     }
 
@@ -151,12 +210,19 @@ serve(async (req) => {
     const markdown = frontMatter + bodyMd;
 
     /* 4) Commit to GitHub */
-    const owner = Deno.env.get("GITHUB_OWNER");
-    const repo = Deno.env.get("GITHUB_REPO");
+    let owner = Deno.env.get("GITHUB_OWNER") ?? "";
+    let repo = Deno.env.get("GITHUB_REPO") ?? "";
+    if (repo.includes("/")) {
+      const [maybeOwner, maybeRepo] = repo.split("/", 2);
+      if (!owner) owner = maybeOwner ?? "";
+      repo = maybeRepo ?? "";
+    }
     const ghToken = Deno.env.get("GITHUB_TOKEN"); // required
     const authorName = Deno.env.get("GIT_AUTHOR_NAME") ?? "Automator";
     const authorEmail = Deno.env.get("GIT_AUTHOR_EMAIL") ?? "automator@example.com";
     const contentDir = Deno.env.get("HUGO_CONTENT_DIR") ?? "content/blog";
+    const workflow = Deno.env.get("GITHUB_WORKFLOW") ?? "deploy-gh-pages.yml";
+    const workflowRef = Deno.env.get("GITHUB_WORKFLOW_REF") ?? "main";
 
     if (!owner || !repo || !ghToken) {
       return jsonResponse(
@@ -195,23 +261,31 @@ serve(async (req) => {
       return jsonResponse({ ok: false, step: "github", status: commitRes.status, upstream: t.slice(0, 300) }, 502);
     }
 
-    /* 5) Trigger Cloudflare Pages build hook */
-    const hook = Deno.env.get("HUGO_WEBHOOK_URL");
-    if (!hook) return jsonResponse({ ok: false, error: "Missing HUGO_WEBHOOK_URL" }, 500);
-
-    const cf = await fetch(hook, { method: "POST" });
-    const cfText = await cf.text();
+    /* 5) Dispatch GitHub Pages workflow */
+    const dispatch = await triggerGithubWorkflow({
+      owner,
+      repo,
+      token: ghToken,
+      workflow,
+      ref: workflowRef,
+      inputs: {
+        triggered_by: "supabase-ml-to-hugo",
+        timestamp: new Date().toISOString(),
+        campaign_id: String(campaignId),
+        slug,
+      },
+    });
 
     return jsonResponse(
       {
-        ok: cf.ok,
-        status: cf.status,
+        ok: dispatch.ok,
+        status: dispatch.status,
         processed_campaign: String(campaignId),
         created: path,
-        message: cf.ok ? "Cloudflare Pages build triggered 🎉" : "Cloudflare trigger failed ❌",
-        upstream: cfText.slice(0, 300),
+        message: dispatch.ok ? "GitHub Pages workflow dispatched 🎉" : "GitHub workflow dispatch failed ❌",
+        upstream: dispatch.body,
       },
-      cf.ok ? 200 : 502,
+      dispatch.ok ? 200 : 502,
     );
   } catch (err: any) {
     // Make 500s actionable
