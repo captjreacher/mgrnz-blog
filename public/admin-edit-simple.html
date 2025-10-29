@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Edit Post - Simple</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #0f172a !important; }
+        .orange-border { border: 4px solid #ff4f00 !important; }
+        .orange-border:focus { border-color: #ff6600 !important; box-shadow: 0 0 0 4px rgba(255, 79, 0, 0.2) !important; }
+    </style>
+</head>
+<body class="min-h-screen bg-neutral-900 text-white">
+    
+    <!-- Header -->
+    <header class="bg-neutral-800 border-b border-neutral-700 p-4">
+        <div class="max-w-4xl mx-auto flex items-center justify-between">
+            <h1 class="text-2xl font-bold text-orange-400">Edit Post - Simple Debug</h1>
+            <a href="/admin/posts/" class="bg-neutral-700 hover:bg-neutral-600 px-4 py-2 rounded text-sm">← Back</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto p-6">
+        
+        <!-- Debug Info -->
+        <div id="debugInfo" class="bg-red-900 border border-red-700 rounded-lg p-4 mb-6">
+            <h3 class="text-red-400 font-bold mb-2">🐛 Debug Information</h3>
+            <div id="debugOutput" class="text-sm text-red-200 font-mono whitespace-pre-wrap">
+                Initializing...
+            </div>
+        </div>
+
+        <!-- Token Input -->
+        <div class="bg-neutral-800 rounded-lg p-6 mb-6">
+            <h3 class="text-yellow-400 font-bold mb-3">🔑 GitHub Token</h3>
+            <div class="flex gap-3">
+                <input type="password" id="tokenInput" placeholder="Enter GitHub token" 
+                       class="flex-1 orange-border rounded px-4 py-2 text-white bg-neutral-700">
+                <button onclick="saveToken()" class="bg-green-600 hover:bg-green-700 px-6 py-2 rounded text-white">
+                    Save Token
+                </button>
+            </div>
+            <p id="tokenStatus" class="text-sm text-neutral-400 mt-2">No token saved</p>
+        </div>
+
+        <!-- Post Selector -->
+        <div class="bg-neutral-800 rounded-lg p-6 mb-6">
+            <h3 class="text-blue-400 font-bold mb-3">📁 Select Post</h3>
+            <div class="flex gap-3 mb-4">
+                <button onclick="loadPostList()" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-white">
+                    🔄 Load Posts
+                </button>
+                <select id="postSelect" class="flex-1 orange-border rounded px-4 py-2 text-white bg-neutral-700">
+                    <option value="">Select a post...</option>
+                </select>
+                <button onclick="loadSelectedPost()" class="bg-orange-600 hover:bg-orange-700 px-6 py-2 rounded text-white">
+                    Load Post
+                </button>
+            </div>
+        </div>
+
+        <!-- Edit Form -->
+        <div class="bg-neutral-800 rounded-lg p-6">
+            <h3 class="text-green-400 font-bold mb-3">✏️ Edit Post</h3>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-neutral-300 mb-2">Title</label>
+                    <input id="titleField" class="w-full orange-border rounded px-4 py-2 text-white bg-neutral-700">
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-neutral-300 mb-2">Date</label>
+                        <input id="dateField" type="date" class="w-full orange-border rounded px-4 py-2 text-white bg-neutral-700">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-neutral-300 mb-2">Draft</label>
+                        <input id="draftField" type="checkbox" class="rounded">
+                        <span class="ml-2 text-neutral-300">Save as draft</span>
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-neutral-300 mb-2">Tags</label>
+                    <input id="tagsField" class="w-full orange-border rounded px-4 py-2 text-white bg-neutral-700">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-neutral-300 mb-2">Categories</label>
+                    <input id="categoriesField" class="w-full orange-border rounded px-4 py-2 text-white bg-neutral-700">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-neutral-300 mb-2">Image URL</label>
+                    <input id="imageField" class="w-full orange-border rounded px-4 py-2 text-white bg-neutral-700">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-neutral-300 mb-2">Summary</label>
+                    <textarea id="summaryField" rows="3" class="w-full orange-border rounded px-4 py-2 text-white bg-neutral-700"></textarea>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-neutral-300 mb-2">Content</label>
+                    <textarea id="contentField" rows="15" class="w-full orange-border rounded px-4 py-2 text-white bg-neutral-700 font-mono text-sm"></textarea>
+                </div>
+                
+                <div class="flex gap-3">
+                    <button onclick="savePost()" class="bg-green-600 hover:bg-green-700 px-6 py-3 rounded text-white font-bold">
+                        💾 Save Changes
+                    </button>
+                    <button onclick="clearForm()" class="bg-red-600 hover:bg-red-700 px-6 py-3 rounded text-white">
+                        🗑️ Clear Form
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let currentPost = null;
+        let debugLog = [];
+        
+        function addDebug(message) {
+            const timestamp = new Date().toLocaleTimeString();
+            debugLog.push(`[${timestamp}] ${message}`);
+            document.getElementById('debugOutput').textContent = debugLog.join('\n');
+            console.log(message);
+        }
+        
+        function saveToken() {
+            const token = document.getElementById('tokenInput').value.trim();
+            if (!token) {
+                addDebug('❌ No token entered');
+                return;
+            }
+            
+            localStorage.setItem('github_token', token);
+            document.getElementById('tokenStatus').textContent = '✅ Token saved';
+            document.getElementById('tokenInput').value = '';
+            addDebug('✅ GitHub token saved');
+        }
+        
+        function checkToken() {
+            const token = localStorage.getItem('github_token');
+            if (token) {
+                document.getElementById('tokenStatus').textContent = '✅ Token saved';
+                addDebug('✅ GitHub token found');
+                return token;
+            } else {
+                document.getElementById('tokenStatus').textContent = '❌ No token saved';
+                addDebug('❌ No GitHub token found');
+                return null;
+            }
+        }
+        
+        async function loadPostList() {
+            const token = checkToken();
+            if (!token) {
+                alert('Please enter and save your GitHub token first');
+                return;
+            }
+            
+            addDebug('🔄 Loading post list from GitHub...');
+            
+            try {
+                const response = await fetch('https://api.github.com/repos/captjreacher/mgrnz-blog/contents/content/posts', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+                
+                addDebug(`📡 GitHub API response: ${response.status} ${response.statusText}`);
+                
+                if (!response.ok) {
+                    throw new Error(`GitHub API error: ${response.status}`);
+                }
+                
+                const folders = await response.json();
+                addDebug(`📁 Found ${folders.length} items in posts directory`);
+                
+                const postFolders = folders.filter(item => item.type === 'dir');
+                addDebug(`📝 Found ${postFolders.length} post folders`);
+                
+                const select = document.getElementById('postSelect');
+                select.innerHTML = '<option value="">Select a post...</option>';
+                
+                postFolders.forEach(folder => {
+                    const option = document.createElement('option');
+                    option.value = folder.name;
+                    option.textContent = folder.name;
+                    select.appendChild(option);
+                });
+                
+                addDebug('✅ Post list loaded successfully');
+                
+            } catch (error) {
+                addDebug(`❌ Error loading posts: ${error.message}`);
+                alert(`Error loading posts: ${error.message}`);
+            }
+        }
+        
+        async function loadSelectedPost() {
+            const postName = document.getElementById('postSelect').value;
+            if (!postName) {
+                addDebug('❌ No post selected');
+                return;
+            }
+            
+            const token = checkToken();
+            if (!token) {
+                alert('GitHub token required');
+                return;
+            }
+            
+            addDebug(`📖 Loading post: ${postName}`);
+            
+            try {
+                const response = await fetch(`https://api.github.com/repos/captjreacher/mgrnz-blog/contents/content/posts/${postName}/index.md`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+                
+                addDebug(`📡 Post API response: ${response.status} ${response.statusText}`);
+                
+                if (!response.ok) {
+                    throw new Error(`GitHub API error: ${response.status}`);
+                }
+                
+                const fileData = await response.json();
+                addDebug(`📄 File data received, content length: ${fileData.content.length}`);
+                
+                // Decode base64 content
+                const content = atob(fileData.content.replace(/\s/g, ''));
+                addDebug(`📝 Decoded content length: ${content.length}`);
+                addDebug(`📝 First 100 chars: ${content.substring(0, 100)}`);
+                
+                currentPost = {
+                    name: postName,
+                    path: fileData.path,
+                    sha: fileData.sha,
+                    content: content
+                };
+                
+                parseAndPopulateForm(content);
+                addDebug('✅ Post loaded and form populated');
+                
+            } catch (error) {
+                addDebug(`❌ Error loading post: ${error.message}`);
+                alert(`Error loading post: ${error.message}`);
+            }
+        }
+        
+        function parseAndPopulateForm(content) {
+            addDebug('🔍 Parsing frontmatter...');
+            
+            const lines = content.split('\n');
+            let frontmatter = {};
+            let postContent = '';
+            
+            if (lines[0] === '---') {
+                let endIndex = -1;
+                for (let i = 1; i < lines.length; i++) {
+                    if (lines[i] === '---') {
+                        endIndex = i;
+                        break;
+                    }
+                }
+                
+                if (endIndex > 0) {
+                    const frontmatterLines = lines.slice(1, endIndex);
+                    postContent = lines.slice(endIndex + 1).join('\n').trim();
+                    
+                    addDebug(`📋 Frontmatter lines: ${frontmatterLines.length}`);
+                    addDebug(`📄 Post content length: ${postContent.length}`);
+                    
+                    frontmatterLines.forEach(line => {
+                        const colonIndex = line.indexOf(':');
+                        if (colonIndex > 0) {
+                            const key = line.substring(0, colonIndex).trim();
+                            let value = line.substring(colonIndex + 1).trim();
+                            
+                            // Remove quotes
+                            if ((value.startsWith('"') && value.endsWith('"')) || 
+                                (value.startsWith("'") && value.endsWith("'"))) {
+                                value = value.slice(1, -1);
+                            }
+                            
+                            // Parse arrays
+                            if (value.startsWith('[') && value.endsWith(']')) {
+                                value = value.slice(1, -1).split(',').map(v => v.trim().replace(/['"]/g, ''));
+                            }
+                            
+                            // Parse booleans
+                            if (value === 'true') value = true;
+                            if (value === 'false') value = false;
+                            
+                            frontmatter[key] = value;
+                            addDebug(`🏷️ ${key}: ${value}`);
+                        }
+                    });
+                }
+            } else {
+                postContent = content;
+                addDebug('📄 No frontmatter found, using entire content');
+            }
+            
+            // Populate form fields
+            document.getElementById('titleField').value = frontmatter.title || '';
+            document.getElementById('dateField').value = frontmatter.date || '';
+            document.getElementById('draftField').checked = frontmatter.draft === true;
+            document.getElementById('tagsField').value = Array.isArray(frontmatter.tags) ? frontmatter.tags.join(', ') : (frontmatter.tags || '');
+            document.getElementById('categoriesField').value = Array.isArray(frontmatter.categories) ? frontmatter.categories.join(', ') : (frontmatter.categories || '');
+            document.getElementById('imageField').value = frontmatter.image || '';
+            document.getElementById('summaryField').value = frontmatter.summary || '';
+            document.getElementById('contentField').value = postContent;
+            
+            addDebug('✅ Form fields populated');
+        }
+        
+        function clearForm() {
+            document.getElementById('titleField').value = '';
+            document.getElementById('dateField').value = '';
+            document.getElementById('draftField').checked = false;
+            document.getElementById('tagsField').value = '';
+            document.getElementById('categoriesField').value = '';
+            document.getElementById('imageField').value = '';
+            document.getElementById('summaryField').value = '';
+            document.getElementById('contentField').value = '';
+            currentPost = null;
+            addDebug('🗑️ Form cleared');
+        }
+        
+        async function savePost() {
+            if (!currentPost) {
+                alert('No post loaded');
+                return;
+            }
+            
+            const token = checkToken();
+            if (!token) {
+                alert('GitHub token required');
+                return;
+            }
+            
+            addDebug('💾 Saving post...');
+            
+            try {
+                // Generate markdown
+                const title = document.getElementById('titleField').value;
+                const date = document.getElementById('dateField').value;
+                const draft = document.getElementById('draftField').checked;
+                const tags = document.getElementById('tagsField').value;
+                const categories = document.getElementById('categoriesField').value;
+                const image = document.getElementById('imageField').value;
+                const summary = document.getElementById('summaryField').value;
+                const content = document.getElementById('contentField').value;
+                
+                let markdown = '---\n';
+                markdown += `title: "${title.replace(/"/g, '\\"')}"\n`;
+                markdown += `date: ${date}\n`;
+                markdown += `draft: ${draft}\n`;
+                
+                if (tags) {
+                    const tagArray = tags.split(',').map(t => `"${t.trim().replace(/"/g, '\\"')}"`).join(', ');
+                    markdown += `tags: [${tagArray}]\n`;
+                }
+                
+                if (categories) {
+                    const catArray = categories.split(',').map(c => `"${c.trim().replace(/"/g, '\\"')}"`).join(', ');
+                    markdown += `categories: [${catArray}]\n`;
+                }
+                
+                if (image) {
+                    markdown += `image: "${image.replace(/"/g, '\\"')}"\n`;
+                }
+                
+                if (summary) {
+                    markdown += `summary: "${summary.replace(/"/g, '\\"')}"\n`;
+                }
+                
+                markdown += '---\n\n';
+                markdown += content;
+                
+                addDebug(`📝 Generated markdown length: ${markdown.length}`);
+                
+                // Save to GitHub
+                const response = await fetch(`https://api.github.com/repos/captjreacher/mgrnz-blog/contents/${currentPost.path}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: `Update post: ${title}`,
+                        content: btoa(unescape(encodeURIComponent(markdown))),
+                        sha: currentPost.sha,
+                        branch: 'main'
+                    })
+                });
+                
+                addDebug(`📡 Save response: ${response.status} ${response.statusText}`);
+                
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.message || `GitHub API error: ${response.status}`);
+                }
+                
+                addDebug('✅ Post saved successfully!');
+                alert('✅ Post saved successfully!');
+                
+            } catch (error) {
+                addDebug(`❌ Error saving post: ${error.message}`);
+                alert(`Error saving post: ${error.message}`);
+            }
+        }
+        
+        // Initialize
+        addDebug('🚀 Edit form initialized');
+        checkToken();
+    </script>
+</body>
+</html>

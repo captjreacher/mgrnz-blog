@@ -1,0 +1,600 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+/* Congo Dark Theme Overrides with Custom Brand Colors */
+:root {
+  --font-body: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-heading: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  
+  /* Custom brand colors */
+  --orange: #ff4f00;
+  --yellow: #ffcf00;
+  --blue: #89bbfe;
+  
+  /* Dark theme colors */
+  --color-neutral-50: 15, 23, 42;
+  --color-neutral-100: 30, 41, 59;
+  --color-neutral-200: 51, 65, 85;
+  --color-neutral-300: 71, 85, 105;
+  --color-neutral-400: 100, 116, 139;
+  --color-neutral-500: 148, 163, 184;
+  --color-neutral-600: 203, 213, 225;
+  --color-neutral-700: 226, 232, 240;
+  --color-neutral-800: 241, 245, 249;
+  --color-neutral-900: 248, 250, 252;
+  
+  /* Primary colors (orange theme) */
+  --color-primary-400: 255, 79, 0;
+  --color-primary-500: 255, 79, 0;
+  --color-primary-600: 204, 63, 0;
+  
+  /* Secondary colors (blue accents) */
+  --color-secondary-400: 137, 187, 254;
+  --color-secondary-500: 137, 187, 254;
+  --color-secondary-600: 109, 149, 203;
+}
+
+/* Force dark theme */
+html {
+  color-scheme: dark;
+  background-color: rgb(15, 23, 42) !important;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: rgb(15, 23, 42) !important;
+  color: rgb(248, 250, 252) !important;
+}
+
+/* Ensure all containers have consistent dark background */
+main, header, aside, .main-content, .content {
+  background-color: rgb(15, 23, 42) !important;
+}
+
+/* Headings with brand colors */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  color: var(--orange) !important;
+}
+
+/* Links */
+a {
+  color: var(--blue);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--yellow);
+}
+
+/* Navigation */
+.main-menu a {
+  color: rgb(var(--color-neutral-700));
+}
+
+.main-menu a:hover {
+  color: var(--yellow);
+}
+
+/* Article images */
+article img, .prose img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 1rem auto;
+  display: block;
+}
+
+/* Hero image */
+.hero-image {
+  display: block;
+  margin: 24px auto;
+  width: 100%;
+  max-width: 1120px;
+  height: auto;
+  border-radius: 12px;
+}
+
+/* Author avatar - updated for logo display */
+.author-avatar, 
+.profile-image,
+img.avatar {
+  width: 128px;
+  height: 128px;
+  border-radius: 50%;
+  object-fit: contain;
+  object-position: center;
+  margin: 0 auto;
+  display: block;
+  background: white;
+  padding: 4px;
+}
+
+/* Sidebar avatar container */
+.sidebar .author-avatar {
+  border: 3px solid var(--orange);
+}
+
+/* Cards */
+.card {
+  background-color: rgb(var(--color-neutral-100));
+  border: 1px solid rgb(var(--color-neutral-200));
+}
+
+.card:hover {
+  border-color: var(--orange);
+}
+
+/* Buttons */
+.btn, button {
+  background-color: var(--orange);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn:hover, button:hover {
+  background-color: var(--yellow);
+  color: rgb(var(--color-neutral-50));
+}
+
+/* Code blocks */
+pre, code {
+  background-color: rgb(var(--color-neutral-100)) !important;
+  color: rgb(var(--color-neutral-800)) !important;
+}
+
+/* Sidebar customization for Congo theme */
+.sidebar {
+  background-color: rgb(var(--color-neutral-900));
+  border-right: 1px solid rgb(var(--color-neutral-700));
+}
+
+/* Header logo - clean rule with good size */
+img.site-logo,
+.site-logo img,
+header img,
+img.h-5,
+img.site-logo.h-5,
+.site-logo.h-10,
+.h-10.site-logo,
+img[src*="BLOG-LOGO"] {
+  height: 96px !important;
+  max-height: 96px !important;
+  width: auto !important;
+}
+  width: auto !important;
+}
+
+/* Override Tailwind h-10 class specifically for logo */
+.site-logo.h-10 {
+  height: 20px !important;
+}
+
+/* Prose content */
+.prose {
+  line-height: 1.7;
+  color: rgb(var(--color-neutral-800));
+}
+
+.prose strong {
+  color: var(--orange);
+}
+
+/* Table styling */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+}
+
+th, td {
+  border: 1px solid rgb(var(--color-neutral-300));
+  padding: 0.5rem;
+  text-align: left;
+}
+
+th {
+  background-color: rgb(var(--color-neutral-100));
+  color: var(--orange);
+  font-weight: 600;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .author-avatar, 
+  .profile-image,
+  img.avatar {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .hero-image {
+    max-width: 100%;
+    margin: 16px auto;
+  }
+}
+
+/* Responsive Sidebar Layout */
+@media (max-width: 1024px) {
+  .ml-64 {
+    margin-left: 0;
+  }
+  
+  aside.fixed {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+  
+  aside.fixed.open {
+    transform: translateX(0);
+  }
+  
+  .author-avatar {
+    width: 80px;
+    height: 80px;
+  }
+  
+  /* Adjust sidebar width on mobile */
+  aside.fixed {
+    width: 280px;
+  }
+}
+
+@media (max-width: 768px) {
+  .grid.md\\:grid-cols-2 {
+    grid-template-columns: 1fr;
+  }
+  
+  .grid.lg\\:grid-cols-3 {
+    grid-template-columns: 1fr;
+  }
+  
+  .text-4xl {
+    font-size: 2rem;
+  }
+  
+  .px-6 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* Ensure images don't break layout */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Fix Congo theme conflicts - ensure proper integration */
+.prose a {
+  color: var(--blue);
+}
+
+.prose a:hover {
+  color: var(--yellow);
+}
+
+/* Ensure proper dark mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+  }
+}
+
+/* Mobile menu toggle */
+#mobile-menu-toggle {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  #mobile-menu-toggle {
+    display: block;
+  }
+}
+
+/* Ensure sidebar is visible - Tailwind fallback */
+aside.fixed {
+  position: fixed !important;
+  left: 0 !important;
+  top: 0 !important;
+  z-index: 30 !important;
+  height: 100vh !important;
+  width: 20rem !important; /* 80 * 0.25rem = 20rem */
+  background-color: rgb(15, 23, 42) !important; /* Same as page background */
+  color: white !important;
+  border-right: 1px solid rgb(71, 85, 105) !important; /* Thin divider */
+}
+
+/* Main content margin */
+.ml-80 {
+  margin-left: 20rem !important; /* 80 * 0.25rem = 20rem */
+}
+
+/* Flex utilities */
+.flex {
+  display: flex !important;
+}
+
+.min-h-screen {
+  min-height: 100vh !important;
+}
+
+.flex-col {
+  flex-direction: column !important;
+}
+
+.items-center {
+  align-items: center !important;
+}
+
+.justify-center {
+  justify-content: center !important;
+}
+
+.justify-between {
+  justify-content: space-between !important;
+}
+
+/* Spacing utilities */
+.p-6 {
+  padding: 1.5rem !important;
+}
+
+.px-6 {
+  padding-left: 1.5rem !important;
+  padding-right: 1.5rem !important;
+}
+
+.py-8 {
+  padding-top: 2rem !important;
+  padding-bottom: 2rem !important;
+}
+
+.mb-8 {
+  margin-bottom: 2rem !important;
+}
+
+.mb-4 {
+  margin-bottom: 1rem !important;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem !important;
+}
+
+/* Text utilities */
+.text-center {
+  text-align: center !important;
+}
+
+.text-lg {
+  font-size: 1.125rem !important;
+  line-height: 1.75rem !important;
+}
+
+.text-sm {
+  font-size: 0.875rem !important;
+  line-height: 1.25rem !important;
+}
+
+.font-bold {
+  font-weight: 700 !important;
+}
+
+/* Background utilities */
+.bg-neutral-900 {
+  background-color: rgb(23, 23, 23) !important;
+}
+
+.bg-neutral-50 {
+  background-color: rgb(249, 250, 251) !important;
+}
+
+/* Border utilities */
+.rounded-full {
+  border-radius: 9999px !important;
+}
+
+.rounded-lg {
+  border-radius: 0.5rem !important;
+}
+
+/* Size utilities */
+.h-32 {
+  height: 8rem !important;
+}
+
+.w-32 {
+  width: 8rem !important;
+}
+
+.h-full {
+  height: 100% !important;
+}
+
+.w-full {
+  width: 100% !important;
+}
+
+.max-w-4xl {
+  max-width: 56rem !important;
+}
+
+.mx-auto {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Navigation spacing */
+.space-y-2 > * + * {
+  margin-top: 0.5rem !important;
+}
+
+/* Image fixes */
+img {
+  max-width: 100% !important;
+  height: auto !important;
+}
+
+/* Ensure images load properly */
+.h-48 {
+  height: 12rem !important;
+}
+
+.h-8 {
+  height: 2rem !important;
+  max-height: 2rem !important;
+}
+
+.h-16 {
+  height: 4rem !important;
+}
+
+.h-56 {
+  height: 14rem !important;
+}
+
+.w-56 {
+  width: 14rem !important;
+}
+
+.h-64 {
+  height: 16rem !important;
+}
+
+.w-64 {
+  width: 16rem !important;
+}
+
+.h-68 {
+  height: 17rem !important;
+}
+
+.w-68 {
+  width: 17rem !important;
+}
+
+.h-60 {
+  height: 15rem !important;
+}
+
+.w-60 {
+  width: 15rem !important;
+}
+
+.ml-4 {
+  margin-left: 1rem !important;
+}
+
+.ml-6 {
+  margin-left: 1.5rem !important;
+}
+
+.h-24 {
+  height: 6rem !important;
+}
+
+.h-64 {
+  height: 16rem !important;
+}
+
+.w-auto {
+  width: auto !important;
+}
+
+.object-cover {
+  object-fit: cover !important;
+}
+
+.object-contain {
+  object-fit: contain !important;
+}
+
+/* Sidebar avatar specific fixes */
+aside img {
+  display: block !important;
+}
+
+.rounded-xl {
+  border-radius: 0.75rem !important;
+}
+
+/* Hidden utility */
+.hidden {
+  display: none !important;
+}
+
+.rounded-2xl {
+  border-radius: 1rem !important;
+}
+
+.shadow-lg {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Hero section spacing */
+.space-y-8 > * + * {
+  margin-top: 2rem !important;
+}
+
+.space-y-6 > * + * {
+  margin-top: 1.5rem !important;
+}
+
+/* Ensure main content is visible */
+main {
+  display: block !important;
+  min-height: 100vh !important;
+}
+
+/* Text utilities */
+.text-5xl {
+  font-size: 3rem !important;
+  line-height: 1 !important;
+}
+
+.text-xl {
+  font-size: 1.25rem !important;
+  line-height: 1.75rem !important;
+}
+
+/* Opacity utilities */
+.opacity-20 {
+  opacity: 0.2 !important;
+}
+
+.opacity-90 {
+  opacity: 0.9 !important;
+}/* O
+verride any remaining light backgrounds */
+* {
+  background-color: inherit !important;
+}
+
+/* Specific overrides for common elements */
+.bg-neutral-50, .bg-white, .bg-gray-50 {
+  background-color: rgb(15, 23, 42) !important;
+}
+
+/* Ensure footer matches */
+footer {
+  background-color: rgb(15, 23, 42) !important;
+  color: rgb(148, 163, 184) !important;
+}/* Fo
+rce all backgrounds to be consistent dark color */
+html, body, main, header, footer, aside, section, div {
+  background-color: rgb(15, 23, 42) !important;
+}
+
+/* Override any Tailwind background classes */
+[class*="bg-"], .bg-neutral-50, .bg-neutral-100, .bg-neutral-800, .bg-neutral-900, .bg-white, .bg-gray-50 {
+  background-color: rgb(15, 23, 42) !important;
+}
+
+/* Ensure gradients are overridden */
+.bg-gradient-to-br, .bg-gradient-to-r {
+  background: rgb(15, 23, 42) !important;
+}

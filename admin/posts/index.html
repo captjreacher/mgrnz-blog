@@ -1,0 +1,120 @@
+<!doctype html><html lang=en class=dark><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Manage Posts | Welcome to the Personal Blog of Mike G Robinson</title><meta name=description content="Mike is an unashamed evangelist of AI, ricidivous vibe-coder, and lifelong learner. A seasoned technology professional and entrepreneur based in Auckland, New Zealand, Mike has over 30 years of experience spanning IT security, SAP configuration, data migration, and business consulting. In early 2025, Mike founded Maximised AI after several months deep diving AI. Mike has since developed a string of successful AI-powered products and services aimed at helping businesses leverage the power of AI to drive productivity and growth."><meta name=author content="Mike G Robinson"><meta property="og:title" content="Manage Posts"><meta property="og:description" content="Mike is an unashamed evangelist of AI, ricidivous vibe-coder, and lifelong learner. A seasoned technology professional and entrepreneur based in Auckland, New Zealand, Mike has over 30 years of experience spanning IT security, SAP configuration, data migration, and business consulting. In early 2025, Mike founded Maximised AI after several months deep diving AI. Mike has since developed a string of successful AI-powered products and services aimed at helping businesses leverage the power of AI to drive productivity and growth."><meta property="og:type" content="website"><meta property="og:url" content="http://mgrnz.com/admin/posts/"><meta property="og:image" content="http://mgrnz.com/images/BLUE-LOGO.png"><meta name=twitter:card content="summary_large_image"><meta name=twitter:title content="Manage Posts"><meta name=twitter:description content="Mike is an unashamed evangelist of AI, ricidivous vibe-coder, and lifelong learner. A seasoned technology professional and entrepreneur based in Auckland, New Zealand, Mike has over 30 years of experience spanning IT security, SAP configuration, data migration, and business consulting. In early 2025, Mike founded Maximised AI after several months deep diving AI. Mike has since developed a string of successful AI-powered products and services aimed at helping businesses leverage the power of AI to drive productivity and growth."><link rel=icon type=image/png href=/images/BLOG-LOGO.png><script src=https://cdn.tailwindcss.com></script><script>tailwind.config={darkMode:"class",theme:{extend:{colors:{"brand-orange":"#ff4f00","brand-yellow":"#ffcf00","brand-blue":"#89bbfe"}}}}</script><link rel=stylesheet href=/css/custom.min.css><link rel=stylesheet href="/css/custom.css?v=1761619509"><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel=stylesheet><script>(function(e,t,n,s,o,i,a){e[o]=e[o]||function(){(e[o].q=e[o].q||[]).push(arguments)},i=t.createElement(n),i.async=1,i.src=s,a=t.getElementsByTagName(n)[0],a.parentNode.insertBefore(i,a)})(window,document,"script","https://assets.mailerlite.com/js/universal.js","ml"),ml("account","1849787")</script><link rel=alternate type=application/rss+xml href=http://mgrnz.com/admin/posts/index.xml><title>Manage Posts - Admin | Welcome to the Personal Blog of Mike G Robinson</title><script src=https://cdn.tailwindcss.com></script><style>body{background-color:#0f172a!important}</style></head><body class="min-h-screen bg-neutral-900 text-white"><header class="sticky top-0 z-20 border-b border-neutral-700 bg-neutral-800"><div class="flex items-center justify-between px-6 py-4"><div class="flex items-center gap-4"><a href=/ class="text-orange-500 hover:text-orange-400 transition-colors">← Back to Site</a><h1 class="text-xl font-bold text-white">Manage Posts</h1></div><nav class="flex items-center space-x-4"><a href=/admin/ class="rounded-lg px-3 py-2 text-sm font-medium text-neutral-300 hover:bg-neutral-700 hover:text-white transition-colors">📊 Dashboard
+</a><a href=/admin-form-v2.html class="rounded-lg px-3 py-2 text-sm font-medium text-neutral-300 hover:bg-neutral-700 hover:text-white transition-colors">✏️ Create
+</a><a href=/admin/posts/ class="rounded-lg px-3 py-2 text-sm font-medium text-neutral-300 hover:bg-neutral-700 hover:text-white transition-colors">📝 Posts
+</a><button onclick=manageGitHubToken() class="rounded-lg px-3 py-2 text-sm font-medium text-neutral-300 hover:bg-neutral-700 hover:text-white transition-colors">
+⚙️ Settings</button></nav></div></header><main class="mx-auto max-w-6xl px-6 py-8"><div class=space-y-8><div class="flex items-center justify-between"><div><h2 class="text-3xl font-bold text-white">Manage Posts</h2><p class="mt-2 text-neutral-400">Edit, delete, or organize your blog posts.</p></div><div class="flex gap-3"><a href=/admin-form-v2.html class="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700">🚀 Quick Create
+</a><a href=/admin/create/ class="rounded-lg bg-orange-600 px-4 py-2 text-sm font-medium text-white hover:bg-orange-700">+ New Post
+</a><a href=/admin/ class="rounded-lg bg-neutral-700 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-600">← Dashboard</a></div></div><div class="grid grid-cols-1 md:grid-cols-4 gap-4"><div class="bg-neutral-800 rounded-lg p-4 border border-neutral-700"><div class="text-2xl font-bold text-white">1</div><div class="text-sm text-neutral-400">Total Posts</div></div><div class="bg-green-900 rounded-lg p-4 border border-green-700"><div class="text-2xl font-bold text-green-300">1</div><div class="text-sm text-green-400">Published</div></div><div class="bg-yellow-900 rounded-lg p-4 border border-yellow-700"><div class="text-2xl font-bold text-yellow-300">0</div><div class="text-sm text-yellow-400">Drafts</div></div><div class="bg-blue-900 rounded-lg p-4 border border-blue-700"><div class="text-2xl font-bold text-blue-300">1</div><div class="text-sm text-blue-400">This Week</div></div></div><div class="flex items-center justify-between bg-neutral-800 rounded-lg p-4 border border-neutral-700"><div class="flex items-center gap-4"><div class="flex items-center gap-2"><label class="text-sm text-neutral-300">Filter:</label>
+<select id=statusFilter class="bg-neutral-700 border border-neutral-600 rounded px-3 py-1 text-sm text-white"><option value>All Posts</option><option value=published>Published Only</option><option value=draft>Drafts Only</option></select></div><div class="flex items-center gap-2"><label class="text-sm text-neutral-300">Search:</label>
+<input id=searchInput type=text placeholder="Search posts..." class="bg-neutral-700 border border-neutral-600 rounded px-3 py-1 text-sm text-white w-64"></div></div><div class="text-sm text-neutral-400">Showing <span id=postCount>1</span> posts</div></div><div class="rounded-lg bg-neutral-800 border border-neutral-700 shadow-lg overflow-hidden"><div class="bg-neutral-700 px-6 py-3 border-b border-neutral-600"><div class="grid grid-cols-12 gap-4 text-xs font-medium text-neutral-300 uppercase tracking-wider"><div class=col-span-3>Title</div><div class=col-span-2>Status</div><div class=col-span-2>Date</div><div class=col-span-2>Tags</div><div class="col-span-3 text-right">Actions</div></div></div><div class="divide-y divide-neutral-700"><div class="px-6 py-4 hover:bg-neutral-700 transition-colors" data-post-slug=index><script type=application/json class=post-content data-slug=index>"\"\\nMy CV\""</script><div class="grid grid-cols-12 gap-4 items-center"><div class=col-span-3><h4 class="text-sm font-semibold text-white truncate">My CV</h4></div><div class=col-span-2><span class="inline-flex items-center rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-800">✅ Published</span></div><div class=col-span-2><div class="text-sm text-white">Jul 1, 2025</div><div class="text-xs text-neutral-400">1 min read</div></div><div class=col-span-2><div class="flex flex-wrap gap-1"><span class="inline-flex items-center rounded bg-neutral-100 px-2 py-0.5 text-xs text-neutral-600">AI
+</span><span class="inline-flex items-center rounded bg-neutral-100 px-2 py-0.5 text-xs text-neutral-600">Automation
+</span><span class="text-xs text-neutral-400">+2</span></div></div><div class="col-span-3 flex items-center justify-end gap-2"><a href=/posts/my-cv/ target=_blank class="inline-flex items-center rounded-lg bg-blue-600 hover:bg-blue-700 px-3 py-1.5 text-xs font-medium text-white transition-colors" title="View Post">👁️ View
+</a><button onclick='editPost("index","My CV","2025-07-01",&#39;["AI","Automation","Business","Accountant"]&#39;,&#39;["Team"]&#39;,"My CV",!1)' class="inline-flex items-center rounded-lg bg-orange-600 hover:bg-orange-700 px-3 py-1.5 text-xs font-medium text-white transition-colors" title="Edit Post">
+✏️ Edit
+</button>
+<button onclick='debugPath("posts/My CV/index.md","My CV",!0)' class="inline-flex items-center rounded-lg bg-blue-600 hover:bg-blue-700 px-3 py-1.5 text-xs font-medium text-white transition-colors" title="Debug Path">
+🔍 Debug
+</button>
+<button onclick='deletePost("posts/My CV/index.md","My CV",!0)' class="inline-flex items-center rounded-lg bg-red-600 hover:bg-red-700 px-3 py-1.5 text-xs font-medium text-white transition-colors" title="Delete Post">
+🗑️ Delete</button></div></div></div></div></div></div><div id=editModal class="fixed inset-0 z-50 hidden overflow-y-auto"><div class="flex min-h-screen items-center justify-center px-4"><div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity"></div><div class="relative w-full max-w-4xl rounded-lg bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"><div class="mb-4 flex items-center justify-between"><h3 class="text-lg font-semibold text-neutral-900">Edit Post</h3><button onclick=closeEditModal() class="text-neutral-400 hover:text-neutral-600">
+<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 18 6M6 6l12 12"/></svg></button></div><form id=editForm class=space-y-4><input type=hidden id=editSlug><div><label class="block text-sm font-medium text-neutral-700 mb-2">Title</label>
+<input id=editTitle class="w-full rounded-lg border border-neutral-300 px-4 py-2 text-neutral-900 focus:border-orange-500 focus:ring-2 focus:ring-orange-200"></div><div><label class="block text-sm font-medium text-neutral-700 mb-2">Date</label>
+<input id=editDate type=date class="w-full rounded-lg border border-neutral-300 px-4 py-2 text-neutral-900 focus:border-orange-500 focus:ring-2 focus:ring-orange-200"></div><div class="grid gap-4 md:grid-cols-2"><div><label class="block text-sm font-medium text-neutral-700 mb-2">Tags</label>
+<input id=editTags placeholder="AI, automation, technology" class="w-full rounded-lg border border-neutral-300 px-4 py-2 text-neutral-900 focus:border-orange-500 focus:ring-2 focus:ring-orange-200"></div><div><label class="block text-sm font-medium text-neutral-700 mb-2">Categories</label>
+<input id=editCategories placeholder="Technology, Business" class="w-full rounded-lg border border-neutral-300 px-4 py-2 text-neutral-900 focus:border-orange-500 focus:ring-2 focus:ring-orange-200"></div></div><div><label class="block text-sm font-medium text-neutral-700 mb-2">Summary</label>
+<textarea id=editSummary rows=3 class="w-full rounded-lg border border-neutral-300 px-4 py-2 text-neutral-900 focus:border-orange-500 focus:ring-2 focus:ring-orange-200"></textarea></div><div><label class="block text-sm font-medium text-neutral-700 mb-2">Content</label>
+<textarea id=editContent rows=10 class="w-full rounded-lg border border-neutral-300 px-4 py-2 text-neutral-900 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 font-mono text-sm"></textarea><p class="mt-1 text-xs text-neutral-500">Edit the markdown content directly</p></div><div><label class="flex items-center"><input id=editDraft type=checkbox class="rounded border-neutral-300 text-orange-600 focus:ring-orange-500">
+<span class="ml-2 text-sm text-neutral-700">Save as draft</span></label></div><div class="flex justify-end gap-3 pt-4"><button type=button onclick=closeEditModal() class="rounded-lg border border-neutral-300 px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50">
+Cancel
+</button>
+<button type=submit class="rounded-lg bg-orange-600 px-4 py-2 text-sm font-medium text-white hover:bg-orange-700">
+Save Changes</button></div></form></div></div></div><script>document.addEventListener("DOMContentLoaded",function(){const e=document.getElementById("statusFilter"),t=document.getElementById("searchInput"),s=document.querySelectorAll("[data-post-slug]"),o=document.getElementById("postCount");function n(){const n=e.value,i=t.value.toLowerCase();let a=0;s.forEach(e=>{const s=e.querySelector("h4").textContent.toLowerCase(),o=e.querySelector(".line-clamp-1")?.textContent.toLowerCase()||"",r=e.querySelector(".bg-green-100")!==null,c=e.querySelector(".bg-yellow-100")!==null;let t=!0;n==="published"&&(t=r),n==="draft"&&(t=c);const l=s.includes(i)||o.includes(i);t&&l?(e.style.display="",a++):e.style.display="none"}),o.textContent=a}e.addEventListener("change",n),t.addEventListener("input",n)});function editPost(e,t,n,s,o,i,a){document.getElementById("editSlug").value=e,document.getElementById("editTitle").value=t,document.getElementById("editDate").value=n,document.getElementById("editTags").value=(s||[]).join(", "),document.getElementById("editCategories").value=(o||[]).join(", "),document.getElementById("editSummary").value=i||"",document.getElementById("editContent").value="Loading content...",document.getElementById("editDraft").checked=a,loadPostContent(e),document.getElementById("editModal").classList.remove("hidden")}function loadPostContent(e){try{const t=document.querySelector(`script.post-content[data-slug="${e}"]`);if(t){const e=JSON.parse(t.textContent);document.getElementById("editContent").value=e}else document.getElementById("editContent").value=`# ${document.getElementById("editTitle").value}
+
+Add your content here. When you save, you'll get a downloadable file to replace the original.
+
+## Example Content
+
+Write your blog post content in Markdown format.
+
+- Use **bold** and *italic* text
+- Add [links](https://example.com)
+- Include code blocks:
+
+\`\`\`javascript
+console.log('Hello world');
+\`\`\`
+`}catch(e){console.error("Error loading post content:",e),document.getElementById("editContent").value="Error loading content. Please try again."}}function closeEditModal(){document.getElementById("editModal").classList.add("hidden")}async function debugPath(e,t,n){const o="captjreacher",i="mgrnz-blog",a="main";let c=localStorage.getItem("github_token");if(!c){alert("No GitHub token found. Please try deleting a post first to set your token.");return}let s=e;s.startsWith("content/")||(s="content/"+s);let r="";n&&(r=s.substring(0,s.lastIndexOf("/")));const l=n?`https://api.github.com/repos/${o}/${i}/contents/${r}?ref=${a}`:`https://api.github.com/repos/${o}/${i}/contents/${s}?ref=${a}`;try{const d=await fetch(l,{headers:{Authorization:`Bearer ${c}`,Accept:"application/vnd.github.v3+json"}}),m=d.ok?"✅ SUCCESS":`❌ FAILED (${d.status})`;let u="";if(d.ok){const e=await d.json();Array.isArray(e)?u=`
+
+Files found: ${e.length}
+${e.map(e=>e.name).join(", ")}`:u=`
+
+File: ${e.name} (${e.size} bytes)`}else{const e=await d.json().catch(()=>({}));u=`
+
+Error: ${e.message||d.statusText}`}const h=`
+📋 DEBUG INFO FOR: "${t}"
+
+Original Path: ${e}
+Normalized Path: ${s}
+Is Folder: ${n}
+${n?`Folder Path: ${r}`:""}
+
+API Test: ${m}
+URL: ${l}${u}
+
+GitHub Web URL:
+${n?`https://github.com/${o}/${i}/tree/${a}/${r}`:`https://github.com/${o}/${i}/blob/${a}/${s}`}
+    `.trim();alert(h),console.log(h)}catch(e){alert(`Debug Error: ${e.message}`)}}async function deletePost(e,t,n){if(!confirm(`⚠️ DELETE POST: "${t}"
+
+This will permanently delete the post from GitHub.
+
+Are you absolutely sure?`))return;let s=localStorage.getItem("github_token");if(!s){if(s=prompt(`Enter your GitHub Personal Access Token:
+
+(Create one at: github.com/settings/tokens with "repo" scope)
+
+This will be saved for future use.`),!s)return;localStorage.setItem("github_token",s)}try{const i="captjreacher",a="mgrnz-blog",r="main";let o=e;if(o.startsWith("content/")||(o="content/"+o),console.log("Original path:",e),console.log("Normalized path:",o),console.log("Is folder:",n),n){const l=o.substring(0,o.lastIndexOf("/"));console.log("Deleting folder:",l);const e=await fetch(`https://api.github.com/repos/${i}/${a}/contents/${l}?ref=${r}`,{headers:{Authorization:`Bearer ${s}`,Accept:"application/vnd.github.v3+json"}});if(!e.ok){const n=await e.json().catch(()=>({}));if(e.status===401||e.status===403)throw localStorage.removeItem("github_token"),new Error("Invalid or expired GitHub token. Please try again with a fresh token.");if(e.status===404){confirm(`⚠️ Post already deleted from GitHub!
+
+The post "${t}" doesn't exist in GitHub but is still showing locally.
+
+This happens when Hugo hasn't rebuilt yet.
+
+Would you like to refresh the page to see the updated list?`)&&location.reload();return}throw new Error(n.message||`GitHub API error: ${e.status} - ${e.statusText}`)}const d=await e.json();if(!Array.isArray(d))throw new Error("Post folder not found or is not a directory");let n=0,c=0;for(const e of d){const o=await fetch(`https://api.github.com/repos/${i}/${a}/contents/${e.path}`,{method:"DELETE",headers:{Authorization:`Bearer ${s}`,Accept:"application/vnd.github.v3+json","Content-Type":"application/json"},body:JSON.stringify({message:`Delete post: ${t}`,sha:e.sha,branch:r})});o.ok?n++:(c++,console.error("Failed to delete:",e.path))}alert(c>0?`⚠️ Partial deletion: ${n} file(s) deleted, ${c} failed.
+
+Check console for details.`:`✅ Post "${t}" deleted successfully!
+
+${n} file(s) deleted.
+
+GitHub Actions will rebuild your site automatically.`)}else{console.log("Deleting file:",o);const e=await fetch(`https://api.github.com/repos/${i}/${a}/contents/${o}?ref=${r}`,{headers:{Authorization:`Bearer ${s}`,Accept:"application/vnd.github.v3+json"}});if(!e.ok){const n=await e.json().catch(()=>({}));if(e.status===401||e.status===403)throw localStorage.removeItem("github_token"),new Error("Invalid or expired GitHub token. Please try again with a fresh token.");if(e.status===404){confirm(`⚠️ Post already deleted from GitHub!
+
+The post "${t}" doesn't exist in GitHub but is still showing locally.
+
+This happens when Hugo hasn't rebuilt yet.
+
+Would you like to refresh the page to see the updated list?`)&&location.reload();return}throw new Error(n.message||`GitHub API error: ${e.status} - ${e.statusText}`)}const c=await e.json(),n=await fetch(`https://api.github.com/repos/${i}/${a}/contents/${o}`,{method:"DELETE",headers:{Authorization:`Bearer ${s}`,Accept:"application/vnd.github.v3+json","Content-Type":"application/json"},body:JSON.stringify({message:`Delete post: ${t}`,sha:c.sha,branch:r})});if(!n.ok){const e=await n.json().catch(()=>({}));throw new Error(e.message||`Failed to delete file: ${n.status} - ${n.statusText}`)}alert(`✅ Post "${t}" deleted successfully!
+
+GitHub Actions will rebuild your site automatically.`)}location.reload()}catch(e){console.error("Delete error:",e),alert(`❌ Error deleting post:
+
+${e.message}
+
+Not Found
+
+Please delete manually or check your GitHub token.`)}}document.getElementById("editForm").addEventListener("submit",e=>{e.preventDefault();const t={slug:document.getElementById("editSlug").value,title:document.getElementById("editTitle").value,date:document.getElementById("editDate").value,tags:document.getElementById("editTags").value,categories:document.getElementById("editCategories").value,summary:document.getElementById("editSummary").value,content:document.getElementById("editContent").value,draft:document.getElementById("editDraft").checked},n=generateMarkdown(t);if(confirm(`Download updated post "${t.title}"?`)){const o=new Blob([n],{type:"text/markdown"}),s=URL.createObjectURL(o),e=document.createElement("a");e.href=s,e.download=`${t.slug}-updated.md`,document.body.appendChild(e),e.click(),document.body.removeChild(e),URL.revokeObjectURL(s),alert(`Updated post downloaded as "${t.slug}-updated.md"!
+
+To apply changes:
+1. Replace content/posts/${t.slug}/index.md with the downloaded file
+2. Rename it back to index.md
+3. Hugo will automatically rebuild your site`),closeEditModal()}});function generateMarkdown(e){const n=e.tags.split(",").map(e=>e.trim()).filter(Boolean),s=e.categories.split(",").map(e=>e.trim()).filter(Boolean);let t=`---
+`;return t+=`title: "${e.title.replace(/"/g,'\\"')}"
+`,t+=`date: ${e.date}
+`,t+=`draft: ${e.draft}
+`,s.length&&(t+=`categories: [${s.map(e=>`"${e.replace(/"/g,'\\"')}"`).join(", ")}]
+`),n.length&&(t+=`tags: [${n.map(e=>`"${e.replace(/"/g,'\\"')}"`).join(", ")}]
+`),e.summary.trim()&&(t+=`summary: "${e.summary.replace(/"/g,'\\"')}"
+`),t+=`---
+
+`,t+e.content}document.getElementById("editModal").addEventListener("click",e=>{e.target===e.currentTarget&&closeEditModal()})</script></main><script>function manageGitHubToken(){const e=localStorage.getItem("github_token"),t=e?"Yes (hidden for security)":"No",n=confirm(`GitHub Token Status: ${t}
+
+Do you want to update/set your GitHub token?
+
+Click OK to set a new token, or Cancel to clear it.`);if(n){const e=prompt(`Enter your GitHub Personal Access Token:
+
+(Create one at: github.com/settings/tokens with "repo" scope)`);e&&(localStorage.setItem("github_token",e),alert("✅ GitHub token saved successfully!"))}else confirm("Clear the saved GitHub token?")&&(localStorage.removeItem("github_token"),alert("✅ GitHub token cleared."))}</script></body></html>

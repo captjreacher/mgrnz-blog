@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Auth Test</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+  <style>
+    body { background-color: #0f172a !important; }
+  </style>
+</head>
+<body class="min-h-screen bg-neutral-900 text-white" x-data="adminAuth()">
+  
+  <!-- Authentication Screen -->
+  <div x-show="!isAuthenticated" class="min-h-screen flex items-center justify-center px-4">
+    <div class="w-full max-w-md">
+      <div class="bg-neutral-800 p-8 rounded-lg shadow-xl border border-neutral-700">
+        <div class="text-center mb-8">
+          <div class="text-4xl mb-4">🔐</div>
+          <h1 class="text-3xl font-bold text-orange-400 mb-2">Admin Auth Test</h1>
+          <p class="text-neutral-400">Testing authentication system</p>
+        </div>
+        
+        <form @submit.prevent="authenticate()" class="space-y-6">
+          <div>
+            <label class="block text-sm font-medium text-neutral-300 mb-2">Access Code</label>
+            <input x-model="accessCode" type="password" required
+                   placeholder="Try: admin2025"
+                   class="w-full bg-neutral-700 border border-neutral-600 rounded-lg px-4 py-3 text-white placeholder-neutral-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20">
+          </div>
+          
+          <div x-show="error" class="p-3 bg-red-900 border border-red-700 rounded-lg">
+            <p class="text-red-300 text-sm" x-text="error"></p>
+          </div>
+          
+          <button type="submit" :disabled="isLoading"
+                  class="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold py-3 px-6 rounded-lg transition-all disabled:opacity-50">
+            <span x-show="!isLoading">🔓 Test Login</span>
+            <span x-show="isLoading">⏳ Testing...</span>
+          </button>
+        </form>
+        
+        <div class="mt-6 text-center">
+          <p class="text-xs text-neutral-500">
+            Valid codes: admin2025, mgrnz-admin, blog-secure, admin, mgrnz2025
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Success Screen -->
+  <div x-show="isAuthenticated" class="min-h-screen flex items-center justify-center px-4">
+    <div class="w-full max-w-md text-center">
+      <div class="text-6xl mb-4">✅</div>
+      <h2 class="text-2xl font-bold text-green-400 mb-4">Authentication Successful!</h2>
+      <p class="text-neutral-400 mb-6">The admin authentication system is working correctly.</p>
+      <div class="space-y-3">
+        <a href="/admin/" class="block w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 px-6 rounded-lg transition-all">
+          Go to Admin Dashboard
+        </a>
+        <button @click="logout()" class="block w-full bg-neutral-700 hover:bg-neutral-600 text-white font-bold py-3 px-6 rounded-lg transition-all">
+          Test Logout
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function adminAuth() {
+      return {
+        isAuthenticated: false,
+        accessCode: '',
+        error: '',
+        isLoading: false,
+        
+        init() {
+          console.log('Admin auth initialized');
+          // Check if already authenticated
+          const authToken = localStorage.getItem('admin_auth_token');
+          const authTime = localStorage.getItem('admin_auth_time');
+          
+          if (authToken && authTime) {
+            const now = new Date().getTime();
+            const authAge = now - parseInt(authTime);
+            const twentyFourHours = 24 * 60 * 60 * 1000;
+            
+            if (authAge < twentyFourHours && this.validateToken(authToken)) {
+              this.isAuthenticated = true;
+              console.log('Already authenticated');
+            } else {
+              this.clearAuth();
+              console.log('Auth expired, cleared');
+            }
+          }
+        },
+        
+        async authenticate() {
+          console.log('Attempting authentication with:', this.accessCode);
+          this.isLoading = true;
+          this.error = '';
+          
+          try {
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            const validCodes = [
+              'admin2025', 
+              'mgrnz-admin', 
+              'blog-secure',
+              'admin',
+              'mgrnz2025'
+            ];
+            
+            console.log('Valid codes:', validCodes);
+            console.log('Checking code:', this.accessCode);
+            
+            if (validCodes.includes(this.accessCode)) {
+              const authToken = this.generateAuthToken();
+              localStorage.setItem('admin_auth_token', authToken);
+              localStorage.setItem('admin_auth_time', new Date().getTime().toString());
+              
+              this.isAuthenticated = true;
+              this.accessCode = '';
+              console.log('Authentication successful!');
+            } else {
+              this.error = 'Invalid access code. Please try again.';
+              console.log('Authentication failed - invalid code');
+            }
+          } catch (error) {
+            this.error = 'Authentication failed. Please try again.';
+            console.error('Auth error:', error);
+          } finally {
+            this.isLoading = false;
+          }
+        },
+        
+        logout() {
+          if (confirm('Are you sure you want to logout?')) {
+            this.clearAuth();
+            this.isAuthenticated = false;
+            console.log('Logged out');
+          }
+        },
+        
+        clearAuth() {
+          localStorage.removeItem('admin_auth_token');
+          localStorage.removeItem('admin_auth_time');
+        },
+        
+        generateAuthToken() {
+          const timestamp = new Date().getTime();
+          const random = Math.random().toString(36).substring(2);
+          return btoa(`${timestamp}-${random}-admin`);
+        },
+        
+        validateToken(token) {
+          try {
+            const decoded = atob(token);
+            return decoded.includes('-admin');
+          } catch {
+            return false;
+          }
+        }
+      }
+    }
+  </script>
+</body>
+</html>

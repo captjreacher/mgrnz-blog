@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Simple Admin Access</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #0f172a !important; }
+    </style>
+</head>
+<body class="min-h-screen bg-neutral-900 text-white flex items-center justify-center">
+    <div class="text-center max-w-md">
+        <h1 class="text-3xl font-bold text-orange-400 mb-6">Quick Admin Access</h1>
+        <p class="text-neutral-300 mb-8">Direct access to admin interfaces (no authentication required)</p>
+        
+        <div class="space-y-4">
+            <a href="/admin-auto.html" 
+               class="block w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold py-4 px-6 rounded-lg transition-all">
+                🤖 Auto-Deploy Admin
+                <div class="text-sm opacity-80">Create posts directly (no server needed)</div>
+            </a>
+            
+            <a href="/admin-direct.html" 
+               class="block w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-bold py-4 px-6 rounded-lg transition-all">
+                ⚡ Direct Publishing
+                <div class="text-sm opacity-80">API-powered direct posting</div>
+            </a>
+            
+            <a href="/admin-dashboard.html" 
+               class="block w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold py-4 px-6 rounded-lg transition-all">
+                📊 Dashboard
+                <div class="text-sm opacity-80">Site overview and management</div>
+            </a>
+            
+            <a href="/admin-form-v2.html" 
+               class="block w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-4 px-6 rounded-lg transition-all">
+                📝 Simple Form
+                <div class="text-sm opacity-80">Basic post creation</div>
+            </a>
+        </div>
+        
+        <div class="mt-8 p-4 bg-neutral-800 rounded-lg border border-neutral-700">
+            <h3 class="text-lg font-bold text-white mb-2">Having Authentication Issues?</h3>
+            <p class="text-sm text-neutral-300 mb-4">If you're seeing access code errors, use these direct links instead.</p>
+            <div class="text-xs text-neutral-400">
+                <p>All interfaces support direct post creation and auto-deployment</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

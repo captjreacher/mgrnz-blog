@@ -1,0 +1,7 @@
+Build triggered at: 2025-10-28 11:45 UTC
+Latest commit: c18c897
+Features deployed:
+- MailerLite subscribe form with orange branding
+- Fixed post deletion with better error handling
+- Debug tools for troubleshooting
+- Cleaned up test posts
