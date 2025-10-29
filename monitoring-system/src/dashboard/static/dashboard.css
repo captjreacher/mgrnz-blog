@@ -15,10 +15,10 @@ body {
 
 #app {
     display: grid;
-    grid-template-areas: 
+    grid-template-areas:
         "header header"
         "main sidebar";
-    grid-template-columns: 1fr 300px;
+    grid-template-columns: minmax(0, 1fr) 320px;
     grid-template-rows: auto 1fr;
     min-height: 100vh;
     gap: 1rem;
@@ -83,7 +83,9 @@ body {
 .dashboard-main {
     grid-area: main;
     padding: 0 2rem;
-    max-width: 900px;
+    max-width: 1100px;
+    width: 100%;
+    margin: 0 auto;
 }
 
 .dashboard-main section {
@@ -102,6 +104,13 @@ body {
 }
 
 /* Status Overview */
+.status-layout {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+    align-items: stretch;
+}
+
 .status-cards {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -129,6 +138,90 @@ body {
     font-size: 1.5rem;
     font-weight: 700;
     color: #2d3748;
+}
+
+.status-visualization {
+    display: flex;
+    align-items: stretch;
+}
+
+.visual-card {
+    background: white;
+    border-radius: 8px;
+    padding: 1.25rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    border: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+}
+
+.visual-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.75rem;
+}
+
+.visual-card-header h2,
+.visual-card-header h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #2d3748;
+}
+
+.visual-caption {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #718096;
+}
+
+.visual-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.chart-wrapper {
+    position: relative;
+    width: 100%;
+    height: 260px;
+}
+
+.chart-wrapper.large {
+    height: 320px;
+}
+
+.chart-wrapper canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.chart-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    pointer-events: none;
+}
+
+.chart-total {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #2d3748;
+}
+
+.chart-subtitle {
+    display: block;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #718096;
+    margin-top: 0.25rem;
 }
 
 /* Pipeline Runs */
@@ -168,6 +261,13 @@ select {
 .runs-list {
     max-height: 400px;
     overflow-y: auto;
+}
+
+.no-runs {
+    text-align: center;
+    color: #718096;
+    font-style: italic;
+    padding: 2rem 1rem;
 }
 
 .run-item {
@@ -219,6 +319,16 @@ select {
 .run-status.completed {
     background-color: #c6f6d5;
     color: #22543d;
+}
+
+.run-status.queued {
+    background-color: #bee3f8;
+    color: #2c5282;
+}
+
+.run-status.cancelled {
+    background-color: #e2e8f0;
+    color: #4a5568;
 }
 
 .run-status.failed {
@@ -305,6 +415,67 @@ select {
 .metric-trend {
     font-size: 0.75rem;
     color: #718096;
+}
+
+.run-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.run-stages {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.run-stages li {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 0.75rem;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #edf2f7;
+}
+
+.run-stages li:last-child {
+    border-bottom: none;
+}
+
+.stage-name {
+    font-weight: 600;
+    color: #2d3748;
+}
+
+.stage-status {
+    padding: 0.25rem 0.5rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.stage-status.running {
+    background-color: #fefcbf;
+    color: #b7791f;
+}
+
+.stage-status.completed {
+    background-color: #c6f6d5;
+    color: #22543d;
+}
+
+.stage-status.failed {
+    background-color: #fed7d7;
+    color: #c53030;
+}
+
+.stage-duration {
+    font-size: 0.75rem;
+    color: #718096;
+    text-align: right;
 }
 
 /* Activity Feed */
@@ -428,9 +599,24 @@ select {
 }
 
 /* Responsive design */
+@media (max-width: 1024px) {
+    #app {
+        grid-template-areas:
+            "header"
+            "main"
+            "sidebar";
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-main,
+    .activity-feed {
+        margin: 0 1rem;
+    }
+}
+
 @media (max-width: 768px) {
     #app {
-        grid-template-areas: 
+        grid-template-areas:
             "header"
             "main"
             "sidebar";
@@ -449,11 +635,16 @@ select {
         text-align: center;
     }
     
+    .status-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .visual-grid,
     .status-cards,
     .metrics-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .runs-controls {
         flex-direction: column;
         align-items: stretch;

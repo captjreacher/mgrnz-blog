@@ -1,0 +1,16 @@
+{
+  "reports": {
+    "title": "Automated Monitoring Report",
+    "defaultFormat": "html",
+    "outputDir": "./exports/reports",
+    "fileNamePrefix": "monitoring-report",
+    "aggregate": {
+      "limit": 25
+    }
+  },
+  "engine": {
+    "monitoring": {
+      "interval": 60000
+    }
+  }
+}

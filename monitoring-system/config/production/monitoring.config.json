@@ -1,0 +1,54 @@
+{
+  "dataDir": "/var/lib/monitoring-system/data",
+  "monitoring": {
+    "interval": 15000,
+    "timeout": 600000,
+    "retryAttempts": 5
+  },
+  "storage": {
+    "dataDir": "/var/lib/monitoring-system/data",
+    "maxRecords": 5000,
+    "cleanupInterval": 43200000,
+    "retentionDays": 14
+  },
+  "triggers": {
+    "gitMonitorInterval": 45000,
+    "githubMonitorInterval": 60000,
+    "webhookSecrets": {
+      "supabase": "${SUPABASE_WEBHOOK_SECRET}",
+      "mailerlite": "${MAILERLITE_WEBHOOK_SECRET}"
+    }
+  },
+  "monitors": {
+    "github": {
+      "enabled": true,
+      "owner": "${GITHUB_OWNER}",
+      "repo": "${GITHUB_REPO}",
+      "workflowId": "deploy-blog.yml",
+      "pollInterval": 20000
+    },
+    "supabase": {
+      "enabled": true,
+      "functionUrl": "https://your-project.supabase.co/functions/v1/ml-to-hugo-public"
+    },
+    "mailerlite": {
+      "enabled": false,
+      "webhookUrl": "https://api.mailerlite.com/api/v2/webhooks"
+    }
+  },
+  "alerts": {
+    "enabled": true,
+    "thresholds": {
+      "errorRate": 15,
+      "responseTime": 6000,
+      "buildTime": 420000,
+      "webhookTimeout": 45000
+    },
+    "notifications": {
+      "console": true,
+      "dashboard": true,
+      "email": false,
+      "webhook": false
+    }
+  }
+}
