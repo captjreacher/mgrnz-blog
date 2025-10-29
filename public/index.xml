@@ -1,92 +1,82 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Welcome to the Personal Blog of Mike G Robinson</title><link>https://mgrnz.com/</link><description>Recent content on Welcome to the Personal Blog of Mike G Robinson</description><generator>Hugo</generator><language>en</language><lastBuildDate>Tue, 28 Oct 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://mgrnz.com/index.xml" rel="self" type="application/rss+xml"/><item><title>Embedded ChatGPT Assistant by email</title><link>https://mgrnz.com/posts/2025/24-aug/embedded-chatgpt/</link><pubDate>Tue, 28 Oct 2025 00:00:00 +0000</pubDate><guid>https://mgrnz.com/posts/2025/24-aug/embedded-chatgpt/</guid><description>A walkthrough on embedding ChatGPT assistants via email and automating workflows.</description></item><item><title>Demystifying AI to Empower Your Business</title><link>https://mgrnz.com/posts/2025/20-july/demystifying-ai-to-empower-your-business/</link><pubDate>Sun, 20 Jul 2025 00:00:00 +0000</pubDate><guid>https://mgrnz.com/posts/2025/20-july/demystifying-ai-to-empower-your-business/</guid><description>Demystifying AI to empower better business decisions.</description></item><item><title>This Automation Was Made For You</title><link>https://mgrnz.com/posts/2025/09-july/this-automation-was-made-for-you/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://mgrnz.com/posts/2025/09-july/this-automation-was-made-for-you/</guid><description>A playful exploration of automation&amp;rsquo;s purpose and the human element that brings it to life - why every automation needs YOU to make it meaningful.</description></item><item><title>Bootstrapping the AI Evolution – The Journey from Accountant to AI Entrepreneur</title><link>https://mgrnz.com/posts/2025/07-july/bootstrapping-the-ai-evolution/</link><pubDate>Mon, 07 Jul 2025 00:00:00 +0000</pubDate><guid>https://mgrnz.com/posts/2025/07-july/bootstrapping-the-ai-evolution/</guid><description>From Robert Plant&amp;rsquo;s career choice dilemma to my own journey from Big Six accounting to AI entrepreneurship - a personal story of transformation and the birth of Maximised AI.</description></item><item><title>My CV</title><link>https://mgrnz.com/posts/2025/01-july/my-cv/</link><pubDate>Tue, 01 Jul 2025 00:00:00 +0000</pubDate><guid>https://mgrnz.com/posts/2025/01-july/my-cv/</guid><description>They say a picture&amp;rsquo;s worth 1000 words so this illustration is a quick and effective way to demonstrate my background. You can also visit my LinkedIn profile here.</description></item><item><title>CV / Experience</title><link>https://mgrnz.com/pages/cv/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://mgrnz.com/pages/cv/</guid><description>&lt;h2 id="snapshot" class="relative group"&gt;Snapshot &lt;span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"&gt;&lt;a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#snapshot" aria-label="Anchor"&gt;#&lt;/a&gt;&lt;/span&gt;&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;Entrepreneur &amp;amp; builder focused on AI + automation.&lt;/li&gt;
-&lt;li&gt;Ship fast, iterate faster. Fair, honest, chilled—but urgent.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id="highlights" class="relative group"&gt;Highlights &lt;span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"&gt;&lt;a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#highlights" aria-label="Anchor"&gt;#&lt;/a&gt;&lt;/span&gt;&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;Founded/ran multiple brands.&lt;/li&gt;
-&lt;li&gt;Built assistants, data pipelines, and workflow tools.&lt;/li&gt;
-&lt;li&gt;Comfortable across product, GTM, ops, and the messy middle.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Replace this with your real CV content or link to a PDF.&lt;/p&gt;</description></item><item><title>Edit Post</title><link>https://mgrnz.com/admin/posts/edit/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://mgrnz.com/admin/posts/edit/</guid><description/></item><item><title>My Brands</title><link>https://mgrnz.com/pages/brands/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://mgrnz.com/pages/brands/</guid><description>&lt;p&gt;Here are the brands I run/work on:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;mgrnz.com&lt;/strong&gt; — automations, assistants, experiments.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;(Add brand)&lt;/strong&gt; — one-liner.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;(Add brand)&lt;/strong&gt; — one-liner.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Swap this list for logos + links when you’re ready.&lt;/p&gt;&lt;/blockquote&gt;</description></item><item><title>Subscribe</title><link>https://mgrnz.com/subscribe/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://mgrnz.com/subscribe/</guid><description>&lt;style&gt;
-.subscribe-container {
- max-width: 600px;
- margin: 0 auto;
- padding: 40px 20px;
- font-family: 'Open Sans', Arial, Helvetica, sans-serif;
-}
-
-.subscribe-header {
- text-align: center;
- margin-bottom: 40px;
-}
-
-.subscribe-header h1 {
- color: #ff4f00;
- font-size: 2.5rem;
- font-weight: 700;
- margin-bottom: 16px;
-}
-
-.subscribe-header p {
- color: #666;
- font-size: 1.1rem;
- line-height: 1.6;
-}
-
-.ml-embedded {
- margin: 0 auto;
-}
-
-/* Custom styling for MailerLite form */
-.ml-form-embedContainer {
- background: #fff;
- border-radius: 8px;
- box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
- padding: 30px;
-}
-
-.benefits {
- margin-top: 40px;
- text-align: center;
-}
-
-.benefits h3 {
- color: #333;
- font-size: 1.5rem;
- margin-bottom: 20px;
-}
-
-.benefits ul {
- list-style: none;
- padding: 0;
- max-width: 400px;
- margin: 0 auto;
-}
-
-.benefits li {
- color: #666;
- margin-bottom: 12px;
- padding-left: 24px;
- position: relative;
-}
-
-.benefits li:before {
- content: "✓";
- color: #ff4f00;
- font-weight: bold;
- position: absolute;
- left: 0;
-}
-&lt;/style&gt;
-&lt;div class="subscribe-container"&gt;
- &lt;div class="subscribe-header"&gt;
- &lt;h1&gt;Subscribe to Mike's Blog&lt;/h1&gt;
- &lt;p&gt;Get the latest insights on AI, technology, and business delivered straight to your inbox. Join our community of forward-thinking professionals.&lt;/p&gt;</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Welcome to the Personal Blog of Mike G Robinson</title>
+    <link>http://localhost:1313/</link>
+    <description>Recent content on Welcome to the Personal Blog of Mike G Robinson</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 28 Oct 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Embedded ChatGPT Assistant by email</title>
+      <link>http://localhost:1313/posts/2025/24-aug/embedded-chatgpt/</link>
+      <pubDate>Tue, 28 Oct 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/2025/24-aug/embedded-chatgpt/</guid>
+      <description>A walkthrough on embedding ChatGPT assistants via email and automating workflows.</description>
+    </item>
+    <item>
+      <title>🔗 WEBHOOK TEST</title>
+      <link>http://localhost:1313/webhook-test/</link>
+      <pubDate>Mon, 27 Oct 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/webhook-test/</guid>
+      <description>&lt;h2 id=&#34;test-commit-2025-10-27-150327&#34;&gt;Test Commit: 2025-10-27 15:03:27&lt;/h2&gt;&#xA;&lt;p&gt;This file tests if GitHub webhooks trigger Cloudflare Pages builds.&lt;/p&gt;&#xA;&lt;h3 id=&#34;expected-behavior&#34;&gt;Expected Behavior:&lt;/h3&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;Commit this file to GitHub&lt;/li&gt;&#xA;&lt;li&gt;GitHub webhook should trigger Cloudflare Pages build&lt;/li&gt;&#xA;&lt;li&gt;Site should update within 3-5 minutes&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;h3 id=&#34;test-results&#34;&gt;Test Results:&lt;/h3&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;⏳ Test initiated at 2025-10-27 15:03:27&lt;/li&gt;&#xA;&lt;li&gt;🔍 Check &lt;a href=&#34;https://mgrnz.com/webhook-test/&#34;&gt;https://mgrnz.com/webhook-test/&lt;/a&gt; in 5 minutes&lt;/li&gt;&#xA;&lt;li&gt;✅ If you see this timestamp, webhooks are working&lt;/li&gt;&#xA;&lt;li&gt;❌ If timestamp is old, webhooks are broken&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h3 id=&#34;troubleshooting&#34;&gt;Troubleshooting:&lt;/h3&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;Check Cloudflare Pages dashboard for build logs&lt;/li&gt;&#xA;&lt;li&gt;Verify GitHub webhook is active in repository settings&lt;/li&gt;&#xA;&lt;li&gt;Ensure .env file has correct HUGO_WEBHOOK_URL&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;p&gt;&lt;strong&gt;Last test&lt;/strong&gt;: 2025-10-27 15:03:27&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Demystifying AI to Empower Your Business</title>
+      <link>http://localhost:1313/posts/2025/20-july/demystifying-ai-to-empower-your-business/</link>
+      <pubDate>Sun, 20 Jul 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/2025/20-july/demystifying-ai-to-empower-your-business/</guid>
+      <description>Demystifying AI to empower better business decisions.</description>
+    </item>
+    <item>
+      <title>This Automation Was Made For You</title>
+      <link>http://localhost:1313/posts/2025/09-july/this-automation-was-made-for-you/</link>
+      <pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/2025/09-july/this-automation-was-made-for-you/</guid>
+      <description>A playful exploration of automation&amp;rsquo;s purpose and the human element that brings it to life - why every automation needs YOU to make it meaningful.</description>
+    </item>
+    <item>
+      <title>Bootstrapping the AI Evolution – The Journey from Accountant to AI Entrepreneur</title>
+      <link>http://localhost:1313/posts/2025/07-july/bootstrapping-the-ai-evolution/</link>
+      <pubDate>Mon, 07 Jul 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/2025/07-july/bootstrapping-the-ai-evolution/</guid>
+      <description>From Robert Plant&amp;rsquo;s career choice dilemma to my own journey from Big Six accounting to AI entrepreneurship - a personal story of transformation and the birth of Maximised AI.</description>
+    </item>
+    <item>
+      <title>My CV</title>
+      <link>http://localhost:1313/posts/2025/01-july/my-cv/</link>
+      <pubDate>Tue, 01 Jul 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/2025/01-july/my-cv/</guid>
+      <description>They say a picture&amp;rsquo;s worth 1000 words so this illustration is a quick and effective way to demonstrate my background. You can also visit my LinkedIn profile here.</description>
+    </item>
+    <item>
+      <title>CV / Experience</title>
+      <link>http://localhost:1313/pages/cv/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/pages/cv/</guid>
+      <description>&lt;h2 id=&#34;snapshot&#34;&gt;Snapshot&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Entrepreneur &amp;amp; builder focused on AI + automation.&lt;/li&gt;&#xA;&lt;li&gt;Ship fast, iterate faster. Fair, honest, chilled—but urgent.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;highlights&#34;&gt;Highlights&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Founded/ran multiple brands.&lt;/li&gt;&#xA;&lt;li&gt;Built assistants, data pipelines, and workflow tools.&lt;/li&gt;&#xA;&lt;li&gt;Comfortable across product, GTM, ops, and the messy middle.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;Replace this with your real CV content or link to a PDF.&lt;/p&gt;&lt;/blockquote&gt;</description>
+    </item>
+    <item>
+      <title>Edit Post</title>
+      <link>http://localhost:1313/admin/posts/edit/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/admin/posts/edit/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>My Brands</title>
+      <link>http://localhost:1313/pages/brands/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/pages/brands/</guid>
+      <description>&lt;p&gt;Here are the brands I run/work on:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;strong&gt;mgrnz.com&lt;/strong&gt; — automations, assistants, experiments.&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;(Add brand)&lt;/strong&gt; — one-liner.&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;(Add brand)&lt;/strong&gt; — one-liner.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;Swap this list for logos + links when you’re ready.&lt;/p&gt;&lt;/blockquote&gt;</description>
+    </item>
+    <item>
+      <title>Subscribe</title>
+      <link>http://localhost:1313/subscribe/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/subscribe/</guid>
+      <description>&lt;style&gt;&#xD;&#xA;.subscribe-container {&#xD;&#xA;    max-width: 600px;&#xD;&#xA;    margin: 0 auto;&#xD;&#xA;    padding: 40px 20px;&#xD;&#xA;    font-family: &#39;Open Sans&#39;, Arial, Helvetica, sans-serif;&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;.subscribe-header {&#xD;&#xA;    text-align: center;&#xD;&#xA;    margin-bottom: 40px;&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;.subscribe-header h1 {&#xD;&#xA;    color: #ff4f00;&#xD;&#xA;    font-size: 2.5rem;&#xD;&#xA;    font-weight: 700;&#xD;&#xA;    margin-bottom: 16px;&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;.subscribe-header p {&#xD;&#xA;    color: #666;&#xD;&#xA;    font-size: 1.1rem;&#xD;&#xA;    line-height: 1.6;&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;.ml-embedded {&#xD;&#xA;    margin: 0 auto;&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;/* Custom styling for MailerLite form */&#xD;&#xA;.ml-form-embedContainer {&#xD;&#xA;    background: #fff;&#xD;&#xA;    border-radius: 8px;&#xD;&#xA;    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);&#xD;&#xA;    padding: 30px;&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;.benefits {&#xD;&#xA;    margin-top: 40px;&#xD;&#xA;    text-align: center;&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;.benefits h3 {&#xD;&#xA;    color: #333;&#xD;&#xA;    font-size: 1.5rem;&#xD;&#xA;    margin-bottom: 20px;&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;.benefits ul {&#xD;&#xA;    list-style: none;&#xD;&#xA;    padding: 0;&#xD;&#xA;    max-width: 400px;&#xD;&#xA;    margin: 0 auto;&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;.benefits li {&#xD;&#xA;    color: #666;&#xD;&#xA;    margin-bottom: 12px;&#xD;&#xA;    padding-left: 24px;&#xD;&#xA;    position: relative;&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;.benefits li:before {&#xD;&#xA;    content: &#34;✓&#34;;&#xD;&#xA;    color: #ff4f00;&#xD;&#xA;    font-weight: bold;&#xD;&#xA;    position: absolute;&#xD;&#xA;    left: 0;&#xD;&#xA;}&#xD;&#xA;&lt;/style&gt;&#xD;&#xA;&lt;div class=&#34;subscribe-container&#34;&gt;&#xD;&#xA;    &lt;div class=&#34;subscribe-header&#34;&gt;&#xD;&#xA;        &lt;h1&gt;Subscribe to Mike&#39;s Blog&lt;/h1&gt;&#xD;&#xA;        &lt;p&gt;Get the latest insights on AI, technology, and business delivered straight to your inbox. Join our community of forward-thinking professionals.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

@@ -1,1 +1,19 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Bootstrapping on Welcome to the Personal Blog of Mike G Robinson</title><link>https://mgrnz.com/tags/bootstrapping/</link><description>Recent content in Bootstrapping on Welcome to the Personal Blog of Mike G Robinson</description><generator>Hugo</generator><language>en</language><lastBuildDate>Mon, 07 Jul 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://mgrnz.com/tags/bootstrapping/index.xml" rel="self" type="application/rss+xml"/><item><title>Bootstrapping the AI Evolution – The Journey from Accountant to AI Entrepreneur</title><link>https://mgrnz.com/posts/2025/07-july/bootstrapping-the-ai-evolution/</link><pubDate>Mon, 07 Jul 2025 00:00:00 +0000</pubDate><guid>https://mgrnz.com/posts/2025/07-july/bootstrapping-the-ai-evolution/</guid><description>From Robert Plant&amp;rsquo;s career choice dilemma to my own journey from Big Six accounting to AI entrepreneurship - a personal story of transformation and the birth of Maximised AI.</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Bootstrapping on Welcome to the Personal Blog of Mike G Robinson</title>
+    <link>http://localhost:1313/tags/bootstrapping/</link>
+    <description>Recent content in Bootstrapping on Welcome to the Personal Blog of Mike G Robinson</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 07 Jul 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/bootstrapping/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Bootstrapping the AI Evolution – The Journey from Accountant to AI Entrepreneur</title>
+      <link>http://localhost:1313/posts/2025/07-july/bootstrapping-the-ai-evolution/</link>
+      <pubDate>Mon, 07 Jul 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/2025/07-july/bootstrapping-the-ai-evolution/</guid>
+      <description>From Robert Plant&amp;rsquo;s career choice dilemma to my own journey from Big Six accounting to AI entrepreneurship - a personal story of transformation and the birth of Maximised AI.</description>
+    </item>
+  </channel>
+</rss>
