@@ -1,0 +1,48 @@
+{{/* Share Buttons Partial */}}
+<div class="mt-8 text-center">
+  <button id="shareButton" 
+          class="inline-flex items-center gap-2 rounded-lg bg-orange-600 px-5 py-2.5 text-sm font-semibold text-white shadow transition-all duration-200 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 focus:ring-offset-neutral-900"
+          title="Share this post">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8m-4-6l-4-4-4 4m4-4v12"></path></svg>
+    <span id="shareText">Share Post</span>
+  </button>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const shareButton = document.getElementById('shareButton');
+  const shareText = document.getElementById('shareText');
+  
+  if (shareButton) {
+    const postTitle = {{ .Title | jsonify }};
+    const postUrl = {{ .Permalink | jsonify }};
+
+    shareButton.addEventListener('click', async () => {
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: postTitle,
+            text: `Check out this article: ${postTitle}`,
+            url: postUrl,
+          });
+          console.log('Post shared successfully');
+        } catch (error) {
+          console.error('Error sharing:', error);
+        }
+      } else {
+        // Fallback for browsers that don't support Web Share API
+        navigator.clipboard.writeText(postUrl).then(() => {
+          const originalText = shareText.textContent;
+          shareText.textContent = '✅ Copied!';
+          setTimeout(() => {
+            shareText.textContent = originalText;
+          }, 2000);
+        }).catch(err => {
+          console.error('Failed to copy URL:', err);
+          alert('Failed to copy URL. Please copy it manually.');
+        });
+      }
+    });
+  }
+});
+</script>

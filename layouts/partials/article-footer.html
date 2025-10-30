@@ -1,0 +1,30 @@
+{{ $related := .Site.RegularPages.Related . | first 5 }}
+{{ with $related }}
+<div class="related-articles">
+  <h3 class="text-xl font-bold mb-4">See Also</h3>
+  <ul class="space-y-2">
+    {{ range . }}
+    <li>
+      <a href="{{ .RelPermalink }}" class="text-orange-400 hover:underline">{{ .Title }}</a>
+    </li>
+    {{ end }}
+  </ul>
+</div>
+{{ end }}
+
+{{/* Include the new share buttons partial */}}
+{{ partial "share-buttons.html" . }}
+
+<footer class="mt-12 border-t border-neutral-700 pt-8">
+  {{ with .Params.categories }}
+  <div class="mb-4">
+    <span class="text-sm font-medium text-neutral-400">Categories:</span>
+    {{ range . }}
+    <a href="{{ "categories" | absURL }}/{{ . | urlize }}" class="ml-2 text-orange-400 hover:text-orange-300">
+      {{ . }}
+    </a>
+    {{ end }}
+  </div>
+  {{ end }}
+  {{ partial "article-pagination.html" . }}
+</footer>
