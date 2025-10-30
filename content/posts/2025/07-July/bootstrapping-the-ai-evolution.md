@@ -65,7 +65,7 @@ If you haven't been involved in a large audit, lucky you! You may not appreciate
 
 **Garbage in = Garbage out.**
 
-![Garbage In Equals Garbage Out](/images/2025/07/garbage-in-garbage-out.webp)
+![Garbage In Equals Garbage Out](/images/garbage-in-garbage-out.webp)
 
 And so it goes, if your systems can be proven to deliver the right numbers (attestation), the financial statements are less likely to contain material errors. But if your systems are garbage, you've got a bunch of fresh-faced, overly enthusiastic audit graduates coming your way for the *Battle of Evermore.*
 
