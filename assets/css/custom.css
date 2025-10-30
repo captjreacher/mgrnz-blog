@@ -34,14 +34,15 @@
 }
 
 /* Force dark theme */
-html {
+html, body {
   color-scheme: dark;
+  background-color: rgb(var(--color-neutral-50)) !important;
 }
 
 body {
   font-family: var(--font-body);
-  background-color: rgb(var(--color-neutral-50));
-  color: rgb(var(--color-neutral-900));
+  background-color: rgb(var(--color-neutral-50)) !important;
+  color: rgb(var(--color-neutral-800)) !important;
 }
 
 /* Headings with brand colors */
@@ -108,12 +109,6 @@ img.avatar {
   border: 3px solid var(--orange);
 }
 
-/* Cards */
-.card {
-  background-color: rgb(var(--color-neutral-100));
-  border: 1px solid rgb(var(--color-neutral-200));
-}
-
 .card:hover {
   border-color: var(--orange);
 }
@@ -121,17 +116,11 @@ img.avatar {
 /* Buttons */
 .btn, button {
   background-color: var(--orange);
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.2s;
 }
 
 .btn:hover, button:hover {
   background-color: var(--yellow);
-  color: rgb(var(--color-neutral-50));
+  color: rgb(var(--color-neutral-100));
 }
 
 /* Code blocks */
@@ -142,9 +131,7 @@ pre, code {
 
 /* Sidebar customization for Congo theme */
 .sidebar {
-  background-color: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(10px);
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  /* Styles are handled by Tailwind classes in the template */
 }
 
 /* Header logo - 50% smaller */
@@ -169,7 +156,7 @@ img.site-logo,
 /* Prose content */
 .prose {
   line-height: 1.7;
-  color: rgb(var(--color-neutral-800));
+  color: rgb(var(--color-neutral-700));
 }
 
 .prose strong {
