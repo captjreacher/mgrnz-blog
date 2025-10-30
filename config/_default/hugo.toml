@@ -1,6 +1,8 @@
 baseURL = "https://mgrnz.com/"
-languageCode = "en-nz"
+languageCode = "en"
 title = "Welcome to the Personal Blog of Mike G Robinson"
+theme = "congo"
 
-[pagination]
-  pagerSize = 10
+[params]
+  [params.admin]
+    access_codes = ["mgrnz-secret-access"]

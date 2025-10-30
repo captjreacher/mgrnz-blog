@@ -74,13 +74,7 @@
 <script>
 const ADMIN_SESSION_DURATION = 8 * 60 * 60 * 1000; // 8 hours
 const ADMIN_DASHBOARD_URL = 'https://mgrnz.com/admin/';
-const ADMIN_VALID_ACCESS_CODES = [
-  'admin2025',
-  'mgrnz-admin',
-  'blog-secure',
-  'admin',
-  'mgrnz2025'
-];
+const ADMIN_VALID_ACCESS_CODES = {{ .Site.Params.admin.access_codes | jsonify }};
 
 function openAdminAuthModal() {
   const modal = document.getElementById('adminAuthModal');

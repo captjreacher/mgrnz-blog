@@ -137,7 +137,7 @@
       
       // Simulate authentication delay
       setTimeout(() => {
-        const validCodes = ['admin2025', 'mgrnz-admin', 'blog-secure', 'admin', 'mgrnz2025'];
+        const validCodes = {{ .Site.Params.admin.access_codes | jsonify }};
         
         if (validCodes.includes(accessCode)) {
           // Generate and store auth token
