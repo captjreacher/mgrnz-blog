@@ -342,6 +342,9 @@ GITHUB_WORKFLOW_REF = "env(GITHUB_WORKFLOW_REF)"
 SUPABASE_URL = "env(SUPABASE_URL)"
 SUPABASE_SERVICE_ROLE = "env(SUPABASE_SERVICE_ROLE)"
 
+[functions.trigger-hugo-build]
+  schedule = "*/15 * * * *"
+
 [analytics]
 enabled = true
 port = 54327

@@ -1,15 +1,13 @@
 ---
-title: "CV / Experience"
-url: "/pages/cv/"
+title: "My CV"
+date: 2025-07-01
+draft: false
+layout: "simple"
+summary: "A visual and narrative overview of my professional journey and experience."
 ---
 
-## Snapshot
-- Entrepreneur & builder focused on AI + automation.
-- Ship fast, iterate faster. Fair, honest, chilled—but urgent.
+![My CV Illustration](/images/my-cv.webp "A visual representation of my career journey")
 
-## Highlights
-- Founded/ran multiple brands.
-- Built assistants, data pipelines, and workflow tools.
-- Comfortable across product, GTM, ops, and the messy middle.
+They say a picture's worth 1000 words, so this illustration is a quick and effective way to demonstrate my background. 
 
-> Replace this with your real CV content or link to a PDF.
+For more details, you can also visit my [LinkedIn profile](https://www.linkedin.com/in/mgrnz).

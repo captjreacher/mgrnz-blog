@@ -1,15 +1,15 @@
-# .github/workflows/deploy-gh-pages.yml
+# .github/workflows/rebuild-on-schedule.yml
 
-name: Deploy Hugo to GitHub Pages
+name: Rebuild Hugo on Schedule
 
 on:
-  # Runs on pushes to the main branch
-  push:
-    branches:
-      - main
-
-  # Allows you to run this workflow manually from the Actions tab
+  # Allows this workflow to be triggered by the Supabase cron job
   workflow_dispatch:
+    inputs:
+      source:
+        description: 'The source of the trigger'
+        required: false
+        default: 'supabase-cron'
 
 # Allow this job to clone the repo and create a page deployment
 permissions:
@@ -56,3 +56,4 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
