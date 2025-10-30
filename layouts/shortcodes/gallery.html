@@ -1,0 +1,132 @@
+{{/*
+  Gallery Shortcode
+  Creates a responsive grid of images.
+
+  Usage:
+  {{< gallery >}}
+    /images/image1.webp "Optional caption for image 1"
+    /images/image2.webp "Optional caption for image 2"
+    /images/image3.webp
+  {{< /gallery >}}
+
+  You can also specify the number of columns (default is 2):
+  {{< gallery "3" >}}
+*/}}
+
+{{- $columns := .Get 0 | default "2" -}}
+{{- $gap := .Get 1 | default "4" -}}
+
+<div class="gallery-grid" style="--grid-cols: {{ $columns }}; --grid-gap: {{ $gap }}px;">
+  {{- $lines := split .Inner "\n" -}}
+  {{- range $lines -}}
+    {{- $line := trim . " " -}}
+    {{- if gt (len $line) 0 -}}
+      {{- $parts := findRE `^([^\\s]+)(?:\\s+"(.*?)"\\s*)?$` $line -}}
+      {{- range $parts -}}
+        {{- $src := . | replaceRE `^([^\\s]+)(?:\\s+"(.*?)"\\s*)?$` "$1" -}}
+        {{- $caption := . | replaceRE `^([^\\s]+)(?:\\s+"(.*?)"\\s*)?$` "$2" -}}
+        {{- $image := "" -}}
+        {{- if strings.HasPrefix $src "/" -}}
+          {{- $image = resources.Get (strings.TrimPrefix "/" $src) -}}
+        {{- else -}}
+          {{- $image = $.Page.Resources.GetMatch $src -}}
+        {{- end -}}
+        {{- if $image -}}
+          {{- $resized := $image.Resize "800x" -}}
+          <figure class="gallery-item">
+            <a href="{{ $image.RelPermalink }}" class="gallery-lightbox-trigger" data-caption="{{ $caption | plainify }}">
+              <img src="{{ $resized.RelPermalink }}" alt="{{ $caption | default $src }}" loading="lazy" class="rounded-lg shadow-md">
+            </a>
+            {{- if $caption -}}<figcaption class="text-center text-sm text-neutral-400 mt-2">{{ $caption | $.Page.RenderString }}</figcaption>{{- end -}}
+          </figure>
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+</div>
+
+<!-- Lightbox Structure -->
+<div id="gallery-lightbox" class="fixed inset-0 z-[999] hidden items-center justify-center bg-black/80 backdrop-blur-sm" style="cursor: zoom-out;" onclick="closeLightbox()">
+  <button id="lightbox-close" class="absolute top-4 right-4 z-10 text-white/80 hover:text-white" title="Close (Esc)">
+    <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+  </button>
+  <button id="lightbox-prev" class="absolute left-4 top-1/2 z-10 -translate-y-1/2 text-white/80 hover:text-white" title="Previous (Left Arrow)">
+    <svg class="h-10 w-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+  </button>
+  <button id="lightbox-next" class="absolute right-4 top-1/2 z-10 -translate-y-1/2 text-white/80 hover:text-white" title="Next (Right Arrow)">
+    <svg class="h-10 w-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+  </button>
+  <div class="relative max-w-[90vw] max-h-[85vh] flex flex-col items-center justify-center">
+    <img id="lightbox-image" src="" alt="" class="max-w-full max-h-full object-contain" style="cursor: default;" onclick="event.stopPropagation()">
+    <figcaption id="lightbox-caption" class="mt-4 text-white/90 text-center text-sm" style="cursor: default;"></figcaption>
+  </div>
+</div>
+
+<script>
+  let galleryItems = [];
+  let currentImageIndex = -1;
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const lightbox = document.getElementById('gallery-lightbox');
+    if (!lightbox) return;
+
+    galleryItems = Array.from(document.querySelectorAll('.gallery-lightbox-trigger'));
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    const prevButton = document.getElementById('lightbox-prev');
+    const nextButton = document.getElementById('lightbox-next');
+
+    galleryItems.forEach((item, index) => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        currentImageIndex = index;
+        updateLightbox();
+        lightbox.classList.remove('hidden');
+        lightbox.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    function updateLightbox() {
+      if (currentImageIndex < 0 || currentImageIndex >= galleryItems.length) return;
+      const item = galleryItems[currentImageIndex];
+      lightboxImage.src = item.href;
+      lightboxImage.alt = item.dataset.caption || 'Gallery image';
+      lightboxCaption.textContent = item.dataset.caption || '';
+      prevButton.style.display = (currentImageIndex === 0) ? 'none' : 'block';
+      nextButton.style.display = (currentImageIndex === galleryItems.length - 1) ? 'none' : 'block';
+    }
+
+    window.closeLightbox = () => {
+      lightbox.classList.add('hidden');
+      lightbox.classList.remove('flex');
+      document.body.style.overflow = 'auto';
+    }
+
+    function showPrevImage(e) {
+      e.stopPropagation();
+      if (currentImageIndex > 0) {
+        currentImageIndex--;
+        updateLightbox();
+      }
+    }
+
+    function showNextImage(e) {
+      e.stopPropagation();
+      if (currentImageIndex < galleryItems.length - 1) {
+        currentImageIndex++;
+        updateLightbox();
+      }
+    }
+
+    prevButton.addEventListener('click', showPrevImage);
+    nextButton.addEventListener('click', showNextImage);
+
+    document.addEventListener('keydown', (e) => {
+      if (lightbox.classList.contains('hidden')) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') showPrevImage(e);
+      if (e.key === 'ArrowRight') showNextImage(e);
+    });
+  });
+</script>

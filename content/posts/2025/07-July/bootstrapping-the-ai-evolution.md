@@ -55,6 +55,11 @@ Most of all however, it has endured. The lessons became the basis of almost ever
 
 "One day Robbo", the Partner says, "you'll be just like me." This became one of those motivating moments when you see the battle ahead of you, and pump your fists and shout, *"No Quarter".*
 
+{{< gallery >}}
+  /images/demystifying-ai.webp "AI can feel like a complex puzzle."
+  /images/embedded-gpt.webp "But it can be embedded anywhere."
+{{< /gallery >}}
+
 ### *No Quarter*
 
 Then one day I no longer needed to prepare for meetings like I once had, I could fire from the hip if I needed to. I was all grown up. I was a real accountant, and I had a badge to prove it.
@@ -65,7 +70,7 @@ If you haven't been involved in a large audit, lucky you! You may not appreciate
 
 **Garbage in = Garbage out.**
 
-![Garbage In Equals Garbage Out](/images/garbage-in-garbage-out.webp)
+![Garbage In Equals Garbage Out](/images/garbage-in-garbage-out.webp "The fundamental principle of data processing: quality input determines quality output.")
 
 And so it goes, if your systems can be proven to deliver the right numbers (attestation), the financial statements are less likely to contain material errors. But if your systems are garbage, you've got a bunch of fresh-faced, overly enthusiastic audit graduates coming your way for the *Battle of Evermore.*
 
