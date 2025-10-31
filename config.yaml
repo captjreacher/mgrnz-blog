@@ -68,7 +68,7 @@ params:
   # Header
   header:
     layout: "basic"
-    logo: "/images/BLOG-LOGO.png"
+    logo: "/images/mgrnz-blog.webp"
     logoDark: "/images/BLOG-LOGO.png"
     showTitle: true
   
