@@ -1,11 +1,11 @@
 <!-- layouts/partials/header.html -->
 <header style="height:56px;display:flex;align-items:center;justify-content:space-between;
-               padding:0 .75rem 0 1rem;background:#0b0b0b;border-bottom:1px solid #222;">
-  <!-- Left: primary menu -->
-  <nav>
+               padding:0 .75rem 0 1rem;background:#0b0b0b;border-bottom:1px solid #222;position:relative;">
+  <!-- Center: primary menu -->
+  <nav style="position:absolute;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:1.25rem;">
     {{ with .Site.Menus.main }}
       {{ range . }}
-        <a href="{{ .URL | relURL }}" style="margin-right:1rem;color:#ddd;text-decoration:none;font-weight:600;">
+        <a href="{{ .URL | relURL }}" style="color:#ddd;text-decoration:none;font-weight:600;">
           {{ .Name }}
         </a>
       {{ end }}
@@ -13,7 +13,7 @@
   </nav>
   <!-- Right: site logo -->
   <a href="{{ "/" | relURL }}" class="block">
-    <img src="/images/BLOG-LOGO.webp" alt="{{ .Site.Title }}" class="site-logo" style="height:36px;max-height:36px;display:block;">
+    <img src="/images/BLOG-LOGO.webp" alt="{{ .Site.Title }}" class="site-logo" style="height:32px;max-height:32px;display:block;">
   </a>
 </header>
 
