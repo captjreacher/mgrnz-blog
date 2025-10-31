@@ -6,11 +6,11 @@ draft: true
 
 ## Test Commit: 2025-10-27 15:03:27
 
-This file tests if GitHub webhooks trigger Cloudflare Pages builds.
+This file tests if GitHub webhooks trigger GitHub Pages builds.
 
 ### Expected Behavior:
 1. Commit this file to GitHub
-2. GitHub webhook should trigger Cloudflare Pages build
+2. GitHub webhook should trigger the GitHub Pages build workflow
 3. Site should update within 3-5 minutes
 
 ### Test Results:
@@ -20,7 +20,7 @@ This file tests if GitHub webhooks trigger Cloudflare Pages builds.
 - ❌ If timestamp is old, webhooks are broken
 
 ### Troubleshooting:
-1. Check Cloudflare Pages dashboard for build logs
+1. Check the GitHub Actions dashboard for build logs
 2. Verify GitHub webhook is active in repository settings
 3. Ensure .env file has correct HUGO_WEBHOOK_URL
 

@@ -1,8 +1,8 @@
 DEPLOYMENT TIMESTAMP: 2025-10-27 23:30:00
 COMMIT: a9c50d4
-STATUS: CLOUDFLARE PAGES CONFIG TEST
+STATUS: GITHUB PAGES CONFIG TEST
 HUGO_VERSION: 0.150.1
 BUILD_COMMAND: hugo --gc --minify
 CACHE_BUSTER: 45821
-MESSAGE: Testing newly configured Cloudflare Pages settings
+MESSAGE: Testing newly configured GitHub Pages settings
 ACTION: Verifying automatic deployment pipeline works
