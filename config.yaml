@@ -18,6 +18,10 @@ taxonomies:
 pagination:
   pagerSize: 10
 
+# Permalinks for clean URLs
+permalinks:
+  posts: "/:year/:month/:slug/"
+
 # Menus
 menu:
   # Header navigation
@@ -43,6 +47,12 @@ params:
   # Theme appearance
   colorScheme: "congo"
   defaultAppearance: "dark"
+
+  # Enable search and code copy
+  enableSearch: true
+  enableCodeCopy: true
+  mainSections: ["posts"]
+
   autoSwitchAppearance: false
   
   # Layout
@@ -86,12 +96,12 @@ params:
     showDate: true
     showViews: false
     showLikes: false
-    showDateUpdated: false
+    showDateUpdated: true
     showAuthor: true
     showHero: true
     heroStyle: "background"
     layoutBackgroundBlur: true
-    showBreadcrumbs: false
+    showBreadcrumbs: true
     showDraftLabel: true
     showEdit: false
     editURL: ""
@@ -99,7 +109,7 @@ params:
     seriesOpened: false
     showHeadingAnchors: true
     showPagination: true
-    invertPagination: false
+    invertPagination: false # Set to true to have newer posts on the right
     showReadingTime: true
     showTableOfContents: false
     showRelatedContent: false
@@ -115,8 +125,8 @@ params:
     showHero: true
     heroStyle: "background"
     layoutBackgroundBlur: true
-    showBreadcrumbs: false
-    showSummary: false
+    showBreadcrumbs: true
+    showSummary: true
     showViews: false
     showLikes: false
     showTableOfContents: false
@@ -164,6 +174,11 @@ params:
       - link: "https://mgrnz.com"
         text: "Website"
 
+  # Site verification for search engines
+  verification:
+    # google: "your-google-verification-code"
+    # bing: "your-bing-verification-code"
+
 # Markup / rendering
 markup:
   goldmark:
@@ -176,5 +191,5 @@ markup:
 
 # Output formats
 outputs:
-  home: ["HTML", "RSS"]
+  home: ["HTML", "RSS", "JSON"] # JSON is required for search
   section: ["HTML", "RSS"]
