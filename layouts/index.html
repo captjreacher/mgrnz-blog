@@ -3,7 +3,7 @@
   <!-- Hero Banner -->
   {{ with .Site.Params.homepage.homepageImage }}
   <section class="relative overflow-hidden rounded-2xl shadow-2xl">
-    <img src="{{ . }}" alt="Home Banner" class="h-64 w-full object-cover">
+    <img src="{{ . }}" alt="Home Banner" class="w-full object-contain" style="max-width:80%;height:auto;display:block;margin:0 auto;">
   </section>
   {{ end }}
 
