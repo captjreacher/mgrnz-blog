@@ -1,69 +1,44 @@
-# 🚨 CLOUDFLARE PAGES - MANUAL INTERVENTION REQUIRED
+# 🚨 GITHUB PAGES - MANUAL INTERVENTION REQUIRED
 
 ## CRITICAL ISSUE CONFIRMED
 
-**Problem**: Cloudflare Pages is doing PARTIAL deployments
+**Problem**: GitHub Pages is doing PARTIAL deployments
 - ✅ Static files updating (deployment-timestamp.txt, build-info.txt)
 - ❌ Hugo layouts NOT updating (admin/create/, admin/posts/)
 - ❌ Template changes stuck in deployment queue
 
 ## IMMEDIATE MANUAL ACTIONS REQUIRED
 
-### 1. Go to Cloudflare Pages Dashboard
-1. Visit: https://dash.cloudflare.com/
-2. Select your **mgrnz-blog** project
-3. Go to **Deployments** tab
+### 1. Go to GitHub Pages Deployment Dashboard
+1. Visit: https://github.com/captjreacher/mgrnz-blog/actions/workflows/deploy-gh-pages.yml
+2. Locate the most recent run for the **Deploy Hugo to GitHub Pages** workflow
+3. Inspect the jobs for build or deploy failures
 
 ### 2. Check Build Logs
-1. Look for the latest deployment
-2. Check if there are any build errors
-3. Look for Hugo template processing issues
+1. Open the latest workflow run
+2. Review the **Build Hugo site** and **Deploy to GitHub Pages** steps
+3. Confirm the job finished successfully without template errors
 
 ### 3. Manual Deployment Trigger
-1. Go to **Settings** > **Build & deployments**
-2. Click **"Retry deployment"** on latest build
-3. Or click **"Create deployment"** to force new build
+1. From the workflow run page click **"Re-run all jobs"**
+2. If a rebuild is required, push an empty commit: `git commit --allow-empty -m "Trigger GitHub Pages rebuild"`
+3. Wait for the workflow to finish and confirm the site redeploys
 
-### 4. Clear Cloudflare Cache
-1. Go to **Caching** > **Configuration**
-2. Click **"Purge Everything"**
-3. Wait 30 seconds, then trigger new deployment
+### 4. Clear Cached Artifacts
+1. Navigate to the repository **Settings > Pages** section
+2. Disable and re-enable GitHub Pages if the workflow appears stuck
+3. Re-run the deployment workflow afterwards to publish the latest build
 
-## ALTERNATIVE: GitHub Actions Deployment
+## FALLBACK OPTION: Manual Publish
 
-If Cloudflare Pages is broken, we can use GitHub Actions:
+If the automated workflow is blocked, build locally and publish manually:
 
-### Create .github/workflows/deploy.yml:
-```yaml
-name: Deploy Hugo Site
-on:
-  push:
-    branches: [ work, main ]
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-      with:
-        submodules: true
-    - name: Setup Hugo
-      uses: peaceiris/actions-hugo@v2
-      with:
-        hugo-version: '0.150.1'
-        extended: true
-    - name: Build
-      run: hugo --gc --minify
-    - name: Deploy to Cloudflare Pages
-      uses: cloudflare/pages-action@v1
-      with:
-        apiToken: ${{ secrets.CLOUDFLARE_API_KEY }}
-        accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        projectName: mgrnz-blog
-        directory: public
-        gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-        # Deploy to the production branch in Cloudflare Pages
-        branch: main
+```bash
+hugo --gc --minify --buildFuture
+npm run deploy:gh
 ```
+
+The `deploy:gh` script should push the contents of the `public/` directory to the `gh-pages` branch.
 
 ## EXPECTED COMMITS TO BE DEPLOYED
 
@@ -90,9 +65,9 @@ After manual intervention, check:
 
 ## THIS IS THE DEFINITIVE SOLUTION
 
-The deployment pipeline is broken at the Cloudflare level and requires manual intervention to restore functionality.
+The deployment pipeline is broken at the GitHub Pages level and requires manual intervention to restore functionality.
 
 ---
 
 **MANUAL INTERVENTION REQUIRED**: 2025-10-27 14:45:00
-**STATUS**: AWAITING CLOUDFLARE DASHBOARD ACTION
+**STATUS**: AWAITING GITHUB PAGES ACTION

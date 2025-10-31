@@ -1,6 +1,6 @@
 # 🚨 FORCE DEPLOYMENT - CRITICAL FIX
 
-## Issue: Cloudflare Pages Not Deploying Latest Commits
+## Issue: GitHub Pages Not Deploying Latest Commits
 
 **Current Live Commit**: e3b41a3 (2025-10-27 13:27:57 NZDT)
 **Latest Local Commit**: b894405 (Force deployment: add test post to trigger Hugo rebuild with admin changes)
@@ -8,15 +8,15 @@
 
 ## Immediate Actions
 
-### 1. Force Cloudflare Rebuild
+### 1. Force GitHub Pages Rebuild
 - Manual trigger required
-- Clear all caches
+- Clear cached artifacts
 - Force fresh deployment
 
 ### 2. Update Build Timestamp
 **Current Time**: 2025-10-27 22:16:25 NZDT
 **Latest Commit**: b894405 — Force deployment: add test post to trigger Hugo rebuild with admin changes
-**Status**: FORCE DEPLOYMENT TRIGGERED - awaiting Cloudflare Pages rebuild
+**Status**: FORCE DEPLOYMENT TRIGGERED - awaiting GitHub Pages rebuild
 
 ### 3. Critical Changes Not Live
 - b894405 — Force deployment: add test post to trigger Hugo rebuild with admin changes
@@ -30,7 +30,7 @@
 
 ## This File Will Trigger Deployment
 
-By committing this file, we force a new deployment that Cloudflare MUST pick up.
+By committing this file, we force a new deployment that GitHub Pages MUST pick up.
 
 **Expected Result**: Live site shows commit b894405 within minutes of rebuild.
 

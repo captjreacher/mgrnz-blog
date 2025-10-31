@@ -82,7 +82,7 @@ const criticalList = missingCommits.slice(0, 8).map((commit) => `- ${commit.hash
 
 const forceDeploy = `# 🚨 FORCE DEPLOYMENT - CRITICAL FIX
 
-## Issue: Cloudflare Pages Not Deploying Latest Commits
+## Issue: GitHub Pages Not Deploying Latest Commits
 
 **Current Live Commit**: ${liveSummary ? `${liveSummary.hash} (${formatNz(liveSummary.iso)})` : 'UNKNOWN'}
 **Latest Local Commit**: ${latest.short} (${latest.subject})
@@ -90,22 +90,22 @@ const forceDeploy = `# 🚨 FORCE DEPLOYMENT - CRITICAL FIX
 
 ## Immediate Actions
 
-### 1. Force Cloudflare Rebuild
+### 1. Force GitHub Pages Rebuild
 - Manual trigger required
-- Clear all caches
+- Clear any cached artifacts
 - Force fresh deployment
 
 ### 2. Update Build Timestamp
 **Current Time**: ${nowNz}
 **Latest Commit**: ${latest.short} — ${latest.subject}
-**Status**: FORCE DEPLOYMENT TRIGGERED - awaiting Cloudflare Pages rebuild
+**Status**: FORCE DEPLOYMENT TRIGGERED - awaiting GitHub Pages rebuild
 
 ### 3. Critical Changes Not Live
 ${criticalList.length ? criticalList.join('\n') : '- Latest commit already live'}
 
 ## This File Will Trigger Deployment
 
-By committing this file, we force a new deployment that Cloudflare MUST pick up.
+By committing this file, we force a new deployment that GitHub Pages MUST pick up.
 
 **Expected Result**: Live site shows commit ${latest.short} within minutes of rebuild.
 
@@ -119,13 +119,13 @@ const buildInfo = `🚨 DEPLOYMENT STATUS: COMPLETE REBUILD REQUIRED
 ===============================
 📅 Last Deploy Attempt: ${nowNz}
 🔧 Build: Hugo Static Site + COMPLETE CACHE PURGE
-🌐 CDN: Cloudflare Pages (manual trigger still required)
+🌐 Hosting: GitHub Pages (manual trigger still required)
 📍 Latest Commit: ${latest.short} — ${latest.subject}
 👤 Author: ${latest.author}
 🆕 Missing Commits: ${missingCount}
 💾 Live Commit: ${liveSummary ? `${liveSummary.hash} — ${liveSummary.message}` : 'UNKNOWN'}
 🔄 Auto-deploy: Emergency override active
-📣 Action: Trigger Cloudflare Pages rebuild + confirm GitHub integration
+📣 Action: Trigger GitHub Pages rebuild and confirm integration
 🔥 CACHE-BUSTER: ${cacheBuster}
 ===============================
 `;
@@ -138,7 +138,7 @@ AUTHOR: ${latest.author}
 LIVE COMMIT: ${liveSummary ? `${liveSummary.hash}` : 'UNKNOWN'}
 MISSING COMMITS: ${missingCount}
 STATUS: Deployment metadata updated to force rebuild
-ACTION: Trigger Cloudflare Pages build and verify Hugo layouts
+ACTION: Trigger GitHub Pages build and verify Hugo layouts
 CACHE-BUSTER: ${cacheBuster}
 `;
 writeFileSync(resolve(root, 'static/deployment-timestamp.txt'), deployTimestamp);
@@ -146,7 +146,7 @@ writeFileSync(resolve(root, 'static/deployment-timestamp.txt'), deployTimestamp)
 const cacheBusterText = `CACHE BUSTER: ${nowNz}
 FORCE REBUILD: ${latest.short}
 MISSING COMMITS: ${missingCount}
-NOTE: Updated via scripts/update-deployment-status.js to invalidate CDN cache
+NOTE: Updated via scripts/update-deployment-status.js to invalidate Pages cache
 TIMESTAMP: ${cacheBuster}
 `;
 writeFileSync(resolve(root, 'static/CACHE-BUSTER.txt'), cacheBusterText);
@@ -171,14 +171,14 @@ ${expectedList || '| 1 | `N/A` | N/A | No missing commits detected |'}
 writeFileSync(resolve(root, 'DEPLOYMENT-MISSING-COMMITS.md'), summary.trim() + '\n');
 
 try {
-  const manualFix = readFileSync(resolve(root, 'CLOUDFLARE-MANUAL-FIX.md'), 'utf8');
+  const manualFix = readFileSync(resolve(root, 'DEPLOYMENT-MANUAL-FIX.md'), 'utf8');
   const updatedManual = manualFix.replace(/These commits are stuck and need to go live:[\s\S]*?## VERIFICATION/, () => {
     const list = missingCommits.slice(0, 12).map((commit) => `- \`${commit.hash}\`: ${commit.message}`).join('\n');
     return `These commits are stuck and need to go live:\n${list || '- (none)'}\n\n## VERIFICATION`;
   });
-  writeFileSync(resolve(root, 'CLOUDFLARE-MANUAL-FIX.md'), updatedManual);
+  writeFileSync(resolve(root, 'DEPLOYMENT-MANUAL-FIX.md'), updatedManual);
 } catch (error) {
-  console.warn('Unable to update CLOUDFLARE-MANUAL-FIX.md:', error.message);
+  console.warn('Unable to update DEPLOYMENT-MANUAL-FIX.md:', error.message);
 }
 
 console.log(`Updated deployment metadata for ${missingCount} missing commits.`);
