@@ -1,0 +1,16 @@
+# Header navigation menu
+
+[[main]]
+  name = "Home"
+  url = "/"
+  weight = 1
+
+[[main]]
+  name = "Blog Posts"
+  url = "/posts/"
+  weight = 2
+
+[[main]]
+  name = "My Story"
+  url = "/pages/cv/"
+  weight = 3
