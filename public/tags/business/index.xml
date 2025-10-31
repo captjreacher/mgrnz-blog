@@ -10,23 +10,23 @@
     <atom:link href="http://localhost:1313/tags/business/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Demystifying AI to Empower Your Business</title>
-      <link>http://localhost:1313/posts/2025/20-july/demystifying-ai-to-empower-your-business/</link>
+      <link>http://localhost:1313/2025/07/demystifying-ai-to-empower-your-business/</link>
       <pubDate>Sun, 20 Jul 2025 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/2025/20-july/demystifying-ai-to-empower-your-business/</guid>
+      <guid>http://localhost:1313/2025/07/demystifying-ai-to-empower-your-business/</guid>
       <description>Demystifying AI to empower better business decisions.</description>
     </item>
     <item>
       <title>This Automation Was Made For You</title>
-      <link>http://localhost:1313/posts/2025/09-july/this-automation-was-made-for-you/</link>
+      <link>http://localhost:1313/2025/07/this-automation-was-made-for-you/</link>
       <pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/2025/09-july/this-automation-was-made-for-you/</guid>
+      <guid>http://localhost:1313/2025/07/this-automation-was-made-for-you/</guid>
       <description>A playful exploration of automation&amp;rsquo;s purpose and the human element that brings it to life - why every automation needs YOU to make it meaningful.</description>
     </item>
     <item>
       <title>My CV</title>
-      <link>http://localhost:1313/posts/2025/01-july/my-cv/</link>
+      <link>http://localhost:1313/2025/07/my-cv/</link>
       <pubDate>Tue, 01 Jul 2025 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/2025/01-july/my-cv/</guid>
+      <guid>http://localhost:1313/2025/07/my-cv/</guid>
       <description>They say a picture&amp;rsquo;s worth 1000 words so this illustration is a quick and effective way to demonstrate my background. You can also visit my LinkedIn profile here.</description>
     </item>
   </channel>

@@ -1,9 +1,19 @@
 <!-- layouts/partials/header.html -->
-<header style="height:56px;display:flex;align-items:center;justify-content:flex-end;
+<header style="height:56px;display:flex;align-items:center;justify-content:space-between;
                padding:0 .75rem 0 1rem;background:#0b0b0b;border-bottom:1px solid #222;">
-  <!-- right-aligned admin gear dropdown -->
-  <div style="margin-left:auto;">
-    {{ partial "admin-menu.html" . }}
-  </div>
+  <!-- Left: primary menu -->
+  <nav>
+    {{ with .Site.Menus.main }}
+      {{ range . }}
+        <a href="{{ .URL | relURL }}" style="margin-right:1rem;color:#ddd;text-decoration:none;font-weight:600;">
+          {{ .Name }}
+        </a>
+      {{ end }}
+    {{ end }}
+  </nav>
+  <!-- Right: site logo -->
+  <a href="{{ "/" | relURL }}" class="block">
+    <img src="/images/BLOG-LOGO.webp" alt="{{ .Site.Title }}" class="site-logo" style="height:36px;max-height:36px;display:block;">
+  </a>
 </header>
 

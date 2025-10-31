@@ -379,13 +379,11 @@
                     if (socialHashtags) markdown += `  hashtags: "${socialHashtags.replace(/"/g, '\\"')}"\n`;
                 }
 
-                // Scheduling metadata
+                // Use publishDate for scheduling
                 if (scheduleEnabled) {
-                    const iso = new Date(`${scheduleDate}T${scheduleTime}:00`).toISOString();
-                    markdown += 'schedule:\n';
-                    markdown += `  enabled: true\n`;
-                    markdown += `  at: "${iso}"\n`;
-                    if (scheduleTz) markdown += `  timezone: "${scheduleTz}"\n`;
+                    // Combine date, time, and timezone to create a full ISO 8601 string for publishDate
+                    const scheduleDateTime = new Date(`${scheduleDate}T${scheduleTime}:00`);
+                    markdown += `publishDate: "${scheduleDateTime.toISOString()}"\n`;
                 }
 
                 markdown += '---\n\n';

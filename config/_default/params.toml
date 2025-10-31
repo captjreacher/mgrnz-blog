@@ -13,8 +13,8 @@ image = "/images/mgrnz-logo.webp"     # MUST exist at static/images/mgrnz-logo.w
 
 # Header logo (top-right)
 [params.header]
-logo = "/images/BLUE-LOGO.png"        # static/images/BLOG-LOGO.png
-logodark = "/images/BLUE-LOGO.png"
+logo = "/images/mgrnz-logo.webp"        # static/images/mgrnz-logo.webp
+logodark = "/images/mgrnz-logo.webp"
 
 # Homepage banner
 [params.homepage]

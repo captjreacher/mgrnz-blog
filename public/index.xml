@@ -10,9 +10,9 @@
     <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Embedded ChatGPT Assistant by email</title>
-      <link>http://localhost:1313/posts/2025/24-aug/embedded-chatgpt/</link>
+      <link>http://localhost:1313/2025/10/embedded-chatgpt-assistant-by-email/</link>
       <pubDate>Tue, 28 Oct 2025 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/2025/24-aug/embedded-chatgpt/</guid>
+      <guid>http://localhost:1313/2025/10/embedded-chatgpt-assistant-by-email/</guid>
       <description>A walkthrough on embedding ChatGPT assistants via email and automating workflows.</description>
     </item>
     <item>
@@ -20,42 +20,42 @@
       <link>http://localhost:1313/webhook-test/</link>
       <pubDate>Mon, 27 Oct 2025 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/webhook-test/</guid>
-      <description>&lt;h2 id=&#34;test-commit-2025-10-27-150327&#34;&gt;Test Commit: 2025-10-27 15:03:27&lt;/h2&gt;&#xA;&lt;p&gt;This file tests if GitHub webhooks trigger Cloudflare Pages builds.&lt;/p&gt;&#xA;&lt;h3 id=&#34;expected-behavior&#34;&gt;Expected Behavior:&lt;/h3&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;Commit this file to GitHub&lt;/li&gt;&#xA;&lt;li&gt;GitHub webhook should trigger Cloudflare Pages build&lt;/li&gt;&#xA;&lt;li&gt;Site should update within 3-5 minutes&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;h3 id=&#34;test-results&#34;&gt;Test Results:&lt;/h3&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;⏳ Test initiated at 2025-10-27 15:03:27&lt;/li&gt;&#xA;&lt;li&gt;🔍 Check &lt;a href=&#34;https://mgrnz.com/webhook-test/&#34;&gt;https://mgrnz.com/webhook-test/&lt;/a&gt; in 5 minutes&lt;/li&gt;&#xA;&lt;li&gt;✅ If you see this timestamp, webhooks are working&lt;/li&gt;&#xA;&lt;li&gt;❌ If timestamp is old, webhooks are broken&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h3 id=&#34;troubleshooting&#34;&gt;Troubleshooting:&lt;/h3&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;Check Cloudflare Pages dashboard for build logs&lt;/li&gt;&#xA;&lt;li&gt;Verify GitHub webhook is active in repository settings&lt;/li&gt;&#xA;&lt;li&gt;Ensure .env file has correct HUGO_WEBHOOK_URL&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;p&gt;&lt;strong&gt;Last test&lt;/strong&gt;: 2025-10-27 15:03:27&lt;/p&gt;</description>
+      <description>&lt;h2 id=&#34;test-commit-2025-10-27-150327&#34; class=&#34;relative group&#34;&gt;Test Commit: 2025-10-27 15:03:27 &lt;span class=&#34;absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100&#34;&gt;&lt;a class=&#34;group-hover:text-primary-300 dark:group-hover:text-neutral-700&#34; style=&#34;text-decoration-line: none !important;&#34; href=&#34;#test-commit-2025-10-27-150327&#34; aria-label=&#34;Anchor&#34;&gt;#&lt;/a&gt;&lt;/span&gt;&lt;/h2&gt;&lt;p&gt;This file tests if GitHub webhooks trigger GitHub Pages builds.&lt;/p&gt;&#xA;&lt;h3 id=&#34;expected-behavior&#34; class=&#34;relative group&#34;&gt;Expected Behavior: &lt;span class=&#34;absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100&#34;&gt;&lt;a class=&#34;group-hover:text-primary-300 dark:group-hover:text-neutral-700&#34; style=&#34;text-decoration-line: none !important;&#34; href=&#34;#expected-behavior&#34; aria-label=&#34;Anchor&#34;&gt;#&lt;/a&gt;&lt;/span&gt;&lt;/h3&gt;&lt;ol&gt;&#xA;&lt;li&gt;Commit this file to GitHub&lt;/li&gt;&#xA;&lt;li&gt;GitHub webhook should trigger the GitHub Pages build workflow&lt;/li&gt;&#xA;&lt;li&gt;Site should update within 3-5 minutes&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;h3 id=&#34;test-results&#34; class=&#34;relative group&#34;&gt;Test Results: &lt;span class=&#34;absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100&#34;&gt;&lt;a class=&#34;group-hover:text-primary-300 dark:group-hover:text-neutral-700&#34; style=&#34;text-decoration-line: none !important;&#34; href=&#34;#test-results&#34; aria-label=&#34;Anchor&#34;&gt;#&lt;/a&gt;&lt;/span&gt;&lt;/h3&gt;&lt;ul&gt;&#xA;&lt;li&gt;⏳ Test initiated at 2025-10-27 15:03:27&lt;/li&gt;&#xA;&lt;li&gt;🔍 Check &lt;a href=&#34;https://mgrnz.com/webhook-test/&#34; target=&#34;_blank&#34; rel=&#34;noreferrer&#34;&gt;https://mgrnz.com/webhook-test/&lt;/a&gt; in 5 minutes&lt;/li&gt;&#xA;&lt;li&gt;✅ If you see this timestamp, webhooks are working&lt;/li&gt;&#xA;&lt;li&gt;❌ If timestamp is old, webhooks are broken&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h3 id=&#34;troubleshooting&#34; class=&#34;relative group&#34;&gt;Troubleshooting: &lt;span class=&#34;absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100&#34;&gt;&lt;a class=&#34;group-hover:text-primary-300 dark:group-hover:text-neutral-700&#34; style=&#34;text-decoration-line: none !important;&#34; href=&#34;#troubleshooting&#34; aria-label=&#34;Anchor&#34;&gt;#&lt;/a&gt;&lt;/span&gt;&lt;/h3&gt;&lt;ol&gt;&#xA;&lt;li&gt;Check the GitHub Actions dashboard for build logs&lt;/li&gt;&#xA;&lt;li&gt;Verify GitHub webhook is active in repository settings&lt;/li&gt;&#xA;&lt;li&gt;Ensure .env file has correct HUGO_WEBHOOK_URL&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;p&gt;&lt;strong&gt;Last test&lt;/strong&gt;: 2025-10-27 15:03:27&lt;/p&gt;</description>
     </item>
     <item>
       <title>Demystifying AI to Empower Your Business</title>
-      <link>http://localhost:1313/posts/2025/20-july/demystifying-ai-to-empower-your-business/</link>
+      <link>http://localhost:1313/2025/07/demystifying-ai-to-empower-your-business/</link>
       <pubDate>Sun, 20 Jul 2025 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/2025/20-july/demystifying-ai-to-empower-your-business/</guid>
+      <guid>http://localhost:1313/2025/07/demystifying-ai-to-empower-your-business/</guid>
       <description>Demystifying AI to empower better business decisions.</description>
     </item>
     <item>
       <title>This Automation Was Made For You</title>
-      <link>http://localhost:1313/posts/2025/09-july/this-automation-was-made-for-you/</link>
+      <link>http://localhost:1313/2025/07/this-automation-was-made-for-you/</link>
       <pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/2025/09-july/this-automation-was-made-for-you/</guid>
+      <guid>http://localhost:1313/2025/07/this-automation-was-made-for-you/</guid>
       <description>A playful exploration of automation&amp;rsquo;s purpose and the human element that brings it to life - why every automation needs YOU to make it meaningful.</description>
     </item>
     <item>
       <title>Bootstrapping the AI Evolution – The Journey from Accountant to AI Entrepreneur</title>
-      <link>http://localhost:1313/posts/2025/07-july/bootstrapping-the-ai-evolution/</link>
+      <link>http://localhost:1313/2025/07/bootstrapping-the-ai-evolution-the-journey-from-accountant-to-ai-entrepreneur/</link>
       <pubDate>Mon, 07 Jul 2025 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/2025/07-july/bootstrapping-the-ai-evolution/</guid>
+      <guid>http://localhost:1313/2025/07/bootstrapping-the-ai-evolution-the-journey-from-accountant-to-ai-entrepreneur/</guid>
       <description>From Robert Plant&amp;rsquo;s career choice dilemma to my own journey from Big Six accounting to AI entrepreneurship - a personal story of transformation and the birth of Maximised AI.</description>
     </item>
     <item>
       <title>My CV</title>
-      <link>http://localhost:1313/posts/2025/01-july/my-cv/</link>
+      <link>http://localhost:1313/pages/cv/</link>
       <pubDate>Tue, 01 Jul 2025 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/2025/01-july/my-cv/</guid>
-      <description>They say a picture&amp;rsquo;s worth 1000 words so this illustration is a quick and effective way to demonstrate my background. You can also visit my LinkedIn profile here.</description>
+      <guid>http://localhost:1313/pages/cv/</guid>
+      <description>A visual and narrative overview of my professional journey and experience.</description>
     </item>
     <item>
-      <title>CV / Experience</title>
-      <link>http://localhost:1313/pages/cv/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/pages/cv/</guid>
-      <description>&lt;h2 id=&#34;snapshot&#34;&gt;Snapshot&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Entrepreneur &amp;amp; builder focused on AI + automation.&lt;/li&gt;&#xA;&lt;li&gt;Ship fast, iterate faster. Fair, honest, chilled—but urgent.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;highlights&#34;&gt;Highlights&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Founded/ran multiple brands.&lt;/li&gt;&#xA;&lt;li&gt;Built assistants, data pipelines, and workflow tools.&lt;/li&gt;&#xA;&lt;li&gt;Comfortable across product, GTM, ops, and the messy middle.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;Replace this with your real CV content or link to a PDF.&lt;/p&gt;&lt;/blockquote&gt;</description>
+      <title>My CV</title>
+      <link>http://localhost:1313/2025/07/my-cv/</link>
+      <pubDate>Tue, 01 Jul 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/2025/07/my-cv/</guid>
+      <description>They say a picture&amp;rsquo;s worth 1000 words so this illustration is a quick and effective way to demonstrate my background. You can also visit my LinkedIn profile here.</description>
     </item>
     <item>
       <title>Edit Post</title>
