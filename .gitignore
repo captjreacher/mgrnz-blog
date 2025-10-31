@@ -3,3 +3,7 @@
 .hugo_build.lock
 jules-scratch/
 hugo.log
+/gemini
+.env
+.env.local
+*/node_modules/
