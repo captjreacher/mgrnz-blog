@@ -82,7 +82,7 @@ params:
   # Homepage
   homepage:
     layout: "page"
-    homepageImage: "/images/mgrnz-logo.webp"
+    homepageImage: "/images/home-banner.webp"
     showRecent: true
     showRecentItems: 6
     showMoreLink: true
