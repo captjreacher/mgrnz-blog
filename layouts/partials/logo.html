@@ -11,7 +11,7 @@
         class="max-h-[6rem] max-w-[10rem] object-scale-down object-left
         {{ if $logo_dark }}dark:hidden flex{{ end }}"
         alt="{{ .Site.Title }}"
-        style="height: 96px !important; max-height: 96px !important;"
+        style="height: 72px !important; max-height: 72px !important;"
       />
       {{- if $logo_dark }}
         <img
@@ -20,7 +20,7 @@
           height="{{ $logo_dark.Height }}"
           class="hidden max-h-[6rem] max-w-[10rem] object-scale-down object-left dark:flex"
           alt="{{ .Site.Title }}"
-          style="height: 96px !important; max-height: 96px !important;"
+          style="height: 72px !important; max-height: 72px !important;"
         />
       {{- end }}
     </a>
