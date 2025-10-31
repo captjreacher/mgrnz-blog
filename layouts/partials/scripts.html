@@ -1,0 +1,373 @@
+<!-- Modern Subscribe Popup Modal -->
+<div id="subscribe-popup" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm">
+  <div class="relative max-w-lg w-full mx-4 transform transition-all duration-300 scale-95 opacity-0" id="popup-content">
+    <!-- Close button -->
+    <button onclick="closeSubscribePopup()" class="absolute -top-3 -right-3 z-10 bg-neutral-800 hover:bg-neutral-700 rounded-full p-2 text-neutral-300 hover:text-white shadow-xl transition-all duration-200">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+    </button>
+    
+    <!-- Custom Styled Form -->
+    <div class="bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl shadow-2xl overflow-hidden border-2 border-orange-400">
+      <div class="p-8">
+        <!-- Header -->
+        <div class="text-center mb-6">
+          <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+            </svg>
+          </div>
+          <h3 class="text-2xl font-bold text-white mb-2">Stay Updated!</h3>
+          <p class="text-orange-100 text-sm">Get the latest insights on AI, technology, and business delivered to your inbox.</p>
+        </div>
+
+        <!-- Form -->
+        <form id="subscribe-form" action="https://assets.mailerlite.com/jsonp/1849787/forms/169453382423020905/subscribe" method="post" class="space-y-4">
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <input 
+                type="text" 
+                name="fields[name]" 
+                placeholder="First Name" 
+                autocomplete="given-name"
+                class="w-full px-4 py-3 rounded-lg bg-neutral-800 bg-opacity-80 border border-neutral-600 text-white placeholder-neutral-400 focus:bg-neutral-700 focus:border-orange-400 focus:ring-2 focus:ring-orange-400 focus:ring-opacity-50 transition-all duration-200"
+              >
+            </div>
+            <div>
+              <input 
+                type="text" 
+                name="fields[last_name]" 
+                placeholder="Last Name" 
+                autocomplete="family-name"
+                class="w-full px-4 py-3 rounded-lg bg-neutral-800 bg-opacity-80 border border-neutral-600 text-white placeholder-neutral-400 focus:bg-neutral-700 focus:border-orange-400 focus:ring-2 focus:ring-orange-400 focus:ring-opacity-50 transition-all duration-200"
+              >
+            </div>
+          </div>
+          
+          <div>
+            <input 
+              type="email" 
+              name="fields[email]" 
+              placeholder="Your Email Address" 
+              autocomplete="email"
+              required
+              class="w-full px-4 py-3 rounded-lg bg-neutral-800 bg-opacity-80 border border-neutral-600 text-white placeholder-neutral-400 focus:bg-neutral-700 focus:border-orange-400 focus:ring-2 focus:ring-orange-400 focus:ring-opacity-50 transition-all duration-200"
+            >
+          </div>
+
+          <!-- reCAPTCHA -->
+          <div class="flex justify-center">
+            <div class="g-recaptcha" data-sitekey="6Lf1KHQUAAAAAFNKEX1hdSWCS3mRMv4FlFaNslaD" data-theme="light"></div>
+          </div>
+
+          <input type="hidden" name="ml-submit" value="1">
+          <input type="hidden" name="anticsrf" value="true">
+
+          <!-- Submit Button -->
+          <button 
+            type="submit" 
+            class="w-full bg-neutral-900 hover:bg-neutral-800 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-105 focus:ring-2 focus:ring-white focus:ring-opacity-50"
+          >
+            <span class="flex items-center justify-center">
+              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+              </svg>
+              Subscribe Now
+            </span>
+          </button>
+        </form>
+
+        <!-- Success Message -->
+        <div id="success-message" class="hidden text-center">
+          <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+          </div>
+          <h3 class="text-2xl font-bold text-white mb-2">Welcome Aboard! 🎉</h3>
+          <p class="text-orange-100">Thanks for subscribing! You'll receive our latest updates soon.</p>
+        </div>
+
+        <!-- Error Message -->
+        <div id="error-message" class="hidden text-center">
+          <div class="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </div>
+          <h3 class="text-2xl font-bold text-white mb-2">Oops! Something went wrong</h3>
+          <p class="text-orange-100 mb-4" id="error-details">There was an issue with your subscription. Please try again.</p>
+          <button onclick="resetSubscribeForm()" class="bg-white text-orange-600 px-4 py-2 rounded-lg font-semibold hover:bg-orange-50 transition-colors">
+            Try Again
+          </button>
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-6 text-center">
+          <p class="text-orange-200 text-xs">No spam, unsubscribe anytime. Privacy policy compliant.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Mobile Menu Toggle -->
+<div class="fixed bottom-4 right-4 z-50 lg:hidden">
+  <button id="mobile-menu-toggle" class="rounded-full bg-orange-500 p-3 text-white shadow-lg hover:bg-orange-600">
+    ☰
+  </button>
+</div>
+
+<!-- Required JavaScript Libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://www.google.com/recaptcha/api.js"></script>
+<script src="/js/mobile-menu.js?v={{ now.Unix }}"></script>
+
+<!-- Smart Subscribe Popup JavaScript -->
+<script>
+  // Popup state management
+  let popupShown = false;
+  let timeoutId = null;
+  
+  function openSubscribePopup() {
+    if (popupShown) return;
+    
+    const popup = document.getElementById('subscribe-popup');
+    const content = document.getElementById('popup-content');
+    
+    popup.classList.remove('hidden');
+    popup.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+    
+    // Animate in
+    setTimeout(() => {
+      content.classList.remove('scale-95', 'opacity-0');
+      content.classList.add('scale-100', 'opacity-100');
+    }, 10);
+    
+    popupShown = true;
+    localStorage.setItem('subscribePopupShown', 'true');
+    localStorage.setItem('subscribePopupTime', Date.now().toString());
+  }
+  
+  function closeSubscribePopup() {
+    const popup = document.getElementById('subscribe-popup');
+    const content = document.getElementById('popup-content');
+    
+    // Animate out
+    content.classList.remove('scale-100', 'opacity-100');
+    content.classList.add('scale-95', 'opacity-0');
+    
+    setTimeout(() => {
+      popup.classList.add('hidden');
+      popup.classList.remove('flex');
+      document.body.style.overflow = 'auto';
+    }, 300);
+  }
+  
+  function shouldShowPopup() {
+    // Don't show if already subscribed or dismissed recently
+    const lastShown = localStorage.getItem('subscribePopupTime');
+    const subscribed = localStorage.getItem('subscribed');
+    
+    if (subscribed === 'true') return false;
+    
+    // Don't show again for 24 hours if dismissed
+    if (lastShown) {
+      const timeDiff = Date.now() - parseInt(lastShown);
+      const hoursDiff = timeDiff / (1000 * 60 * 60);
+      if (hoursDiff < 24) return false;
+    }
+    
+    return true;
+  }
+  
+  function initPopupTriggers() {
+    if (!shouldShowPopup()) return;
+    
+    const currentPath = window.location.pathname;
+    
+    // Trigger 1: Homepage - show after 3 seconds
+    if (currentPath === '/' || currentPath === '/index.html') {
+      timeoutId = setTimeout(() => {
+        openSubscribePopup();
+      }, 3000);
+    }
+    
+    // Trigger 2: 2-minute timer on any page
+    setTimeout(() => {
+      if (!popupShown && shouldShowPopup()) {
+        openSubscribePopup();
+      }
+    }, 120000); // 2 minutes
+    
+    // Trigger 3: Exit intent (mouse leaving viewport)
+    document.addEventListener('mouseleave', function(e) {
+      if (e.clientY <= 0 && !popupShown && shouldShowPopup()) {
+        openSubscribePopup();
+      }
+    });
+    
+    // Trigger 4: Scroll to bottom of post
+    if (currentPath.includes('/posts/')) {
+      let scrollTriggered = false;
+      window.addEventListener('scroll', function() {
+        if (scrollTriggered || popupShown) return;
+        
+        const scrollPercent = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+        if (scrollPercent > 80) {
+          scrollTriggered = true;
+          setTimeout(() => {
+            if (!popupShown && shouldShowPopup()) {
+              openSubscribePopup();
+            }
+          }, 2000);
+        }
+      });
+    }
+  }
+  
+  // Form submission handling
+  function handleFormSubmission() {
+    const form = document.getElementById('subscribe-form');
+    const successMessage = document.getElementById('success-message');
+    const errorMessage = document.getElementById('error-message');
+    const errorDetails = document.getElementById('error-details');
+    const submitButton = form.querySelector('button[type="submit"]');
+    
+    form.addEventListener('submit', function(e) {
+      e.preventDefault(); // Prevent default form submission
+      
+      // Validate form data
+      const email = form.querySelector('input[name="fields[email]"]').value;
+      const name = form.querySelector('input[name="fields[name]"]').value;
+      
+      if (!email || !email.includes('@')) {
+        showError('Please enter a valid email address.');
+        return;
+      }
+      
+      if (!name || name.trim().length < 2) {
+        showError('Please enter your name (at least 2 characters).');
+        return;
+      }
+      
+      // Show loading state
+      const originalText = submitButton.innerHTML;
+      submitButton.innerHTML = '<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>Subscribing...';
+      submitButton.disabled = true;
+      
+      const formData = new FormData(form);
+      const submissionTime = Date.now();
+      
+      const iframe = document.createElement('iframe');
+      iframe.style.display = 'none';
+      iframe.name = 'mailerlite-submit-' + submissionTime;
+      document.body.appendChild(iframe);
+      
+      form.target = iframe.name;
+      
+      const tempForm = document.createElement('form');
+      tempForm.action = form.action;
+      tempForm.method = 'POST';
+      tempForm.target = iframe.name;
+      tempForm.style.display = 'none';
+      
+      for (let [key, value] of formData.entries()) {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = key;
+        input.value = value;
+        tempForm.appendChild(input);
+      }
+      
+      document.body.appendChild(tempForm);
+      
+      const timeout = setTimeout(() => {
+        showError('Request timed out. Please check your internet connection and try again.');
+        resetButton();
+        cleanup();
+      }, 10000);
+      
+      iframe.onload = function() {
+        clearTimeout(timeout);
+        form.style.display = 'none';
+        successMessage.classList.remove('hidden');
+        localStorage.setItem('subscribed', 'true');
+        localStorage.setItem('subscription_time', submissionTime.toString());
+        setTimeout(() => { closeSubscribePopup(); }, 4000);
+        cleanup();
+      };
+      
+      iframe.onerror = function() {
+        clearTimeout(timeout);
+        showError('Network error. Please check your connection and try again.');
+        resetButton();
+        cleanup();
+      };
+      
+      try {
+        tempForm.submit();
+      } catch (error) {
+        clearTimeout(timeout);
+        showError('Submission failed. Please try again.');
+        resetButton();
+        cleanup();
+      }
+      
+      function cleanup() {
+        setTimeout(() => {
+          if (iframe.parentNode) { iframe.parentNode.removeChild(iframe); }
+          if (tempForm.parentNode) { tempForm.parentNode.removeChild(tempForm); }
+        }, 1000);
+      }
+      
+      function resetButton() {
+        submitButton.innerHTML = originalText;
+        submitButton.disabled = false;
+      }
+      
+      function showError(message) {
+        errorDetails.textContent = message;
+        errorMessage.classList.remove('hidden');
+        form.style.display = 'none';
+      }
+    });
+  }
+  
+  function resetSubscribeForm() {
+    const form = document.getElementById('subscribe-form');
+    const successMessage = document.getElementById('success-message');
+    const errorMessage = document.getElementById('error-message');
+    const submitButton = form.querySelector('button[type="submit"]');
+    
+    form.style.display = 'block';
+    successMessage.classList.add('hidden');
+    errorMessage.classList.add('hidden');
+    submitButton.innerHTML = '<span class="flex items-center justify-center"><svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>Subscribe Now</span>';
+    submitButton.disabled = false;
+    form.reset();
+  }
+  
+  document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('subscribe-popup').addEventListener('click', function(e) {
+      if (e.target === this) { closeSubscribePopup(); }
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') { closeSubscribePopup(); }
+    });
+    initPopupTriggers();
+    handleFormSubmission();
+  });
+  
+  window.triggerSubscribePopup = function() {
+    if (timeoutId) clearTimeout(timeoutId);
+    openSubscribePopup();
+  };
+</script>
+<script src="https://groot.mailerlite.com/js/w/webforms.min.js?v176e10baa5e7ed80d35ae235be3d5024" type="text/javascript"></script>
+
+<!-- Botpress Webchat Embed -->
+<script src="https://cdn.botpress.cloud/webchat/v3.3/inject.js"></script>
+<script src="https://files.bpcontent.cloud/2025/10/31/00/20251031000555-2CX1VKR7.js" defer></script>
