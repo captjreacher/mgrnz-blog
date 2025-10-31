@@ -1,5 +1,5 @@
 <!-- layouts/partials/header.html -->
-<header style="height:56px;display:flex;align-items:center;justify-content:space-between;
+<header style="height:56px;display:flex;align-items:center;justify-content:center;
                padding:0 .75rem 0 1rem;background:#0b0b0b;border-bottom:1px solid #222;position:relative;">
   <!-- Center: primary menu -->
   <nav style="position:absolute;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:1.25rem;">
@@ -12,8 +12,8 @@
     {{ end }}
   </nav>
   <!-- Right: site logo -->
-  <a href="{{ "/" | relURL }}" class="block">
-    <img src="/images/BLOG-LOGO.webp" alt="{{ .Site.Title }}" class="site-logo" style="height:32px;max-height:32px;display:block;">
+  <a href="{{ "/" | relURL }}" class="block" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);">
+    <img src="/images/BLOG-LOGO.webp" alt="{{ .Site.Title }}" class="site-logo" style="height:28px;max-height:28px;display:block;">
   </a>
 </header>
 
