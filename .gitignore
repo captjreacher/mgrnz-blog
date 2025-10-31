@@ -1,16 +1,5 @@
-node_modules/
+/public
+/resources
 .hugo_build.lock
-.DS_Store
-/public/
-/resources/_gen/
-.hugo_build.lock
-/GEMINI
-
-# Environment variables (contains secrets)
-.env
-.env.local
-.env.production
-.env.staging
-
-# Supabase
-.supabase/
+jules-scratch/
+hugo.log
