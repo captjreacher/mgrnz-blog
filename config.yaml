@@ -68,7 +68,7 @@ params:
   # Header
   header:
     layout: "basic"
-    logo: "/images/mgrnz-blog.webp"
+    logo: "/images/mgrnz-blog.png"
     logoDark: "/images/BLOG-LOGO.png"
     showTitle: true
   
@@ -166,7 +166,7 @@ params:
   # Author configuration
   author:
     name: "Mike G Robinson"
-    image: "/images/mgrnz-logo.webp"
+    image: "/images/mgrnz-logo.png"
     headline: "Demystifying Technology to Build Better Businesses"
     bio: "Mike is an unashamed evangelist of AI, ricidivous vibe-coder, and lifelong learner based in Auckland, New Zealand. Mike is a seasoned technology professional and entrepreneur. Mike has over 30 years of experience spanning IT security, SAP configuration, data migration, and business consulting. In early 2025, Mike founded Maximised AI after several months deep diving AI. Mike has since developed a string of successful AI-powered products and services aimed at helping businesses leverage the power of AI to drive productivity and growth."
     links:
