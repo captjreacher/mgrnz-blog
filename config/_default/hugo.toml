@@ -3,6 +3,11 @@ languageCode = "en"
 title = "Welcome to the Personal Blog of Mike G Robinson"
 theme = "congo"
 
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+
 [params]
   [params.admin]
     access_codes = ["mgrnz-secret-access"]
