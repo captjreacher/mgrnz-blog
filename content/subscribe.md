@@ -132,87 +132,120 @@ url: "/subscribe/"
 </div>
 
 <script>
-// Initialize MailerLite form after page load
 document.addEventListener('DOMContentLoaded', function() {
-    // The MailerLite Universal script will automatically initialize embedded forms
-    if (typeof ml !== 'undefined') {
-        const embeddedForms = document.querySelectorAll('.ml-embedded[data-form]');
-
-        if (embeddedForms.length > 0) {
-            embeddedForms.forEach(container => {
-                const formId = container.getAttribute('data-form');
-                if (formId) {
-                    ml('forms', 'load', formId);
-                }
-            });
-        } else {
-            ml('forms', 'load');
-        }
-
-        // Add custom form validation and error handling
-        setTimeout(() => {
-            const embeddedForm = document.querySelector('.ml-embedded form');
-            if (embeddedForm) {
-                embeddedForm.addEventListener('submit', function(e) {
-                    const email = this.querySelector('input[type="email"]');
-                    if (email && (!email.value || !email.value.includes('@'))) {
-                        e.preventDefault();
-                        alert('Please enter a valid email address.');
-                        email.focus();
-                        return false;
-                    }
-                });
-            }
-        }, 2000); // Wait for MailerLite to initialize
-    } else {
-        // Fallback if MailerLite Universal script fails to load
-        console.warn('MailerLite Universal script not loaded. Form may not work properly.');
+    const form = document.getElementById('subscription-form');
+    const statusDiv = document.getElementById('form-status');
+    const submitBtn = document.getElementById('subscribe-btn');
+    
+    // Check if user recently subscribed
+    checkSubscriptionStatus();
+    
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
         
-        // Show fallback message
-        setTimeout(() => {
-            const container = document.querySelector('.ml-embedded');
-            if (container && !container.innerHTML.trim()) {
-                container.innerHTML = `
-                    <div style="text-align: center; padding: 40px; background: #f8f9fa; border-radius: 8px; border: 2px dashed #dee2e6;">
-                        <h3 style="color: #6c757d; margin-bottom: 16px;">Form Loading Issue</h3>
-                        <p style="color: #6c757d; margin-bottom: 20px;">The subscription form is having trouble loading. You can still subscribe using the link below:</p>
-                        <a href="https://dashboard.mailerlite.com/forms/1849787/169453382423020905/share" 
-                           target="_blank" 
-                           style="display: inline-block; background: #ff4f00; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: bold;">
-                           Subscribe via MailerLite →
-                        </a>
-                    </div>
-                `;
+        // Get form data
+        const formData = new FormData(form);
+        const data = {
+            email: formData.get('email'),
+            name: formData.get('name'),
+            last_name: formData.get('last_name')
+        };
+        
+        // Validate email
+        if (!data.email || !data.email.includes('@')) {
+            showStatus('Please enter a valid email address.', 'error');
+            return;
+        }
+        
+        // Show loading state
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Subscribing...';
+        showStatus('Processing your subscription...', 'loading');
+        
+        try {
+            // Call Supabase function for MailerLite API
+            const response = await fetch('https://your-project.supabase.co/functions/v1/mailerlite-subscribe', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            });
+            
+            const result = await response.json();
+            
+            if (result.ok) {
+                // Success
+                showStatus(result.message, 'success');
+                form.reset();
+                
+                // Store subscription time
+                localStorage.setItem('subscription_time', Date.now().toString());
+                
+                // Redirect to thank you message after 2 seconds
+                setTimeout(() => {
+                    showThankYouMessage();
+                }, 2000);
+                
+            } else {
+                // Error from API
+                showStatus(result.error || 'Subscription failed. Please try again.', 'error');
             }
-        }, 5000);
+            
+        } catch (error) {
+            console.error('Subscription error:', error);
+            showStatus('Network error. Please check your connection and try again.', 'error');
+        } finally {
+            // Reset button state
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Subscribe to Newsletter';
+        }
+    });
+    
+    function showStatus(message, type) {
+        statusDiv.style.display = 'block';
+        statusDiv.className = `status-${type}`;
+        statusDiv.textContent = message;
+        
+        // Style based on type
+        if (type === 'success') {
+            statusDiv.style.background = '#d4edda';
+            statusDiv.style.color = '#155724';
+            statusDiv.style.border = '1px solid #c3e6cb';
+        } else if (type === 'error') {
+            statusDiv.style.background = '#f8d7da';
+            statusDiv.style.color = '#721c24';
+            statusDiv.style.border = '1px solid #f5c6cb';
+        } else if (type === 'loading') {
+            statusDiv.style.background = '#d1ecf1';
+            statusDiv.style.color = '#0c5460';
+            statusDiv.style.border = '1px solid #bee5eb';
+        }
+    }
+    
+    function showThankYouMessage() {
+        const container = document.querySelector('.subscribe-container');
+        container.innerHTML = `
+            <div style="text-align: center; padding: 40px;">
+                <div style="width: 80px; height: 80px; background: #28a745; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                    <span style="color: white; font-size: 40px;">✓</span>
+                </div>
+                <h1 style="color: #28a745; margin-bottom: 16px;">Welcome to the Newsletter!</h1>
+                <p style="color: #666; margin-bottom: 20px;">Thank you for subscribing! You'll receive our latest insights on AI, technology, and business.</p>
+                <p style="color: #666; margin-bottom: 30px;">Check your email for a confirmation message.</p>
+                <a href="/" style="display: inline-block; background: #ff4f00; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: bold;">← Back to Blog</a>
+            </div>
+        `;
+    }
+    
+    function checkSubscriptionStatus() {
+        const subscriptionTime = localStorage.getItem('subscription_time');
+        if (subscriptionTime) {
+            const timeDiff = Date.now() - parseInt(subscriptionTime);
+            if (timeDiff < 300000) { // 5 minutes
+                showThankYouMessage();
+            }
+        }
     }
 });
-
-// Function to check if subscription was successful
-function checkSubscriptionStatus() {
-    // Check if user recently subscribed
-    const subscriptionTime = localStorage.getItem('subscription_time');
-    if (subscriptionTime) {
-        const timeDiff = Date.now() - parseInt(subscriptionTime);
-        if (timeDiff < 300000) { // 5 minutes
-            // Show success message if recently subscribed
-            const container = document.querySelector('.subscribe-container');
-            if (container) {
-                container.innerHTML = `
-                    <div style="text-align: center; padding: 40px;">
-                        <div style="width: 80px; height: 80px; background: #28a745; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
-                            <span style="color: white; font-size: 40px;">✓</span>
-                        </div>
-                        <h1 style="color: #28a745; margin-bottom: 16px;">Already Subscribed!</h1>
-                        <p style="color: #666;">You recently subscribed to our newsletter. Thank you!</p>
-                        <p style="margin-top: 20px;"><a href="/" style="color: #ff4f00;">← Back to Blog</a></p>
-                    </div>
-                `;
-            }
-        }
-    }
-}
-
-// Check subscription status on page load
-checkSubscriptionStatus();
 </script>
