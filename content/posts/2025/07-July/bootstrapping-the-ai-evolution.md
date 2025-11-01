@@ -8,7 +8,7 @@ image: "/images/bootstrap.webp"
 summary: "From Robert Plant's career choice dilemma to my own journey from Big Six accounting to AI entrepreneurship - a personal story of transformation and the birth of Maximised AI."
 ---
 
-![Bootstrapping the AI Evolution](/images/BLOG-LOGO.webp)
+![Bootstrapping the AI Evolution](/images/bootstrap.webp)
 
 *By Mike G Robinson*  
 *7th July 2025*
