@@ -3,10 +3,13 @@
 name: Deploy Hugo to GitHub Pages
 
 on:
-  # Runs on pushes to the main branch
+  # Runs on pushes to the published gh-pages branch
   push:
     branches:
-      - main
+      - gh-pages
+
+  # Allows other workflows (like scheduled rebuilds) to re-use this deployment logic
+  workflow_call:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
