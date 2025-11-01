@@ -209,44 +209,54 @@ document.addEventListener('keydown', function(event) {
 });
 </script>
 
-<!-- Forgot access code flow (module) -->
+<!-- Forgot access code flow (Supabase integration) -->
 <script type="module">
   import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
+  // --- Supabase project credentials (public anon key) ---
   const supabase = createClient(
     'https://jqfodlzcsgfocyuawzyx.supabase.co',
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpxZm9kbHpjc2dmb2N5dWF3enl4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjExNjEzNTUsImV4cCI6MjA3NjczNzM1NX0.LLdRTNerb3J6WxQUg3tXUbKt7wDhOpm--nSlWAhYYqA'
   )
 
+  // --- UI element bindings ---
   const forgotLink   = document.getElementById('forgot-link')
   const forgotForm   = document.getElementById('forgot-form')
   const forgotEmail  = document.getElementById('forgot-email')
   const forgotMsg    = document.getElementById('forgot-msg')
   const forgotSubmit = document.getElementById('forgot-submit')
 
+  // Reveal the email input form
   forgotLink?.addEventListener('click', (e) => {
     e.preventDefault()
-    forgotForm.classList.remove('hidden')
+    forgotForm?.classList.remove('hidden')
+    forgotMsg?.classList.add('hidden')
+    forgotMsg.textContent = ''
   })
 
+  // Handle the reset email request
   forgotSubmit?.addEventListener('click', async () => {
-    const email = (forgotEmail.value || '').trim()
+    const email = forgotEmail?.value.trim()
     if (!email) return
+
+    forgotMsg.textContent = '⏳ Sending reset link...'
+    forgotMsg.classList.remove('hidden', 'text-red-300')
+    forgotMsg.classList.add('text-orange-300')
 
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${window.location.origin}/reset/`
     })
 
     if (error) {
-      forgotMsg.textContent = `Error: ${error.message}`
-      forgotMsg.classList.remove('hidden')
-      forgotMsg.classList.remove('text-green-300')
+      console.error('Supabase reset error:', error)
+      forgotMsg.textContent = `❌ ${error.message}`
+      forgotMsg.classList.remove('text-orange-300', 'text-green-300')
       forgotMsg.classList.add('text-red-300')
     } else {
       forgotMsg.textContent = '✅ Check your email for a reset link.'
-      forgotMsg.classList.remove('hidden')
-      forgotMsg.classList.remove('text-red-300')
+      forgotMsg.classList.remove('text-orange-300', 'text-red-300')
       forgotMsg.classList.add('text-green-300')
     }
   })
 </script>
+
