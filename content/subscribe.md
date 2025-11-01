@@ -81,8 +81,44 @@ url: "/subscribe/"
         <p>Get the latest insights on AI, technology, and business delivered straight to your inbox. Join our community of forward-thinking professionals.</p>
     </div>
 
-    <!-- MailerLite Embedded Form -->
-    <div class="ml-embedded" data-form="169453382423020905"></div>
+    <!-- MailerLite API Form -->
+    <div id="subscription-form-container">
+        <form id="subscription-form" class="ml-form-embedContainer">
+            <div class="ml-form-formContent">
+                <div class="ml-form-fieldRow">
+                    <input type="text" 
+                           id="first-name" 
+                           name="name" 
+                           placeholder="First Name" 
+                           style="width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 4px; font-size: 16px;">
+                </div>
+                <div class="ml-form-fieldRow">
+                    <input type="text" 
+                           id="last-name" 
+                           name="last_name" 
+                           placeholder="Last Name" 
+                           style="width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 4px; font-size: 16px;">
+                </div>
+                <div class="ml-form-fieldRow">
+                    <input type="email" 
+                           id="email" 
+                           name="email" 
+                           placeholder="Email Address" 
+                           required 
+                           style="width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 4px; font-size: 16px;">
+                </div>
+                <div class="ml-form-fieldRow">
+                    <button type="submit" 
+                            id="subscribe-btn"
+                            style="width: 100%; background: #ff4f00; color: white; padding: 14px; border: none; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 16px;">
+                        Subscribe to Newsletter
+                    </button>
+                </div>
+            </div>
+        </form>
+        
+        <div id="form-status" style="display: none; margin-top: 20px; padding: 15px; border-radius: 4px; text-align: center;"></div>
+    </div>
 
     <div class="benefits">
         <h3>What You'll Get:</h3>
