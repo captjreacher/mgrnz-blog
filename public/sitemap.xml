@@ -148,6 +148,12 @@
   
     
       <url>
+            <loc>http://localhost:1313/reset/</loc>
+          </url>
+    
+  
+    
+      <url>
             <loc>http://localhost:1313/subscribe/</loc>
           </url>
     

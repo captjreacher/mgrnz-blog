@@ -45,7 +45,7 @@
 
 <link rel="stylesheet" href="/css/custom.min.css">
 
-<link rel="stylesheet" href="/css/custom.css?v=1761964634">
+<link rel="stylesheet" href="/css/custom.css?v=1762007392">
 
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -72,7 +72,7 @@ ml('account', '1849787');
     <div class="mb-8">
       
       <div style="padding-left: 2rem;">
-        <img src="/images/mgrnz-logo.webp?v=1761964634" alt="Mike G Robinson" class="mb-4 h-60 w-60 rounded-full object-contain" style="display: block;">
+        <img src="/images/mgrnz-logo.webp?v=1762007392" alt="Mike G Robinson" class="mb-4 h-60 w-60 rounded-full object-contain" style="display: block;">
       </div>
       
       <div class="text-center">
@@ -157,7 +157,7 @@ ml('account', '1849787');
     
     
     <div class="flex-shrink-0 border-t border-neutral-700 p-4 text-center text-xs text-neutral-400">
-      © 2025 Welcome to the Personal Blog of Mike G Robinson - Build 2025-11-01 15:37
+      © 2025 Welcome to the Personal Blog of Mike G Robinson - Build 2025-11-02 03:29
       
       <div class="mt-2">
         
@@ -212,11 +212,12 @@ ml('account', '1849787');
       </button>
     </div>
 
+    
     <form onsubmit="authenticateAdmin(event)" class="px-6 py-5 space-y-5">
       <div class="space-y-2">
         <label for="adminAccessCode" class="block text-sm font-medium text-neutral-300">Access Code</label>
         <input id="adminAccessCode" type="password" required autocomplete="current-password" placeholder="Enter access code"
-               class="w-full rounded-lg border border-neutral-700 bg-neutral-800 px-4 py-3 text-white placeholder-neutral-500 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/30 transition">
+               class="w-full rounded-lg border border-neutral-700 bg-neutral-800 px-4 py-3 text-white placeholder-neutral-500 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/30 transition" />
       </div>
 
       <div id="adminAuthError" class="hidden rounded-lg border border-red-700 bg-red-900/40 px-4 py-3 text-sm text-red-200">
@@ -230,8 +231,23 @@ ml('account', '1849787');
         </button>
       </div>
     </form>
+
+    
+    <div class="px-6 pb-6 pt-0">
+      <a id="forgot-link" href="#" class="text-sm text-blue-400 hover:text-blue-200 block mt-2">Forgot access code?</a>
+      <div id="forgot-form" class="hidden mt-3">
+        <input id="forgot-email" type="email" placeholder="Enter your admin email"
+               class="block w-full p-2 rounded bg-neutral-800 border border-neutral-600 text-neutral-200 mb-2" required>
+        <button id="forgot-submit" type="button"
+                class="w-full bg-orange-600 hover:bg-orange-500 text-white font-medium py-2 px-4 rounded">
+          Email reset link
+        </button>
+        <p id="forgot-msg" class="text-sm hidden mt-2"></p>
+      </div>
+    </div>
   </div>
 </div>
+
 
 <script>
 const ADMIN_SESSION_DURATION = 8 * 60 * 60 * 1000; 
@@ -242,50 +258,27 @@ function openAdminAuthModal() {
   const modal = document.getElementById('adminAuthModal');
   const input = document.getElementById('adminAccessCode');
   const error = document.getElementById('adminAuthError');
-
-  if (!modal) {
-    return;
-  }
-
+  if (!modal) return;
   modal.classList.remove('hidden');
   document.body.classList.add('overflow-hidden');
-
-  if (error) {
-    error.classList.add('hidden');
-  }
-
-  if (input) {
-    input.value = '';
-    window.setTimeout(() => input.focus(), 0);
-  }
+  if (error) error.classList.add('hidden');
+  if (input) { input.value = ''; setTimeout(() => input.focus(), 0); }
 }
 
 function closeAdminAuthModal() {
   const modal = document.getElementById('adminAuthModal');
   const error = document.getElementById('adminAuthError');
-
-  if (!modal) {
-    return;
-  }
-
+  if (!modal) return;
   modal.classList.add('hidden');
   document.body.classList.remove('overflow-hidden');
-
-  if (error) {
-    error.classList.add('hidden');
-  }
-
+  if (error) error.classList.add('hidden');
   setAdminAuthLoading(false);
 }
 
 function setAdminAuthLoading(isLoading) {
   const submitButton = document.getElementById('adminAuthSubmit');
   const actionLabel = submitButton ? submitButton.querySelector('.auth-action-label') : null;
-
-  if (!submitButton || !actionLabel) {
-    return;
-  }
-
+  if (!submitButton || !actionLabel) return;
   submitButton.disabled = isLoading;
   actionLabel.textContent = isLoading ? '⏳ Verifying…' : '🔐 Access Admin';
 }
@@ -297,55 +290,30 @@ function generateAdminAuthToken() {
 }
 
 function authenticateAdmin(event) {
-  if (event) {
-    event.preventDefault();
-  }
-
+  if (event) event.preventDefault();
   const input = document.getElementById('adminAccessCode');
   const error = document.getElementById('adminAuthError');
-
-  if (!input) {
-    window.location.href = '/admin/';
-    return;
-  }
-
+  if (!input) { window.location.href = '/admin/'; return; }
   const accessCode = input.value.trim();
-
   if (!accessCode) {
-    if (error) {
-      error.textContent = 'Please enter your access code.';
-      error.classList.remove('hidden');
-    }
-    input.focus();
-    return;
+    if (error) { error.textContent = 'Please enter your access code.'; error.classList.remove('hidden'); }
+    input.focus(); return;
   }
-
   setAdminAuthLoading(true);
-
-  window.setTimeout(() => {
+  setTimeout(() => {
     const isValidCode = ADMIN_VALID_ACCESS_CODES.includes(accessCode);
-
     if (isValidCode) {
       const authToken = generateAdminAuthToken();
       localStorage.setItem('admin_auth_token', authToken);
       localStorage.setItem('admin_auth_time', Date.now().toString());
-
-      if (error) {
-        error.classList.add('hidden');
-      }
-
+      if (error) error.classList.add('hidden');
       closeAdminAuthModal();
       toggleAdminMenu(true);
       window.location.href = ADMIN_DASHBOARD_URL;
     } else {
-      if (error) {
-        error.textContent = 'Invalid access code. Please try again.';
-        error.classList.remove('hidden');
-      }
-
+      if (error) { error.textContent = 'Invalid access code. Please try again.'; error.classList.remove('hidden'); }
       input.focus();
     }
-
     setAdminAuthLoading(false);
   }, 400);
 }
@@ -353,46 +321,27 @@ function authenticateAdmin(event) {
 function hasValidAdminSession() {
   const authToken = localStorage.getItem('admin_auth_token');
   const authTime = localStorage.getItem('admin_auth_time');
-
-  if (!authToken || !authTime) {
-    return false;
-  }
-
+  if (!authToken || !authTime) return false;
   const now = Date.now();
   const authAge = now - parseInt(authTime, 10);
   return authAge < ADMIN_SESSION_DURATION;
 }
 
 function checkAdminAccess() {
-  if (hasValidAdminSession()) {
-    window.location.href = ADMIN_DASHBOARD_URL;
-    return;
-  }
-
+  if (hasValidAdminSession()) { window.location.href = ADMIN_DASHBOARD_URL; return; }
   clearAdminSession();
   openAdminAuthModal();
 }
 
 function toggleAdminMenu(forceHide = false) {
   const dropdown = document.getElementById('adminDropdown');
-
-  if (!dropdown) {
-    return;
-  }
-
-  if (forceHide) {
-    dropdown.classList.add('hidden');
-    return;
-  }
-
+  if (!dropdown) return;
+  if (forceHide) { dropdown.classList.add('hidden'); return; }
   dropdown.classList.toggle('hidden');
 }
 
 function logoutAdmin(event) {
-  if (event) {
-    event.preventDefault();
-  }
-
+  if (event) event.preventDefault();
   if (confirm('Are you sure you want to logout?')) {
     clearAdminSession();
     toggleAdminMenu(true);
@@ -410,27 +359,58 @@ document.addEventListener('click', function(event) {
   const dropdown = document.getElementById('adminDropdown');
   const button = event.target.closest('button[onclick="checkAdminAccess()"]');
   const modal = document.getElementById('adminAuthModal');
-
-  if (dropdown && !button && !dropdown.contains(event.target)) {
-    dropdown.classList.add('hidden');
-  }
-
-  if (modal && !modal.classList.contains('hidden') && event.target === modal) {
-    closeAdminAuthModal();
-  }
+  if (dropdown && !button && !dropdown.contains(event.target)) dropdown.classList.add('hidden');
+  if (modal && !modal.classList.contains('hidden') && event.target === modal) closeAdminAuthModal();
 });
-
 document.addEventListener('keydown', function(event) {
   if (event.key === 'Escape') {
     const modal = document.getElementById('adminAuthModal');
-
-    if (modal && !modal.classList.contains('hidden')) {
-      closeAdminAuthModal();
-    } else {
-      toggleAdminMenu(true);
-    }
+    if (modal && !modal.classList.contains('hidden')) { closeAdminAuthModal(); }
+    else { toggleAdminMenu(true); }
   }
 });
+</script>
+
+
+<script type="module">
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+
+  const supabase = createClient(
+    'https://YOUR_PROJECT_REF.supabase.co',
+    'PUBLIC_ANON_KEY'
+  )
+
+  const forgotLink   = document.getElementById('forgot-link')
+  const forgotForm   = document.getElementById('forgot-form')
+  const forgotEmail  = document.getElementById('forgot-email')
+  const forgotMsg    = document.getElementById('forgot-msg')
+  const forgotSubmit = document.getElementById('forgot-submit')
+
+  forgotLink?.addEventListener('click', (e) => {
+    e.preventDefault()
+    forgotForm.classList.remove('hidden')
+  })
+
+  forgotSubmit?.addEventListener('click', async () => {
+    const email = (forgotEmail.value || '').trim()
+    if (!email) return
+
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset/`
+    })
+
+    if (error) {
+      forgotMsg.textContent = `Error: ${error.message}`
+      forgotMsg.classList.remove('hidden')
+      forgotMsg.classList.remove('text-green-300')
+      forgotMsg.classList.add('text-red-300')
+    } else {
+      forgotMsg.textContent = '✅ Check your email for a reset link.'
+      forgotMsg.classList.remove('hidden')
+      forgotMsg.classList.remove('text-red-300')
+      forgotMsg.classList.add('text-green-300')
+    }
+  })
 </script>
 
       </div>
@@ -614,7 +594,7 @@ document.addEventListener('keydown', function(event) {
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://www.google.com/recaptcha/api.js"></script>
-<script src="/js/mobile-menu.js?v=1761964634"></script>
+<script src="/js/mobile-menu.js?v=1762007392"></script>
 
 
 <script>

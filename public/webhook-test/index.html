@@ -45,7 +45,7 @@
 
 <link rel="stylesheet" href="/css/custom.min.css">
 
-<link rel="stylesheet" href="/css/custom.css?v=1761907040">
+<link rel="stylesheet" href="/css/custom.css?v=1762006095">
 
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -72,7 +72,7 @@ ml('account', '1849787');
     <div class="mb-8">
       
       <div style="padding-left: 2rem;">
-        <img src="/images/mgrnz-logo.webp?v=1761907040" alt="Mike G Robinson" class="mb-4 h-60 w-60 rounded-full object-contain" style="display: block;">
+        <img src="/images/mgrnz-logo.webp?v=1762006095" alt="Mike G Robinson" class="mb-4 h-60 w-60 rounded-full object-contain" style="display: block;">
       </div>
       
       <div class="text-center">
@@ -157,7 +157,7 @@ ml('account', '1849787');
     
     
     <div class="flex-shrink-0 border-t border-neutral-700 p-4 text-center text-xs text-neutral-400">
-      © 2025 Welcome to the Personal Blog of Mike G Robinson - Build 2025-10-31 23:37
+      © 2025 Welcome to the Personal Blog of Mike G Robinson - Build 2025-11-02 03:08
       
       <div class="mt-2">
         
@@ -212,11 +212,65 @@ ml('account', '1849787');
       </button>
     </div>
 
-    <form onsubmit="authenticateAdmin(event)" class="px-6 py-5 space-y-5">
-      <div class="space-y-2">
-        <label for="adminAccessCode" class="block text-sm font-medium text-neutral-300">Access Code</label>
-        <input id="adminAccessCode" type="password" required autocomplete="current-password" placeholder="Enter access code"
-               class="w-full rounded-lg border border-neutral-700 bg-neutral-800 px-4 py-3 text-white placeholder-neutral-500 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/30 transition">
+<form onsubmit="authenticateAdmin(event)" class="px-6 py-5 space-y-5">
+  <div class="space-y-2">
+    <label for="adminAccessCode" class="block text-sm font-medium text-neutral-300">Access Code</label>
+    <input
+      id="adminAccessCode"
+      type="password"
+      required
+      autocomplete="current-password"
+      placeholder="Enter access code"
+      class="w-full rounded-lg border border-neutral-700 bg-neutral-800 px-4 py-3 text-white placeholder-neutral-500 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/30 transition"
+    />
+
+    
+    <a id="forgot-link" href="#" class="text-sm text-blue-400 hover:text-blue-200 block mt-3">
+      Forgot access code?
+    </a>
+
+    <form id="forgot-form" class="hidden mt-3">
+      <input
+        id="forgot-email"
+        type="email"
+        placeholder="Enter your admin email"
+        class="block w-full p-2 rounded bg-neutral-800 border border-neutral-600 text-neutral-200 mb-2"
+        required
+      />
+      <button
+        type="submit"
+        class="w-full bg-orange-600 hover:bg-orange-500 text-white font-medium py-2 px-4 rounded"
+      >
+        Email reset link
+      </button>
+    </form>
+
+    <p id="forgot-msg" class="text-sm text-green-300 hidden mt-2"></p>
+  </div>
+
+  <div
+    id="adminAuthError"
+    class="hidden rounded-lg border border-red-700 bg-red-900/40 px-4 py-3 text-sm text-red-200"
+  >
+    Invalid access code. Please try again.
+  </div>
+
+  <div class="flex items-center justify-between">
+    <p class="text-xs text-neutral-500">Session lasts for 24 hours.</p>
+    <button
+      type="submit"
+      id="adminAuthSubmit"
+      class="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-orange-500 to-red-500 px-4 py-2 text-sm font-semibold text-white hover:from-orange-600 hover:to-red-600 transition"
+    >
+      <span class="auth-action-label">🔐 Access Admin</span>
+    </button>
+  </div>
+</form>
+
+
+<p id="forgot-msg" class="text-sm text-green-300 hidden mt-2"></p>
+
+focus:ring-2 focus:ring-orange-500/30 transition">
       </div>
 
       <div id="adminAuthError" class="hidden rounded-lg border border-red-700 bg-red-900/40 px-4 py-3 text-sm text-red-200">
@@ -233,205 +287,45 @@ ml('account', '1849787');
   </div>
 </div>
 
-<script>
-const ADMIN_SESSION_DURATION = 8 * 60 * 60 * 1000; 
-const ADMIN_DASHBOARD_URL = 'https://mgrnz.com/admin/';
-const ADMIN_VALID_ACCESS_CODES = "[\"mgrnz-secret-access\"]";
+<script type="module">
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
-function openAdminAuthModal() {
-  const modal = document.getElementById('adminAuthModal');
-  const input = document.getElementById('adminAccessCode');
-  const error = document.getElementById('adminAuthError');
+  const supabase = createClient(
+    'https://YOUR_PROJECT_REF.supabase.co',
+    'PUBLIC_ANON_KEY'
+  )
 
-  if (!modal) {
-    return;
-  }
+  const forgotLink = document.getElementById('forgot-link')
+  const forgotForm = document.getElementById('forgot-form')
+  const forgotEmail = document.getElementById('forgot-email')
+  const forgotMsg = document.getElementById('forgot-msg')
 
-  modal.classList.remove('hidden');
-  document.body.classList.add('overflow-hidden');
+  forgotLink?.addEventListener('click', (e) => {
+    e.preventDefault()
+    forgotForm.classList.remove('hidden')
+  })
 
-  if (error) {
-    error.classList.add('hidden');
-  }
+  forgotForm?.addEventListener('submit', async (e) => {
+    e.preventDefault()
+    const email = forgotEmail.value.trim()
+    if (!email) return
 
-  if (input) {
-    input.value = '';
-    window.setTimeout(() => input.focus(), 0);
-  }
-}
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset/`
+    })
 
-function closeAdminAuthModal() {
-  const modal = document.getElementById('adminAuthModal');
-  const error = document.getElementById('adminAuthError');
-
-  if (!modal) {
-    return;
-  }
-
-  modal.classList.add('hidden');
-  document.body.classList.remove('overflow-hidden');
-
-  if (error) {
-    error.classList.add('hidden');
-  }
-
-  setAdminAuthLoading(false);
-}
-
-function setAdminAuthLoading(isLoading) {
-  const submitButton = document.getElementById('adminAuthSubmit');
-  const actionLabel = submitButton ? submitButton.querySelector('.auth-action-label') : null;
-
-  if (!submitButton || !actionLabel) {
-    return;
-  }
-
-  submitButton.disabled = isLoading;
-  actionLabel.textContent = isLoading ? '⏳ Verifying…' : '🔐 Access Admin';
-}
-
-function generateAdminAuthToken() {
-  const timestamp = Date.now();
-  const random = Math.random().toString(36).substring(2);
-  return btoa(`${timestamp}-${random}`);
-}
-
-function authenticateAdmin(event) {
-  if (event) {
-    event.preventDefault();
-  }
-
-  const input = document.getElementById('adminAccessCode');
-  const error = document.getElementById('adminAuthError');
-
-  if (!input) {
-    window.location.href = '/admin/';
-    return;
-  }
-
-  const accessCode = input.value.trim();
-
-  if (!accessCode) {
     if (error) {
-      error.textContent = 'Please enter your access code.';
-      error.classList.remove('hidden');
-    }
-    input.focus();
-    return;
-  }
-
-  setAdminAuthLoading(true);
-
-  window.setTimeout(() => {
-    const isValidCode = ADMIN_VALID_ACCESS_CODES.includes(accessCode);
-
-    if (isValidCode) {
-      const authToken = generateAdminAuthToken();
-      localStorage.setItem('admin_auth_token', authToken);
-      localStorage.setItem('admin_auth_time', Date.now().toString());
-
-      if (error) {
-        error.classList.add('hidden');
-      }
-
-      closeAdminAuthModal();
-      toggleAdminMenu(true);
-      window.location.href = ADMIN_DASHBOARD_URL;
+      forgotMsg.textContent = `Error: ${error.message}`
+      forgotMsg.classList.remove('hidden', 'text-green-300')
+      forgotMsg.classList.add('text-red-300')
     } else {
-      if (error) {
-        error.textContent = 'Invalid access code. Please try again.';
-        error.classList.remove('hidden');
-      }
-
-      input.focus();
+      forgotMsg.textContent = '✅ Check your email for a reset link.'
+      forgotMsg.classList.remove('hidden', 'text-red-300')
+      forgotMsg.classList.add('text-green-300')
     }
-
-    setAdminAuthLoading(false);
-  }, 400);
-}
-
-function hasValidAdminSession() {
-  const authToken = localStorage.getItem('admin_auth_token');
-  const authTime = localStorage.getItem('admin_auth_time');
-
-  if (!authToken || !authTime) {
-    return false;
-  }
-
-  const now = Date.now();
-  const authAge = now - parseInt(authTime, 10);
-  return authAge < ADMIN_SESSION_DURATION;
-}
-
-function checkAdminAccess() {
-  if (hasValidAdminSession()) {
-    window.location.href = ADMIN_DASHBOARD_URL;
-    return;
-  }
-
-  clearAdminSession();
-  openAdminAuthModal();
-}
-
-function toggleAdminMenu(forceHide = false) {
-  const dropdown = document.getElementById('adminDropdown');
-
-  if (!dropdown) {
-    return;
-  }
-
-  if (forceHide) {
-    dropdown.classList.add('hidden');
-    return;
-  }
-
-  dropdown.classList.toggle('hidden');
-}
-
-function logoutAdmin(event) {
-  if (event) {
-    event.preventDefault();
-  }
-
-  if (confirm('Are you sure you want to logout?')) {
-    clearAdminSession();
-    toggleAdminMenu(true);
-    alert('✅ Logged out successfully');
-  }
-}
-
-function clearAdminSession() {
-  localStorage.removeItem('admin_auth_token');
-  localStorage.removeItem('admin_auth_time');
-}
-
-
-document.addEventListener('click', function(event) {
-  const dropdown = document.getElementById('adminDropdown');
-  const button = event.target.closest('button[onclick="checkAdminAccess()"]');
-  const modal = document.getElementById('adminAuthModal');
-
-  if (dropdown && !button && !dropdown.contains(event.target)) {
-    dropdown.classList.add('hidden');
-  }
-
-  if (modal && !modal.classList.contains('hidden') && event.target === modal) {
-    closeAdminAuthModal();
-  }
-});
-
-document.addEventListener('keydown', function(event) {
-  if (event.key === 'Escape') {
-    const modal = document.getElementById('adminAuthModal');
-
-    if (modal && !modal.classList.contains('hidden')) {
-      closeAdminAuthModal();
-    } else {
-      toggleAdminMenu(true);
-    }
-  }
-});
+  })
 </script>
+
 
       </div>
     </div>
@@ -441,284 +335,30 @@ document.addEventListener('keydown', function(event) {
   <div class="ml-80 flex min-h-screen w-full flex-col">
     
     
-<header style="height:56px;display:flex;align-items:center;justify-content:flex-end;
-               padding:0 .75rem 0 1rem;background:#0b0b0b;border-bottom:1px solid #222;">
+<header style="height:56px;display:flex;align-items:center;justify-content:center;
+               padding:0 .75rem 0 1rem;background:#0b0b0b;border-bottom:1px solid #222;position:relative;">
   
-  <div style="margin-left:auto;">
+  <nav style="position:absolute;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:1.25rem;">
     
-<div class="relative inline-block text-left" id="adminMenuContainer">
-  <button onclick="checkAdminAccess()"
-          class="inline-flex items-center justify-center gap-2 rounded-lg bg-orange-600 px-4 py-2 text-sm font-semibold text-white shadow transition-all duration-200 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 focus:ring-offset-neutral-900"
-          title="Settings">
-    <span class="uppercase tracking-wide">Settings</span>
-  </button>
-
-  <div id="adminDropdown" class="hidden absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-neutral-800 border border-neutral-700 z-50">
-    <div class="py-2">
-      <div class="px-4 py-2 text-xs text-neutral-400 border-b border-neutral-700">
-        🔐 Secure Admin Access
-      </div>
-      <a href="/admin/" class="block px-4 py-2 text-sm text-neutral-300 hover:bg-neutral-700 hover:text-white transition-colors">
-        📊 Dashboard
-      </a>
-      <a href="/admin/posts/" class="block px-4 py-2 text-sm text-neutral-300 hover:bg-neutral-700 hover:text-white transition-colors">
-        📝 Manage Posts
-      </a>
-      <a href="/admin/create/" class="block px-4 py-2 text-sm text-neutral-300 hover:bg-neutral-700 hover:text-white transition-colors">
-        ✏️ Create Post
-      </a>
-      <a href="/admin-edit-v2-fixed.html" class="block px-4 py-2 text-sm text-neutral-300 hover:bg-neutral-700 hover:text-white transition-colors">
-        🔧 Edit Posts
-      </a>
-      <div class="border-t border-neutral-700 mt-2 pt-2">
-        <a href="/admin-simple.html" class="block px-4 py-2 text-sm text-green-400 hover:bg-green-900/20 transition-colors">
-          🚀 Quick Access
+      
+        <a href="/" style="color:#ddd;text-decoration:none;font-weight:600;">
+          Home
         </a>
-        <button onclick="logoutAdmin(event)" class="block w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-red-900/20 transition-colors">
-          🚪 Logout
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<div id="adminAuthModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-  <div class="bg-neutral-900 border border-neutral-700 rounded-2xl shadow-2xl w-full max-w-md mx-4">
-    <div class="px-6 py-4 border-b border-neutral-800 flex items-center justify-between">
-      <div>
-        <p class="text-xs uppercase tracking-widest text-orange-400">Secure Access</p>
-        <h3 class="text-xl font-semibold text-white">Admin Authentication</h3>
-      </div>
-      <button onclick="closeAdminAuthModal()" class="text-neutral-400 hover:text-white transition-colors" aria-label="Close admin authentication modal">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-        </svg>
-      </button>
-    </div>
-
-    <form onsubmit="authenticateAdmin(event)" class="px-6 py-5 space-y-5">
-      <div class="space-y-2">
-        <label for="adminAccessCode" class="block text-sm font-medium text-neutral-300">Access Code</label>
-        <input id="adminAccessCode" type="password" required autocomplete="current-password" placeholder="Enter access code"
-               class="w-full rounded-lg border border-neutral-700 bg-neutral-800 px-4 py-3 text-white placeholder-neutral-500 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/30 transition">
-      </div>
-
-      <div id="adminAuthError" class="hidden rounded-lg border border-red-700 bg-red-900/40 px-4 py-3 text-sm text-red-200">
-        Invalid access code. Please try again.
-      </div>
-
-      <div class="flex items-center justify-between">
-        <p class="text-xs text-neutral-500">Session lasts for 24 hours.</p>
-        <button type="submit" id="adminAuthSubmit" class="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-orange-500 to-red-500 px-4 py-2 text-sm font-semibold text-white hover:from-orange-600 hover:to-red-600 transition">
-          <span class="auth-action-label">🔐 Access Admin</span>
-        </button>
-      </div>
-    </form>
-  </div>
-</div>
-
-<script>
-const ADMIN_SESSION_DURATION = 8 * 60 * 60 * 1000; 
-const ADMIN_DASHBOARD_URL = 'https://mgrnz.com/admin/';
-const ADMIN_VALID_ACCESS_CODES = "[\"mgrnz-secret-access\"]";
-
-function openAdminAuthModal() {
-  const modal = document.getElementById('adminAuthModal');
-  const input = document.getElementById('adminAccessCode');
-  const error = document.getElementById('adminAuthError');
-
-  if (!modal) {
-    return;
-  }
-
-  modal.classList.remove('hidden');
-  document.body.classList.add('overflow-hidden');
-
-  if (error) {
-    error.classList.add('hidden');
-  }
-
-  if (input) {
-    input.value = '';
-    window.setTimeout(() => input.focus(), 0);
-  }
-}
-
-function closeAdminAuthModal() {
-  const modal = document.getElementById('adminAuthModal');
-  const error = document.getElementById('adminAuthError');
-
-  if (!modal) {
-    return;
-  }
-
-  modal.classList.add('hidden');
-  document.body.classList.remove('overflow-hidden');
-
-  if (error) {
-    error.classList.add('hidden');
-  }
-
-  setAdminAuthLoading(false);
-}
-
-function setAdminAuthLoading(isLoading) {
-  const submitButton = document.getElementById('adminAuthSubmit');
-  const actionLabel = submitButton ? submitButton.querySelector('.auth-action-label') : null;
-
-  if (!submitButton || !actionLabel) {
-    return;
-  }
-
-  submitButton.disabled = isLoading;
-  actionLabel.textContent = isLoading ? '⏳ Verifying…' : '🔐 Access Admin';
-}
-
-function generateAdminAuthToken() {
-  const timestamp = Date.now();
-  const random = Math.random().toString(36).substring(2);
-  return btoa(`${timestamp}-${random}`);
-}
-
-function authenticateAdmin(event) {
-  if (event) {
-    event.preventDefault();
-  }
-
-  const input = document.getElementById('adminAccessCode');
-  const error = document.getElementById('adminAuthError');
-
-  if (!input) {
-    window.location.href = '/admin/';
-    return;
-  }
-
-  const accessCode = input.value.trim();
-
-  if (!accessCode) {
-    if (error) {
-      error.textContent = 'Please enter your access code.';
-      error.classList.remove('hidden');
-    }
-    input.focus();
-    return;
-  }
-
-  setAdminAuthLoading(true);
-
-  window.setTimeout(() => {
-    const isValidCode = ADMIN_VALID_ACCESS_CODES.includes(accessCode);
-
-    if (isValidCode) {
-      const authToken = generateAdminAuthToken();
-      localStorage.setItem('admin_auth_token', authToken);
-      localStorage.setItem('admin_auth_time', Date.now().toString());
-
-      if (error) {
-        error.classList.add('hidden');
-      }
-
-      closeAdminAuthModal();
-      toggleAdminMenu(true);
-      window.location.href = ADMIN_DASHBOARD_URL;
-    } else {
-      if (error) {
-        error.textContent = 'Invalid access code. Please try again.';
-        error.classList.remove('hidden');
-      }
-
-      input.focus();
-    }
-
-    setAdminAuthLoading(false);
-  }, 400);
-}
-
-function hasValidAdminSession() {
-  const authToken = localStorage.getItem('admin_auth_token');
-  const authTime = localStorage.getItem('admin_auth_time');
-
-  if (!authToken || !authTime) {
-    return false;
-  }
-
-  const now = Date.now();
-  const authAge = now - parseInt(authTime, 10);
-  return authAge < ADMIN_SESSION_DURATION;
-}
-
-function checkAdminAccess() {
-  if (hasValidAdminSession()) {
-    window.location.href = ADMIN_DASHBOARD_URL;
-    return;
-  }
-
-  clearAdminSession();
-  openAdminAuthModal();
-}
-
-function toggleAdminMenu(forceHide = false) {
-  const dropdown = document.getElementById('adminDropdown');
-
-  if (!dropdown) {
-    return;
-  }
-
-  if (forceHide) {
-    dropdown.classList.add('hidden');
-    return;
-  }
-
-  dropdown.classList.toggle('hidden');
-}
-
-function logoutAdmin(event) {
-  if (event) {
-    event.preventDefault();
-  }
-
-  if (confirm('Are you sure you want to logout?')) {
-    clearAdminSession();
-    toggleAdminMenu(true);
-    alert('✅ Logged out successfully');
-  }
-}
-
-function clearAdminSession() {
-  localStorage.removeItem('admin_auth_token');
-  localStorage.removeItem('admin_auth_time');
-}
-
-
-document.addEventListener('click', function(event) {
-  const dropdown = document.getElementById('adminDropdown');
-  const button = event.target.closest('button[onclick="checkAdminAccess()"]');
-  const modal = document.getElementById('adminAuthModal');
-
-  if (dropdown && !button && !dropdown.contains(event.target)) {
-    dropdown.classList.add('hidden');
-  }
-
-  if (modal && !modal.classList.contains('hidden') && event.target === modal) {
-    closeAdminAuthModal();
-  }
-});
-
-document.addEventListener('keydown', function(event) {
-  if (event.key === 'Escape') {
-    const modal = document.getElementById('adminAuthModal');
-
-    if (modal && !modal.classList.contains('hidden')) {
-      closeAdminAuthModal();
-    } else {
-      toggleAdminMenu(true);
-    }
-  }
-});
-</script>
-
-  </div>
+      
+        <a href="/posts/" style="color:#ddd;text-decoration:none;font-weight:600;">
+          Blog Posts
+        </a>
+      
+        <a href="/pages/cv/" style="color:#ddd;text-decoration:none;font-weight:600;">
+          My Story
+        </a>
+      
+    
+  </nav>
+  
+  <a href="/" class="block" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);">
+    <img src="/images/BLOG-LOGO.webp" alt="Welcome to the Personal Blog of Mike G Robinson" class="site-logo" style="height:24px;max-height:24px;display:block;">
+  </a>
 </header>
 
 
@@ -919,7 +559,7 @@ document.addEventListener('keydown', function(event) {
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://www.google.com/recaptcha/api.js"></script>
-<script src="/js/mobile-menu.js?v=1761907040"></script>
+<script src="/js/mobile-menu.js?v=1762006095"></script>
 
 
 <script>

@@ -1,39 +1,119 @@
-<!doctype html><html><head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Reset Password</title>
-</head><body class="bg-neutral-900 text-neutral-100 flex justify-center items-center h-screen">
-  <div class="w-full max-w-sm">
-    <h1 class="text-xl mb-4 text-center">Set a New Access Code</h1>
-    <form id="reset-form" class="space-y-3">
-      <input id="new-password" type="password" minlength="8" placeholder="New password"
-             class="w-full p-2 rounded bg-neutral-800 border border-neutral-600 text-neutral-200" required>
-      <button type="submit"
-              class="w-full bg-orange-600 hover:bg-orange-500 text-white font-medium py-2 px-4 rounded">
-        Update
-      </button>
-    </form>
-    <p id="reset-msg" class="text-sm mt-3"></p>
-  </div>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Reset Access Code</title>
+    <link rel="icon" href="/favicon.ico" />
+    <script type="module" src="https://cdn.tailwindcss.com"></script>
+    <style>
+      @keyframes fadeSlide {
+        0% { opacity: 0; transform: translateY(20px); }
+        50% { opacity: 1; transform: translateY(0); }
+        100% { opacity: 0; transform: translateY(-10px); }
+      }
+      .animate-fadeSlide {
+        animation: fadeSlide 2.4s ease-in-out forwards;
+      }
+      @keyframes pulseCheck {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.2); }
+      }
+      .animate-pulseCheck {
+        animation: pulseCheck 1s ease-in-out 2;
+      }
+    </style>
+  </head>
 
-  <script type="module">
-    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
-    const supabase = createClient('https://YOUR_PROJECT_REF.supabase.co','PUBLIC_ANON_KEY')
+  <body class="bg-neutral-900 text-neutral-100 flex items-center justify-center min-h-screen px-4">
+    <main class="w-full max-w-md bg-neutral-900 border border-neutral-700 rounded-2xl shadow-2xl p-8 relative overflow-hidden">
+      <header class="mb-6 text-center">
+        <p class="text-xs uppercase tracking-widest text-orange-400 mb-1">
+          Secure Admin Reset
+        </p>
+        <h1 class="text-2xl font-semibold text-white">Set a New Access Code</h1>
+      </header>
 
-    const form = document.getElementById('reset-form')
-    const msg  = document.getElementById('reset-msg')
+      <form id="reset-form" class="space-y-5">
+        <div>
+          <label for="new-password" class="block text-sm font-medium text-neutral-300 mb-2">
+            New Access Code
+          </label>
+          <input
+            id="new-password"
+            type="password"
+            minlength="8"
+            placeholder="Enter new access code"
+            class="w-full rounded-lg border border-neutral-700 bg-neutral-800 px-4 py-3 text-white placeholder-neutral-500 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/30 transition"
+            required
+          />
+        </div>
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault()
-      const newPassword = document.getElementById('new-password').value
-      const { data: { session } } = await supabase.auth.getSession()
-      if (!session) {
-        msg.textContent = 'This link is invalid or expired. Request a new reset email.'
-        return
+        <button
+          type="submit"
+          class="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-orange-500 to-yellow-500 px-4 py-2 text-sm font-semibold text-white hover:from-orange-600 hover:to-yellow-600 transition"
+        >
+          🔑 Update Access Code
+        </button>
+      </form>
+
+      <p id="reset-msg" class="text-sm mt-5 text-center text-neutral-400 transition-all"></p>
+
+      <!-- Animated Success Banner -->
+      <div id="success-banner" class="hidden absolute inset-x-0 top-0 flex flex-col items-center justify-center bg-gradient-to-r from-orange-500/90 to-yellow-500/90 text-white py-6 backdrop-blur-md">
+        <svg class="w-12 h-12 mb-2 animate-pulseCheck" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+        <p class="text-lg font-semibold tracking-wide">Access Code Updated</p>
+        <p class="text-xs opacity-80">Redirecting to admin dashboard…</p>
+      </div>
+    </main>
+
+    <script type="module">
+      import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+
+      // --- CONFIGURE THESE ---
+      const supabase = createClient(
+        'https://YOUR_PROJECT_REF.supabase.co',
+        'PUBLIC_ANON_KEY'
+      )
+      // -----------------------
+
+      const form = document.getElementById('reset-form')
+      const msg = document.getElementById('reset-msg')
+      const banner = document.getElementById('success-banner')
+
+      function showMessage(text, isSuccess = true) {
+        msg.textContent = text
+        msg.classList.remove('text-neutral-400', 'text-red-400', 'text-orange-400')
+        msg.classList.add(isSuccess ? 'text-orange-400' : 'text-red-400')
       }
 
-      const { error } = await supabase.auth.updateUser({ password: newPassword })
-      msg.textContent = error ? `Error: ${error.message}` : 'Password updated. You can close this tab and sign in.'
-    })
-  </script>
-</body></html>
+      function showSuccessBanner() {
+        banner.classList.remove('hidden')
+        banner.classList.add('animate-fadeSlide')
+      }
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault()
+        const newPassword = document.getElementById('new-password').value.trim()
+
+        const { data: { session } } = await supabase.auth.getSession()
+        if (!session) {
+          showMessage('⚠️ This link is invalid or expired. Please request a new reset.', false)
+          return
+        }
+
+        const { error } = await supabase.auth.updateUser({ password: newPassword })
+
+        if (error) {
+          showMessage(`❌ ${error.message}`, false)
+        } else {
+          showMessage('')
+          showSuccessBanner()
+          setTimeout(() => (window.location.href = '/admin/'), 2400)
+        }
+      })
+    </script>
+  </body>
+</html>

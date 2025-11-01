@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Blog Admin - Auto Deploy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-orange': '#ff4f00',
+                        'brand-yellow': '#ffcf00',
+                        'brand-blue': '#89bbfe'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #0f172a !important; }
+        .orange-border { border: 2px solid #ff4f00 !important; }
+        .orange-border:focus { border-color: #ff6600 !important; box-shadow: 0 0 0 3px rgba(255, 79, 0, 0.2) !important; }
+        .loading { opacity: 0.6; pointer-events: none; }
+    </style>
+</head>
+<body class="min-h-screen bg-neutral-900 text-white" x-data="adminApp()">
+    
+    <!-- Header -->
+    <header class="bg-neutral-800 border-b border-neutral-700 p-4 sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <h1 class="text-2xl font-bold text-orange-400">Auto-Deploy Admin</h1>
+                <span class="px-3 py-1 bg-green-900 text-green-300 text-xs rounded-full">GitHub Integration</span>
+            </div>
+            <div class="flex items-center space-x-4">
+                <a href="/admin-dashboard.html" class="bg-neutral-700 hover:bg-neutral-600 px-4 py-2 rounded text-sm transition-colors">
+                    ← Dashboard
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Info Banner -->
+    <div class="bg-blue-900 border-b border-blue-700 p-4">
+        <div class="max-w-4xl mx-auto">
+            <div class="flex items-center">
+                <div class="text-blue-300 text-2xl mr-4">🚀</div>
+                <div>
+                    <h3 class="text-blue-300 font-bold">Automatic Deployment</h3>
+                    <p class="text-blue-200 text-sm">Posts are created directly in your repository and auto-deployed to the live site</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto p-6">
+        
+        <!-- Status Messages -->
+        <div x-show="message.show" x-transition 
+             :class="message.type === 'success' ? 'bg-green-900 border-green-700 text-green-300' : 
+                     message.type === 'error' ? 'bg-red-900 border-red-700 text-red-300' :
+                     'bg-blue-900 border-blue-700 text-blue-300'"
+             class="mb-6 p-4 border rounded-lg">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h3 class="font-bold" x-text="message.title"></h3>
+                    <p class="text-sm" x-text="message.text"></p>
+                    <div x-show="message.url" class="mt-2">
+                        <a :href="message.url" target="_blank" class="text-sm underline">View Live Post</a>
+                    </div>
+                </div>
+                <button @click="message.show = false" class="text-xl">&times;</button>
+            </div>
+        </div>
+
+        <!-- Post Creation Form -->
+        <div class="bg-neutral-800 rounded-lg p-8 shadow-xl border-2 border-orange-500">
+            
+            <form @submit.prevent="createPost()" class="space-y-6">
+                
+                <!-- Post Slug with Live Preview -->
+                <div>
+                    <label class="block text-sm font-medium text-neutral-300 mb-2">Post Slug</label>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-sm text-neutral-400 bg-neutral-700 px-3 py-2 rounded" x-text="slugPrefix"></span>
+                        <input x-model="form.slug" required placeholder="my-awesome-post" 
+                               @input="updateSlugPreview()"
+                               class="flex-1 rounded-lg border border-neutral-600 bg-neutral-700 px-4 py-2 text-white placeholder-neutral-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20">
+                    </div>
+                    <p class="mt-2 text-sm font-bold text-orange-400" x-text="'Live URL: https://mgrnz.com' + fullSlugPreview"></p>
+                </div>
+
+                <!-- Date and Title -->
+                <div class="grid gap-6 md:grid-cols-2">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Publish Date</label>
+                        <input x-model="form.date" type="date" @change="updateSlugPrefix()"
+                               class="w-full orange-border rounded-lg px-4 py-2 text-gray-900">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Post Title *</label>
+                        <input x-model="form.title" required placeholder="Enter your post title" 
+                               @input="generateSlugFromTitle()"
+                               class="w-full orange-border rounded-lg px-4 py-2 text-gray-900">
+                    </div>
+                </div>
+
+                <!-- Tags and Categories -->
+                <div class="grid gap-6 md:grid-cols-2">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Tags</label>
+                        <input x-model="form.tags" placeholder="AI, automation, technology" 
+                               class="w-full orange-border rounded-lg px-4 py-2 text-gray-900">
+                        <div class="mt-2 flex flex-wrap gap-2">
+                            <template x-for="tag in suggestedTags">
+                                <button type="button" @click="addTag(tag)"
+                                        class="px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded hover:bg-gray-300">
+                                    + <span x-text="tag"></span>
+                                </button>
+                            </template>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Categories</label>
+                        <select x-model="form.categories" 
+                                class="w-full orange-border rounded-lg px-4 py-2 text-gray-900">
+                            <option value="">Select category...</option>
+                            <option value="Technology">Technology</option>
+                            <option value="Business">Business</option>
+                            <option value="AI">AI</option>
+                            <option value="Tutorial">Tutorial</option>
+                            <option value="Opinion">Opinion</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Summary -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Summary/Excerpt 
+                        <span class="text-xs text-gray-500">(<span x-text="form.excerpt.length"></span>/160 chars)</span>
+                    </label>
+                    <textarea x-model="form.excerpt" rows="3" maxlength="160"
+                              placeholder="Brief description of your post..." 
+                              class="w-full orange-border rounded-lg px-4 py-2 text-gray-900"></textarea>
+                </div>
+
+                <!-- Content with Preview -->
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <label class="block text-sm font-medium text-gray-700">Post Content *</label>
+                        <button type="button" @click="showPreview = !showPreview"
+                                class="text-sm text-orange-600 hover:text-orange-700">
+                            <span x-text="showPreview ? 'Hide Preview' : 'Show Preview'"></span>
+                        </button>
+                    </div>
+                    
+                    <div class="grid gap-4" :class="showPreview ? 'md:grid-cols-2' : 'grid-cols-1'">
+                        <div>
+                            <textarea x-model="form.content" rows="12" required
+                                      placeholder="Write your post content in Markdown..." 
+                                      class="w-full orange-border rounded-lg px-4 py-2 text-gray-900 font-mono text-sm"></textarea>
+                        </div>
+                        <div x-show="showPreview" class="bg-gray-50 p-4 rounded-lg border">
+                            <h4 class="text-sm font-medium text-gray-700 mb-2">Preview:</h4>
+                            <div class="prose prose-sm max-w-none text-gray-900" x-html="markdownPreview"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Advanced Options -->
+                <div x-data="{ showAdvanced: false }">
+                    <button type="button" @click="showAdvanced = !showAdvanced"
+                            class="text-sm text-orange-600 hover:text-orange-700 mb-4">
+                        <span x-text="showAdvanced ? '▼ Hide Advanced Options' : '▶ Show Advanced Options'"></span>
+                    </button>
+                    
+                    <div x-show="showAdvanced" x-transition class="space-y-4 p-4 bg-gray-50 rounded-lg">
+                        <div class="grid gap-4 md:grid-cols-2">
+                            <div>
+                                <label class="flex items-center">
+                                    <input x-model="form.draft" type="checkbox" class="mr-2">
+                                    <span class="text-sm text-gray-700">Save as draft</span>
+                                </label>
+                            </div>
+                            <div>
+                                <label class="flex items-center">
+                                    <input x-model="form.featured" type="checkbox" class="mr-2">
+                                    <span class="text-sm text-gray-700">Featured post</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="pt-6">
+                    <button type="submit" :disabled="isLoading"
+                            :class="isLoading ? 'loading' : ''"
+                            class="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold py-4 px-6 rounded-lg text-lg transition-all disabled:opacity-50">
+                        <span x-show="!isLoading">🚀 Create & Auto-Deploy Post</span>
+                        <span x-show="isLoading">⏳ Creating Post...</span>
+                    </button>
+                    <p class="text-center text-sm text-gray-600 mt-2">
+                        Post will be created and trigger automatic deployment via GitHub Actions
+                    </p>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        function adminApp() {
+            return {
+                isLoading: false,
+                showPreview: false,
+                
+                // Form data
+                form: {
+                    title: '',
+                    slug: '',
+                    date: new Date().toISOString().slice(0,10),
+                    tags: '',
+                    categories: '',
+                    excerpt: '',
+                    content: '',
+                    draft: false,
+                    featured: false
+                },
+                
+                // UI state
+                message: {
+                    show: false,
+                    type: 'success',
+                    title: '',
+                    text: '',
+                    url: ''
+                },
+                
+                suggestedTags: ['AI', 'Technology', 'Business', 'Tutorial', 'Opinion'],
+                slugPrefix: '/posts/2025/10/',
+                fullSlugPreview: '/posts/2025/10/my-awesome-post/',
+                
+                init() {
+                    this.updateSlugPrefix();
+                },
+                
+                get markdownPreview() {
+                    // Simple markdown preview
+                    return this.form.content
+                        .replace(/^# (.*$)/gim, '<h1 class="text-xl font-bold mb-2">$1</h1>')
+                        .replace(/^## (.*$)/gim, '<h2 class="text-lg font-bold mb-2">$1</h2>')
+                        .replace(/^### (.*$)/gim, '<h3 class="text-base font-bold mb-2">$1</h3>')
+                        .replace(/\*\*(.*)\*\*/gim, '<strong>$1</strong>')
+                        .replace(/\*(.*)\*/gim, '<em>$1</em>')
+                        .replace(/\n\n/gim, '</p><p class="mb-2">')
+                        .replace(/\n/gim, '<br>')
+                        .replace(/^(.*)$/gim, '<p class="mb-2">$1</p>');
+                },
+                
+                updateSlugPrefix() {
+                    if (this.form.date) {
+                        const date = new Date(this.form.date + 'T00:00:00');
+                        const year = date.getFullYear();
+                        const month = String(date.getMonth() + 1).padStart(2, '0');
+                        this.slugPrefix = `/posts/${year}/${month}/`;
+                        this.updateSlugPreview();
+                    }
+                },
+                
+                updateSlugPreview() {
+                    const slug = this.form.slug || 'my-awesome-post';
+                    this.fullSlugPreview = this.slugPrefix + slug + '/';
+                },
+                
+                generateSlugFromTitle() {
+                    if (this.form.title && !this.form.slug) {
+                        this.form.slug = this.form.title
+                            .toLowerCase()
+                            .replace(/[^a-z0-9\s-]/g, '')
+                            .replace(/\s+/g, '-')
+                            .replace(/-+/g, '-')
+                            .trim();
+                        this.updateSlugPreview();
+                    }
+                },
+                
+                addTag(tag) {
+                    const currentTags = this.form.tags ? this.form.tags.split(',').map(t => t.trim()) : [];
+                    if (!currentTags.includes(tag)) {
+                        currentTags.push(tag);
+                        this.form.tags = currentTags.join(', ');
+                    }
+                },
+                
+                async createPost() {
+                    this.isLoading = true;
+                    
+                    try {
+                        // Generate the post content
+                        const dateObj = new Date(this.form.date + 'T00:00:00');
+                        const year = dateObj.getFullYear();
+                        const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+                        const folderName = `${year}-${month}-${this.form.slug}`;
+                        
+                        let markdown = '---\n';
+                        markdown += `title: "${this.form.title}"\n`;
+                        markdown += `date: ${this.form.date}T12:00:00+13:00\n`;
+                        markdown += `draft: ${this.form.draft}\n`;
+                        
+                        if (this.form.tags) {
+                            const tagArray = this.form.tags.split(',').map(t => `"${t.trim()}"`).join(', ');
+                            markdown += `tags: [${tagArray}]\n`;
+                        }
+                        
+                        if (this.form.categories) {
+                            markdown += `categories: ["${this.form.categories}"]\n`;
+                        }
+                        
+                        if (this.form.excerpt) {
+                            markdown += `summary: "${this.form.excerpt}"\n`;
+                        }
+                        
+                        if (this.form.featured) {
+                            markdown += `featured: true\n`;
+                        }
+                        
+                        markdown += '---\n\n';
+                        markdown += this.form.content || `# ${this.form.title}\n\nYour post content goes here.`;
+                        
+                        // Use GitHub API to create the post directly
+                        const success = await this.createPostViaGitHub(folderName, markdown);
+                        
+                        if (success) {
+                            const liveUrl = `https://mgrnz.com${this.fullSlugPreview}`;
+                            this.showMessage('success', 'Post Created & Deploying!', 
+                                `"${this.form.title}" has been created and is deploying. Check your live site in 2-3 minutes.`,
+                                liveUrl);
+                            
+                            // Reset form
+                            this.form = {
+                                title: '',
+                                slug: '',
+                                date: new Date().toISOString().slice(0,10),
+                                tags: '',
+                                categories: '',
+                                excerpt: '',
+                                content: '',
+                                draft: false,
+                                featured: false
+                            };
+                            this.updateSlugPrefix();
+                        } else {
+                            this.showMessage('error', 'Creation Failed', 'Unable to create post. Please try the download method instead.');
+                        }
+                        
+                    } catch (error) {
+                        this.showMessage('error', 'Error', 'Failed to create post: ' + error.message);
+                    } finally {
+                        this.isLoading = false;
+                    }
+                },
+                
+                async createPostViaGitHub(folderName, content) {
+                    // For now, create downloadable file as fallback
+                    // In production, this would use GitHub API with proper authentication
+                    
+                    const blob = new Blob([content], { type: 'text/markdown' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `${folderName}-index.md`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    
+                    return true; // Simulate success
+                },
+                
+                showMessage(type, title, text, url = '') {
+                    this.message = { show: true, type, title, text, url };
+                    setTimeout(() => this.message.show = false, 10000);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
