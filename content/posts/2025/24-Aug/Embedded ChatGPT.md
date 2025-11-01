@@ -4,7 +4,7 @@ date: 2025-10-28
 draft: false
 categories: ["Technology", "AI", "Tools"]
 tags: ["ChatGPT", "Email", "Embedded AI"]
-image: "/images/embedded-gpt"
+image: "/images/embedded-gpt.webp"
 summary: "A walkthrough on embedding ChatGPT assistants via email and automating workflows."
 ---
 
