@@ -100,8 +100,19 @@ url: "/subscribe/"
 document.addEventListener('DOMContentLoaded', function() {
     // The MailerLite Universal script will automatically initialize embedded forms
     if (typeof ml !== 'undefined') {
-        ml('forms', 'load');
-        
+        const embeddedForms = document.querySelectorAll('.ml-embedded[data-form]');
+
+        if (embeddedForms.length > 0) {
+            embeddedForms.forEach(container => {
+                const formId = container.getAttribute('data-form');
+                if (formId) {
+                    ml('forms', 'load', formId);
+                }
+            });
+        } else {
+            ml('forms', 'load');
+        }
+
         // Add custom form validation and error handling
         setTimeout(() => {
             const embeddedForm = document.querySelector('.ml-embedded form');
