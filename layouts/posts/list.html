@@ -41,8 +41,12 @@
         {{ end }}
         
         {{ if $featuredImage }}
+        {{ $featuredImageURL := $featuredImage }}
+        {{ if and $featuredImageURL (not (strings.HasPrefix $featuredImageURL "http")) }}
+          {{ $featuredImageURL = relURL $featuredImageURL }}
+        {{ end }}
         <div class="relative h-80 w-full overflow-hidden">
-          <img src="{{ $featuredImage }}" alt="{{ $post.Title }}" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
+          <img src="{{ $featuredImageURL }}" alt="{{ $post.Title }}" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
           <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
           <div class="absolute top-4 left-4">
             <span class="rounded-full bg-gradient-to-r from-orange-500 to-red-500 px-4 py-2 text-sm font-bold text-white shadow-lg backdrop-blur-sm">
@@ -132,8 +136,12 @@
           {{ end }}
           
           {{ if $cardImage }}
+          {{ $cardImageURL := $cardImage }}
+          {{ if and $cardImageURL (not (strings.HasPrefix $cardImageURL "http")) }}
+            {{ $cardImageURL = relURL $cardImageURL }}
+          {{ end }}
           <div class="relative h-48 w-full overflow-hidden">
-            <img src="{{ $cardImage }}" alt="{{ $post.Title }}" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
+            <img src="{{ $cardImageURL }}" alt="{{ $post.Title }}" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
             <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
           </div>
           {{ else }}
@@ -215,8 +223,12 @@
             {{ end }}
           </div>
           {{ if .Params.image }}
+          {{ $olderImage := .Params.image }}
+          {{ if and $olderImage (not (strings.HasPrefix $olderImage "http")) }}
+            {{ $olderImage = relURL $olderImage }}
+          {{ end }}
           <div class="ml-4 flex-shrink-0">
-            <img src="{{ .Params.image }}" alt="{{ .Title }}" class="h-16 w-16 rounded object-cover">
+            <img src="{{ $olderImage }}" alt="{{ .Title }}" class="h-16 w-16 rounded object-cover">
           </div>
           {{ end }}
         </div>
