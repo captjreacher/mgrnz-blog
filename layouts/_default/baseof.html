@@ -17,6 +17,22 @@
         {{ block "main" . }}{{ end }}
       </div>
     </main>
+<script type="module">
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+
+  // Use your real values:
+  const supabase = createClient(
+    'https://jqfodlzcsgfocyuawzyx.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpxZm9kbHpjc2dmb2N5dWF3enl4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjExNjEzNTUsImV4cCI6MjA3NjczNzM1NX0.LLdRTNerb3J6WxQUg3tXUbKt7wDhOpm--nSlWAhYYqA'
+  )
+
+  // If we arrive anywhere with a Supabase recovery hash, stash it and go to /reset/
+  const { hash } = window.location
+  if (hash && (hash.includes('type=recovery') || hash.includes('access_token='))) {
+    sessionStorage.setItem('sb-recovery-hash', hash)
+    window.location.replace('/reset/')
+  }
+</script>
 
     {{ partial "footer.html" . }}
     {{ partial "scripts.html" . }}
