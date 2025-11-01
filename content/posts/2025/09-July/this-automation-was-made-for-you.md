@@ -4,7 +4,7 @@ date: 2025-07-09
 draft: false
 categories: ["Technology", "Business", "AI"]
 tags: ["AI", "Automation", "Business"]
-image: "/images/home-banner.webp"
+image: "/images/this-auto.webp"
 summary: "A playful exploration of automation's purpose and the human element that brings it to life - why every automation needs YOU to make it meaningful."
 ---
 

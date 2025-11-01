@@ -4,7 +4,7 @@ date: 2025-07-20
 draft: false
 categories: ["Technology", "Business", "AI"]
 tags: ["AI", "business", "demystifying"]
-image: "/images/demystifying-ai.webp"
+image: "/images/demystify-head.webp"
 summary: "Demystifying AI to empower better business decisions."
 ---
 

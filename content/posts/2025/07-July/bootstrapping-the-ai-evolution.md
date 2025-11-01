@@ -4,7 +4,7 @@ date: 2025-07-07
 draft: false
 categories: ["Technology", "Business", "AI"]
 tags: ["AI", "bootstrapping", "entrepreneurship", "accounting", "career-change"]
-image: "/images/BLOG-LOGO.webp"
+image: "/images/bootstrap.webp"
 summary: "From Robert Plant's career choice dilemma to my own journey from Big Six accounting to AI entrepreneurship - a personal story of transformation and the birth of Maximised AI."
 ---
 
@@ -56,7 +56,7 @@ Most of all however, it has endured. The lessons became the basis of almost ever
 "One day Robbo", the Partner says, "you'll be just like me." This became one of those motivating moments when you see the battle ahead of you, and pump your fists and shout, *"No Quarter".*
 
 {{< gallery >}}
-  /images/demystifying-ai.webp "AI can feel like a complex puzzle."
+  /images/demystify-head.webp "AI can feel like a complex puzzle."
   /images/embedded-gpt.webp "But it can be embedded anywhere."
 {{< /gallery >}}
 
