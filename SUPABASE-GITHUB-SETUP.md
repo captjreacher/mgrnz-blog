@@ -7,7 +7,7 @@
 ## CHANGES MADE
 
 ### 1. Supabase Function Updated
-- ✅ Now triggers GitHub Actions instead of Cloudflare Pages
+- ✅ Now triggers GitHub Actions for deployment
 - ✅ Uses GitHub API to dispatch workflow
 - ✅ Requires `GITHUB_TOKEN` instead of `HUGO_WEBHOOK_URL`
 
@@ -32,7 +32,7 @@
 
 ### Step 2: Update Supabase Secrets
 
-Replace the old Cloudflare webhook with GitHub token:
+Add GitHub token for deployment:
 
 ```bash
 # Remove old secret (if exists)
@@ -89,11 +89,11 @@ Expected response:
 - `WEBHOOK_TOKEN` - Shared secret for authentication (required)
 
 ### Old Secrets to Remove:
-- `HUGO_WEBHOOK_URL` - No longer needed (was for Cloudflare)
+- `HUGO_WEBHOOK_URL` - No longer needed
 
 ## ADVANTAGES
 
-1. ✅ **Reliable** - No more Cloudflare build failures
+1. ✅ **Reliable** - Consistent GitHub Pages deployment
 2. ✅ **Transparent** - See build logs in GitHub Actions
 3. ✅ **Controlled** - Hugo 0.150.1 guaranteed
 4. ✅ **Free** - GitHub Pages is free for public repos

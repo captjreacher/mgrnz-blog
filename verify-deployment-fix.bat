@@ -41,6 +41,6 @@ echo    VERIFICATION COMPLETE
 echo ========================================
 echo.
 echo If all tests show ✅ GREEN: Deployment pipeline FIXED
-echo If any tests show ❌ RED: Manual Cloudflare intervention needed
+echo If any tests show ❌ RED: Manual GitHub Pages intervention needed
 echo.
 pause

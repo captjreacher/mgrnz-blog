@@ -42,16 +42,16 @@ echo.
 echo If any tests show ⚠️  YELLOW:
 echo   - Deployment may still be processing
 echo   - Wait 5 minutes and run again
-echo   - Check Cloudflare Pages dashboard
+echo   - Check GitHub Actions for build status
 echo.
 echo If any tests show ❌ RED:
 echo   - Network connectivity issues
-echo   - Cloudflare Pages service problems
+echo   - GitHub Pages service problems
 echo   - Manual intervention may be required
 echo.
 echo 🔗 Useful Links:
-echo   - Cloudflare Pages: https://dash.cloudflare.com/
-echo   - GitHub Repository: https://github.com/your-repo
+echo   - GitHub Actions: https://github.com/captjreacher/mgrnz-blog/actions
+echo   - GitHub Repository: https://github.com/captjreacher/mgrnz-blog
 echo   - Live Site: https://mgrnz.com/
 echo.
 pause

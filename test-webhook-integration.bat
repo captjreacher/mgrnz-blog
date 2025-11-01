@@ -23,11 +23,11 @@ echo ---
 echo.
 echo ## Test Commit: %timestamp%
 echo.
-echo This file tests if GitHub webhooks trigger Cloudflare Pages builds.
+echo This file tests if GitHub webhooks trigger GitHub Pages builds.
 echo.
 echo ### Expected Behavior:
 echo 1. Commit this file to GitHub
-echo 2. GitHub webhook should trigger Cloudflare Pages build
+echo 2. GitHub webhook should trigger GitHub Actions build
 echo 3. Site should update within 3-5 minutes
 echo.
 echo ### Test Results:
@@ -37,9 +37,9 @@ echo - ✅ If you see this timestamp, webhooks are working
 echo - ❌ If timestamp is old, webhooks are broken
 echo.
 echo ### Troubleshooting:
-echo 1. Check Cloudflare Pages dashboard for build logs
+echo 1. Check GitHub Actions for build logs
 echo 2. Verify GitHub webhook is active in repository settings
-echo 3. Ensure .env file has correct HUGO_WEBHOOK_URL
+echo 3. Ensure GitHub Pages is properly configured
 echo.
 echo **Last test**: %timestamp%
 ) > content/webhook-test.md
@@ -60,7 +60,7 @@ echo.
 echo 🎯 Check these URLs in 5 minutes:
 echo.
 echo 1. Test file: https://mgrnz.com/webhook-test/
-echo 2. Build logs: Cloudflare Pages dashboard
+echo 2. Build logs: GitHub Actions dashboard
 echo 3. Main site: https://mgrnz.com/
 echo.
 echo ✅ If webhook-test shows current timestamp = WORKING

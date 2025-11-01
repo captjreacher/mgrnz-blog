@@ -43,8 +43,8 @@ if exist "static\CNAME" (
 echo.
 echo 5. Checking for conflicting workflows...
 if exist ".github\workflows\deploy.yml" (
-    echo ⚠️  Conflicting Cloudflare workflow detected!
-    echo    Consider disabling it to avoid conflicts
+    echo ⚠️  Old deployment workflow detected!
+    echo    Consider removing it to avoid conflicts
 ) else (
     echo ✅ No conflicting workflows
 )

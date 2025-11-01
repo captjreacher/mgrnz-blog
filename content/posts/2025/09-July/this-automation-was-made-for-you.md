@@ -8,7 +8,7 @@ image: "/images/this-auto.webp"
 summary: "A playful exploration of automation's purpose and the human element that brings it to life - why every automation needs YOU to make it meaningful."
 ---
 
-![This Automation Was Made For You](/images/home-banner.webp)
+![This Automation Was Made For You](/images/this-auto.webp)
 
 This automation was made especially for <a href="#" onclick="triggerSubscribePopup(); return false;"><strong>you</strong></a>.
 

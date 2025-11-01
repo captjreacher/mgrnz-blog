@@ -52,7 +52,7 @@ if /i "%choice%"=="Y" (
     git commit -m "🔧 Fix GitHub Actions deployment pipeline
 
 - Fixed CNAME domain consistency (mgrnz.com)
-- Disabled conflicting Cloudflare workflow  
+- Cleaned up deployment configuration  
 - Updated workflow permissions and error handling
 - Removed invalid --verbose flag from Hugo build
 - Added comprehensive testing and validation
