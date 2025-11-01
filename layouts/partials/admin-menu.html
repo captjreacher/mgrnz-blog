@@ -20,13 +20,7 @@
       <a href="/admin/create/" class="block px-4 py-2 text-sm text-neutral-300 hover:bg-neutral-700 hover:text-white transition-colors">
         ✏️ Create Post
       </a>
-      <a href="/admin-edit-v2-fixed.html" class="block px-4 py-2 text-sm text-neutral-300 hover:bg-neutral-700 hover:text-white transition-colors">
-        🔧 Edit Posts
-      </a>
       <div class="border-t border-neutral-700 mt-2 pt-2">
-        <a href="/admin-simple.html" class="block px-4 py-2 text-sm text-green-400 hover:bg-green-900/20 transition-colors">
-          🚀 Quick Access
-        </a>
         <button onclick="logoutAdmin(event)" class="block w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-red-900/20 transition-colors">
           🚪 Logout
         </button>
@@ -35,13 +29,13 @@
   </div>
 </div>
 
-<!-- Admin Authentication Modal -->
+<!-- Admin Authentication Modal (Supabase Email Login) -->
 <div id="adminAuthModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
   <div class="bg-neutral-900 border border-neutral-700 rounded-2xl shadow-2xl w-full max-w-md mx-4">
     <div class="px-6 py-4 border-b border-neutral-800 flex items-center justify-between">
       <div>
         <p class="text-xs uppercase tracking-widest text-orange-400">Secure Access</p>
-        <h3 class="text-xl font-semibold text-white">Admin Authentication</h3>
+        <h3 class="text-xl font-semibold text-white">Admin Login</h3>
       </div>
       <button onclick="closeAdminAuthModal()" class="text-neutral-400 hover:text-white transition-colors" aria-label="Close admin authentication modal">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -50,30 +44,32 @@
       </button>
     </div>
 
-    <!-- MAIN AUTH FORM (single form) -->
-    <form onsubmit="authenticateAdmin(event)" class="px-6 py-5 space-y-5">
+    <form id="login-form" class="px-6 py-5 space-y-5">
       <div class="space-y-2">
-        <label for="adminAccessCode" class="block text-sm font-medium text-neutral-300">Access Code</label>
-        <input id="adminAccessCode" type="password" required autocomplete="current-password" placeholder="Enter access code"
+        <label for="adminEmail" class="block text-sm font-medium text-neutral-300">Email</label>
+        <input id="adminEmail" type="email" required placeholder="you@domain.com"
+               class="w-full rounded-lg border border-neutral-700 bg-neutral-800 px-4 py-3 text-white placeholder-neutral-500 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/30 transition" />
+      </div>
+
+      <div class="space-y-2">
+        <label for="adminPassword" class="block text-sm font-medium text-neutral-300">Password</label>
+        <input id="adminPassword" type="password" required placeholder="Enter password"
                class="w-full rounded-lg border border-neutral-700 bg-neutral-800 px-4 py-3 text-white placeholder-neutral-500 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/30 transition" />
       </div>
 
       <div id="adminAuthError" class="hidden rounded-lg border border-red-700 bg-red-900/40 px-4 py-3 text-sm text-red-200">
-        Invalid access code. Please try again.
+        Invalid credentials. Please try again.
       </div>
 
       <div class="flex items-center justify-between">
-        <p class="text-xs text-neutral-500">Session lasts for 24 hours.</p>
-        <button type="submit" id="adminAuthSubmit" class="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-orange-500 to-red-500 px-4 py-2 text-sm font-semibold text-white hover:from-orange-600 hover:to-red-600 transition">
+        <a id="forgot-link" href="#" class="text-sm text-blue-400 hover:text-blue-200">Forgot password?</a>
+        <button type="submit" id="adminAuthSubmit"
+                class="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-orange-500 to-red-500 px-4 py-2 text-sm font-semibold text-white hover:from-orange-600 hover:to-red-600 transition">
           <span class="auth-action-label">🔐 Access Admin</span>
         </button>
       </div>
-    </form>
 
-    <!-- FORGOT ACCESS CODE (separate, NOT a form) -->
-    <div class="px-6 pb-6 pt-0">
-      <a id="forgot-link" href="#" class="text-sm text-blue-400 hover:text-blue-200 block mt-2">Forgot access code?</a>
-      <div id="forgot-form" class="hidden mt-3">
+      <div id="forgot-form" class="hidden mt-4">
         <input id="forgot-email" type="email" placeholder="Enter your admin email"
                class="block w-full p-2 rounded bg-neutral-800 border border-neutral-600 text-neutral-200 mb-2" required>
         <button id="forgot-submit" type="button"
@@ -82,163 +78,81 @@
         </button>
         <p id="forgot-msg" class="text-sm hidden mt-2"></p>
       </div>
-    </div>
+    </form>
   </div>
 </div>
 
-<!-- Existing admin logic (non-module) -->
-<script>
-const ADMIN_SESSION_DURATION = 8 * 60 * 60 * 1000; // 8 hours
-const ADMIN_DASHBOARD_URL = 'https://mgrnz.com/admin/';
-const ADMIN_VALID_ACCESS_CODES = {{ .Site.Params.admin.access_codes | jsonify }};
-
-function openAdminAuthModal() {
-  const modal = document.getElementById('adminAuthModal');
-  const input = document.getElementById('adminAccessCode');
-  const error = document.getElementById('adminAuthError');
-  if (!modal) return;
-  modal.classList.remove('hidden');
-  document.body.classList.add('overflow-hidden');
-  if (error) error.classList.add('hidden');
-  if (input) { input.value = ''; setTimeout(() => input.focus(), 0); }
-}
-
-function closeAdminAuthModal() {
-  const modal = document.getElementById('adminAuthModal');
-  const error = document.getElementById('adminAuthError');
-  if (!modal) return;
-  modal.classList.add('hidden');
-  document.body.classList.remove('overflow-hidden');
-  if (error) error.classList.add('hidden');
-  setAdminAuthLoading(false);
-}
-
-function setAdminAuthLoading(isLoading) {
-  const submitButton = document.getElementById('adminAuthSubmit');
-  const actionLabel = submitButton ? submitButton.querySelector('.auth-action-label') : null;
-  if (!submitButton || !actionLabel) return;
-  submitButton.disabled = isLoading;
-  actionLabel.textContent = isLoading ? '⏳ Verifying…' : '🔐 Access Admin';
-}
-
-function generateAdminAuthToken() {
-  const timestamp = Date.now();
-  const random = Math.random().toString(36).substring(2);
-  return btoa(`${timestamp}-${random}`);
-}
-
-function authenticateAdmin(event) {
-  if (event) event.preventDefault();
-  const input = document.getElementById('adminAccessCode');
-  const error = document.getElementById('adminAuthError');
-  if (!input) { window.location.href = '/admin/'; return; }
-  const accessCode = input.value.trim();
-  if (!accessCode) {
-    if (error) { error.textContent = 'Please enter your access code.'; error.classList.remove('hidden'); }
-    input.focus(); return;
-  }
-  setAdminAuthLoading(true);
-  setTimeout(() => {
-    const isValidCode = ADMIN_VALID_ACCESS_CODES.includes(accessCode);
-    if (isValidCode) {
-      const authToken = generateAdminAuthToken();
-      localStorage.setItem('admin_auth_token', authToken);
-      localStorage.setItem('admin_auth_time', Date.now().toString());
-      if (error) error.classList.add('hidden');
-      closeAdminAuthModal();
-      toggleAdminMenu(true);
-      window.location.href = ADMIN_DASHBOARD_URL;
-    } else {
-      if (error) { error.textContent = 'Invalid access code. Please try again.'; error.classList.remove('hidden'); }
-      input.focus();
-    }
-    setAdminAuthLoading(false);
-  }, 400);
-}
-
-function hasValidAdminSession() {
-  const authToken = localStorage.getItem('admin_auth_token');
-  const authTime = localStorage.getItem('admin_auth_time');
-  if (!authToken || !authTime) return false;
-  const now = Date.now();
-  const authAge = now - parseInt(authTime, 10);
-  return authAge < ADMIN_SESSION_DURATION;
-}
-
-function checkAdminAccess() {
-  if (hasValidAdminSession()) { window.location.href = ADMIN_DASHBOARD_URL; return; }
-  clearAdminSession();
-  openAdminAuthModal();
-}
-
-function toggleAdminMenu(forceHide = false) {
-  const dropdown = document.getElementById('adminDropdown');
-  if (!dropdown) return;
-  if (forceHide) { dropdown.classList.add('hidden'); return; }
-  dropdown.classList.toggle('hidden');
-}
-
-function logoutAdmin(event) {
-  if (event) event.preventDefault();
-  if (confirm('Are you sure you want to logout?')) {
-    clearAdminSession();
-    toggleAdminMenu(true);
-    alert('✅ Logged out successfully');
-  }
-}
-
-function clearAdminSession() {
-  localStorage.removeItem('admin_auth_token');
-  localStorage.removeItem('admin_auth_time');
-}
-
-// Close dropdown when clicking outside & handle Esc
-document.addEventListener('click', function(event) {
-  const dropdown = document.getElementById('adminDropdown');
-  const button = event.target.closest('button[onclick="checkAdminAccess()"]');
-  const modal = document.getElementById('adminAuthModal');
-  if (dropdown && !button && !dropdown.contains(event.target)) dropdown.classList.add('hidden');
-  if (modal && !modal.classList.contains('hidden') && event.target === modal) closeAdminAuthModal();
-});
-document.addEventListener('keydown', function(event) {
-  if (event.key === 'Escape') {
-    const modal = document.getElementById('adminAuthModal');
-    if (modal && !modal.classList.contains('hidden')) { closeAdminAuthModal(); }
-    else { toggleAdminMenu(true); }
-  }
-});
-</script>
-
-<!-- Forgot access code flow (Supabase integration) -->
 <script type="module">
   import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
-  // --- Supabase project credentials (public anon key) ---
   const supabase = createClient(
     'https://jqfodlzcsgfocyuawzyx.supabase.co',
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpxZm9kbHpjc2dmb2N5dWF3enl4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjExNjEzNTUsImV4cCI6MjA3NjczNzM1NX0.LLdRTNerb3J6WxQUg3tXUbKt7wDhOpm--nSlWAhYYqA'
   )
 
-  // --- UI element bindings ---
-  const forgotLink   = document.getElementById('forgot-link')
-  const forgotForm   = document.getElementById('forgot-form')
-  const forgotEmail  = document.getElementById('forgot-email')
-  const forgotMsg    = document.getElementById('forgot-msg')
+  const modal = document.getElementById('adminAuthModal')
+  const loginForm = document.getElementById('login-form')
+  const errorBox = document.getElementById('adminAuthError')
+  const forgotLink = document.getElementById('forgot-link')
+  const forgotForm = document.getElementById('forgot-form')
+  const forgotEmail = document.getElementById('forgot-email')
+  const forgotMsg = document.getElementById('forgot-msg')
   const forgotSubmit = document.getElementById('forgot-submit')
 
-  // Reveal the email input form
-  forgotLink?.addEventListener('click', (e) => {
+  // Open/close modal
+  function openAdminAuthModal() {
+    modal.classList.remove('hidden')
+    document.body.classList.add('overflow-hidden')
+    errorBox.classList.add('hidden')
+  }
+  function closeAdminAuthModal() {
+    modal.classList.add('hidden')
+    document.body.classList.remove('overflow-hidden')
+    errorBox.classList.add('hidden')
+  }
+
+  // Email + password login via Supabase
+  loginForm.addEventListener('submit', async (e) => {
     e.preventDefault()
-    forgotForm?.classList.remove('hidden')
-    forgotMsg?.classList.add('hidden')
-    forgotMsg.textContent = ''
+    const email = document.getElementById('adminEmail').value.trim()
+    const password = document.getElementById('adminPassword').value.trim()
+    errorBox.classList.add('hidden')
+
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+    if (error) {
+      console.error('Login error:', error)
+      errorBox.textContent = 'Invalid email or password.'
+      errorBox.classList.remove('hidden')
+      return
+    }
+
+    closeAdminAuthModal()
+    window.location.href = '/admin/'
   })
 
-  // Handle the reset email request
-  forgotSubmit?.addEventListener('click', async () => {
-    const email = forgotEmail?.value.trim()
-    if (!email) return
+  // Check existing Supabase session before prompting login
+  async function checkAdminAccess() {
+    const { data: { user } } = await supabase.auth.getUser()
+    if (user) window.location.href = '/admin/'
+    else openAdminAuthModal()
+  }
 
+  // Logout
+  async function logoutAdmin(e) {
+    e.preventDefault()
+    await supabase.auth.signOut()
+    alert('✅ Logged out successfully')
+  }
+
+  // Forgot password flow
+  forgotLink.addEventListener('click', (e) => {
+    e.preventDefault()
+    forgotForm.classList.remove('hidden')
+    forgotMsg.classList.add('hidden')
+  })
+  forgotSubmit.addEventListener('click', async () => {
+    const email = forgotEmail.value.trim()
+    if (!email) return
     forgotMsg.textContent = '⏳ Sending reset link...'
     forgotMsg.classList.remove('hidden', 'text-red-300')
     forgotMsg.classList.add('text-orange-300')
@@ -246,17 +160,15 @@ document.addEventListener('keydown', function(event) {
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${window.location.origin}/reset/`
     })
-
     if (error) {
-      console.error('Supabase reset error:', error)
+      console.error('Reset error:', error)
       forgotMsg.textContent = `❌ ${error.message}`
-      forgotMsg.classList.remove('text-orange-300', 'text-green-300')
+      forgotMsg.classList.remove('text-orange-300')
       forgotMsg.classList.add('text-red-300')
     } else {
       forgotMsg.textContent = '✅ Check your email for a reset link.'
-      forgotMsg.classList.remove('text-orange-300', 'text-red-300')
+      forgotMsg.classList.remove('text-orange-300')
       forgotMsg.classList.add('text-green-300')
     }
   })
 </script>
-
