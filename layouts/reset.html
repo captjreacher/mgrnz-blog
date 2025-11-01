@@ -12,25 +12,19 @@
         50% { opacity: 1; transform: translateY(0); }
         100% { opacity: 0; transform: translateY(-10px); }
       }
-      .animate-fadeSlide {
-        animation: fadeSlide 2.4s ease-in-out forwards;
-      }
+      .animate-fadeSlide { animation: fadeSlide 2.4s ease-in-out forwards; }
       @keyframes pulseCheck {
         0%, 100% { transform: scale(1); }
         50% { transform: scale(1.2); }
       }
-      .animate-pulseCheck {
-        animation: pulseCheck 1s ease-in-out 2;
-      }
+      .animate-pulseCheck { animation: pulseCheck 1s ease-in-out 2; }
     </style>
   </head>
 
   <body class="bg-neutral-900 text-neutral-100 flex items-center justify-center min-h-screen px-4">
     <main class="w-full max-w-md bg-neutral-900 border border-neutral-700 rounded-2xl shadow-2xl p-8 relative overflow-hidden">
       <header class="mb-6 text-center">
-        <p class="text-xs uppercase tracking-widest text-orange-400 mb-1">
-          Secure Admin Reset
-        </p>
+        <p class="text-xs uppercase tracking-widest text-orange-400 mb-1">Secure Admin Reset</p>
         <h1 class="text-2xl font-semibold text-white">Set a New Access Code</h1>
       </header>
 
@@ -72,15 +66,14 @@
     <script type="module">
       import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
-      // --- CONFIGURE THESE ---
+      // ——— Supabase (public) —
       const supabase = createClient(
-        'https://YOUR_PROJECT_REF.supabase.co',
-        'PUBLIC_ANON_KEY'
+        'https://jqfodlzcsgfocyuawzyx.supabase.co',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpxZm9kbHpjc2dmb2N5dWF3enl4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjExNjEzNTUsImV4cCI6MjA3NjczNzM1NX0.LLdRTNerb3J6WxQUg3tXUbKt7wDhOpm--nSlWAhYYqA'
       )
-      // -----------------------
 
-      const form = document.getElementById('reset-form')
-      const msg = document.getElementById('reset-msg')
+      const form   = document.getElementById('reset-form')
+      const msg    = document.getElementById('reset-msg')
       const banner = document.getElementById('success-banner')
 
       function showMessage(text, isSuccess = true) {
@@ -88,12 +81,32 @@
         msg.classList.remove('text-neutral-400', 'text-red-400', 'text-orange-400')
         msg.classList.add(isSuccess ? 'text-orange-400' : 'text-red-400')
       }
-
       function showSuccessBanner() {
         banner.classList.remove('hidden')
         banner.classList.add('animate-fadeSlide')
       }
 
+      // ——— Recovery session bootstrap —
+      // Accept the recovery hash from:
+      //  - current URL (#...),
+      //  - or sessionStorage (if a previous page captured it and redirected here).
+      const recoveryHash =
+        window.location.hash ||
+        sessionStorage.getItem('sb-recovery-hash') ||
+        ''
+
+      if (recoveryHash && (recoveryHash.includes('type=recovery') || recoveryHash.includes('access_token='))) {
+        try {
+          await supabase.auth.exchangeCodeForSession(recoveryHash)
+          sessionStorage.removeItem('sb-recovery-hash')
+          // Clean the URL (remove hash noise)
+          history.replaceState(null, '', window.location.pathname)
+        } catch (e) {
+          console.error('exchangeCodeForSession failed:', e)
+        }
+      }
+
+      // ——— Handle password update —
       form.addEventListener('submit', async (e) => {
         e.preventDefault()
         const newPassword = document.getElementById('new-password').value.trim()

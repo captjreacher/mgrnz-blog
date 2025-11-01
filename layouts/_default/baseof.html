@@ -4,6 +4,15 @@
   {{ partial "head.html" . }}
   {{ partial "mailerlite.html" . }}
 </head>
+<script type="module">
+  // Forward any Supabase recovery hash to /reset/
+  const { hash } = window.location
+  if (hash && (hash.includes('type=recovery') || hash.includes('access_token='))) {
+    sessionStorage.setItem('sb-recovery-hash', hash)
+    window.location.replace('/reset/')
+  }
+</script>
+
 <body class="flex min-h-screen bg-neutral-900 text-neutral-100">
   
   {{ partial "sidebar.html" . }}
