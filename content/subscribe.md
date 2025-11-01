@@ -83,7 +83,7 @@ url: "/subscribe/"
 
     <!-- MailerLite API Form -->
     <div id="subscription-form-container">
-        <form id="subscription-form" class="ml-form-embedContainer">
+        <form id="169888919468377247" class="ml-form-embedContainer">
             <div class="ml-form-formContent">
                 <div class="ml-form-fieldRow">
                     <input type="text" 
